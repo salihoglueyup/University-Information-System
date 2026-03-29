@@ -1,0 +1,13 @@
+import { useQuery } from '@tanstack/react-query';
+import axiosInstance from '../api/axiosInstance';
+
+export function useGrades(userId) {
+    return useQuery({
+        queryKey: ['grades', userId],
+        queryFn: async () => {
+            const { data } = await axiosInstance.get(`/grades?userId=${userId || 'all'}`);
+            return data;
+        },
+        staleTime: 2 * 60 * 1000, // 2 minutes - grades change more often
+    });
+}

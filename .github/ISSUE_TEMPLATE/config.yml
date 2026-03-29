@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: mailto:security@ubis.local
+    about: Report security vulnerabilities privately by email.
+  - name: General support
+    url: mailto:support@ubis.local
+    about: Ask usage and troubleshooting questions.

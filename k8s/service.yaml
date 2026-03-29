@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ubis-backend-service
+spec:
+  type: ClusterIP
+  selector:
+    app: ubis-backend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000

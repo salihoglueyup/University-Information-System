@@ -1,0 +1,113 @@
+name: ubis-dev
+
+services:
+  mongo:
+    image: mongo:7
+    container_name: ubis_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: ubis_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: ubis_rabbitmq
+    restart: unless-stopped
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  meilisearch:
+    image: getmeili/meilisearch:v1.6
+    container_name: ubis_meilisearch
+    restart: unless-stopped
+    ports:
+      - "7700:7700"
+    environment:
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-}
+    volumes:
+      - meili_data:/meili_data/data.ms
+
+  server:
+    build:
+      context: ..
+      dockerfile: docker/server.Dockerfile
+      target: development
+    container_name: ubis_server
+    restart: unless-stopped
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      meilisearch:
+        condition: service_started
+    ports:
+      - "${SERVER_PORT:-5000}:5000"
+    environment:
+      NODE_ENV: development
+      PORT: 5000
+      MONGO_URL: mongodb://mongo:27017/ubis
+      REDIS_URL: redis://redis:6379
+      MEILI_HOST: http://meilisearch:7700
+      MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-}
+      RABBITMQ_URL: amqp://rabbitmq:5672
+      CLIENT_URL: http://localhost:5173
+    volumes:
+      - ../server:/app
+      - server_node_modules:/app/node_modules
+
+  client:
+    build:
+      context: ..
+      dockerfile: docker/client.Dockerfile
+      target: development
+    container_name: ubis_client
+    restart: unless-stopped
+    depends_on:
+      - server
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_DEV_PROXY_TARGET: http://server:5000
+      VITE_API_URL: http://localhost:${SERVER_PORT:-5000}
+    volumes:
+      - ../client:/app
+      - client_node_modules:/app/node_modules
+
+volumes:
+  mongo_data:
+  redis_data:
+  meili_data:
+  rabbitmq_data:
+  server_node_modules:
+  client_node_modules:

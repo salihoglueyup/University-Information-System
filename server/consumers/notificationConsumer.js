@@ -1,0 +1,79 @@
+const messageBroker = require('../utils/messageBroker');
+const logger = require('../utils/logger');
+const socketAPI = require('../socket');
+
+const formatError = (err) => {
+    if (!err) {
+        return 'Unknown error';
+    }
+
+    if (err.message) {
+        return err.message;
+    }
+
+    if (Array.isArray(err.errors) && err.errors.length > 0) {
+        return err.errors
+            .map((item) => item && item.message)
+            .filter(Boolean)
+            .join(' | ');
+    }
+
+    return String(err);
+};
+
+async function startNotificationConsumer() {
+    try {
+        const ch = await messageBroker.ensureChannel();
+        if (!ch) {
+            logger.warn('RabbitMQ channel is not ready. Notification consumer is disabled.');
+            return;
+        }
+
+        const queueName = 'email_notifications';
+        await ch.assertQueue(queueName);
+
+        logger.info(`RabbitMQ Consumer started listening on ${queueName}`);
+
+        ch.consume(queueName, (msg) => {
+            if (msg !== null) {
+                try {
+                    const payload = JSON.parse(msg.content.toString());
+                    logger.debug(`[Consumer] Processing event for user: ${payload.userId || payload.username}`);
+
+                    // Emit Web Socket Notification
+                    const targetKeys = [payload.userId, payload.username]
+                        .filter(Boolean)
+                        .map((value) => String(value));
+
+                    if (targetKeys.length > 0) {
+                        const io = socketAPI.getIO();
+                        const onlineUsers = socketAPI.getOnlineUsers();
+                        const socketId = targetKeys
+                            .map((key) => onlineUsers.get(key))
+                            .find(Boolean);
+
+                        if (socketId) {
+                            io.to(socketId).emit('new_notification', {
+                                title: payload.title || 'Sistem Bildirimi',
+                                message: payload.message || 'Yeni bir bildiriminiz var.',
+                                type: payload.type || 'info',
+                                timestamp: new Date()
+                            });
+                        }
+                    }
+
+                    // Acknowledge the message to drop it from queue safely
+                    ch.ack(msg);
+                } catch (err) {
+                    logger.error(`[Consumer] Error processing message: ${err.message}`);
+                    // Don't ack so it can be retried or put back
+                }
+            }
+        });
+        
+    } catch (error) {
+        logger.warn(`Notification consumer setup failed. Continuing without consumer. Details: ${formatError(error)}`);
+    }
+}
+
+module.exports = { startNotificationConsumer };

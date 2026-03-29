@@ -1,0 +1,41 @@
+# Root dependencies
+node_modules/
+
+# Build outputs
+client/dist/
+client/.vite/
+server/dist/
+
+# Coverage and test artifacts
+coverage/
+*.lcov
+server/test_output.txt
+server/test_results.json
+
+# Logs
+*.log
+logs/
+server/logs/
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.production.example
+server/.env
+client/.env
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# Docker local volumes and runtime
+**/data/
+**/tmp/
+
+# Uploads and generated assets
+server/uploads/
+docs/assets/screens/**/*.png

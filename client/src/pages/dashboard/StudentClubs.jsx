@@ -1,0 +1,56 @@
+import { UserPlus } from 'lucide-react';
+
+// Components
+
+// Mock Data
+import { studentClubs } from '../../data/mockData';
+
+export default function StudentClubs() {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-6"
+        >
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-2xl font-bold text-slate-800 flex items-center gap-2">
+                        <Users className="text-pink-600" /> Öğrenci Kulüpleri
+                    </h1>
+                    <p className="text-slate-500 text-sm">İlgi alanınıza uygun kulüplere katılın ve sosyalleşin</p>
+                </div>
+                <Button variant="outline" icon={UserPlus}>Yeni Kulüp Başvurusu</Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {studentClubs.map((club) => (
+                    <Card key={club.id} className="hover:shadow-lg transition-shadow duration-300 group">
+                        <div className="p-6 text-center space-y-4">
+                            <div className="w-16 h-16 mx-auto bg-slate-50 rounded-full flex items-center justify-center text-4xl shadow-sm group-hover:scale-110 transition-transform">
+                                {club.logo}
+                            </div>
+
+                            <div>
+                                <h3 className="font-bold text-slate-800 text-lg">{club.name}</h3>
+                                <p className="text-slate-500 text-sm mt-1 line-clamp-2 min-h-[40px]">{club.description}</p>
+                            </div>
+
+                            <div className="flex justify-center gap-4 text-xs font-medium text-slate-400 border-t border-slate-100 pt-4">
+                                <div className="flex items-center gap-1">
+                                    <Users size={14} />
+                                    <span>{club.members} Üye</span>
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                                    <span>Aktif</span>
+                                </div>
+                            </div>
+
+                            <Button variant="primary" className="w-full mt-2">Üye Ol</Button>
+                        </div>
+                    </Card>
+                ))}
+            </div>
+        </motion.div>
+    );
+}

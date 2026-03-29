@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+set -e
+
+echo "[pre-commit] Running client lint (CI mode)..."
+cd client
+npm run lint:ci
+
+cd ../server
+echo "[pre-commit] Running server lint (CI mode)..."
+npm run lint:ci
+
+echo "[pre-commit] All checks passed."

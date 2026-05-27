@@ -5,12 +5,12 @@ export default function Curriculum() {
     const [courses, setCourses] = useState(courseCatalog); // Mock state
 
     const handleEdit = (course) => {
-        console.log("Edit course:", course);
+        // TODO: implement edit course
     };
 
     const handleDelete = (id) => {
         if (window.confirm("Bu dersi silmek istediğinize emin misiniz?")) {
-            console.log("Delete course:", id);
+            // TODO: implement delete course
             setCourses(courses.filter(c => c.id !== id));
         }
     };
@@ -52,3 +52,5 @@ export default function Curriculum() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { BookOpen, Plus } from 'lucide-react';

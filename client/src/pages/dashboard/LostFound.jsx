@@ -1,4 +1,4 @@
-import { HelpCircle } from 'lucide-react';
+import { CalendarDays, HelpCircle, MapPin, Search } from 'lucide-react';
 
 // Components
 
@@ -69,3 +69,5 @@ export default function LostFound() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card, Input, Tabs } from '../../components/ui';

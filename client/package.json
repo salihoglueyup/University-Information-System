@@ -23,6 +23,7 @@
     "axios": "^1.13.6",
     "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
+    "dompurify": "^3.4.0",
     "framer-motion": "^12.34.0",
     "html2canvas": "^1.4.1",
     "i18next": "^25.10.4",

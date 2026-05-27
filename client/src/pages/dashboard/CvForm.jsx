@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Save, Plus } from 'lucide-react';
+import { Plus, Save, UserSquare2 } from 'lucide-react';
 
 // Components
 
@@ -104,3 +104,5 @@ export default function CvForm() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card, Input, Select, Textarea } from '../../components/ui';

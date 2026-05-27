@@ -1,5 +1,6 @@
 const { MeiliSearch } = require('meilisearch');
 const dotenv = require('dotenv');
+const logger = require('./logger');
 dotenv.config();
 
 const meiliConfig = {
@@ -27,9 +28,9 @@ const initIndexes = async () => {
             searchableAttributes: ['code', 'title', 'instructor'],
             filterableAttributes: ['credits']
         });
-        console.log('🔍 MeiliSearch Endeksleri başarıyla ayarlandı.');
+        logger.info('MeiliSearch indexes configured successfully.');
     } catch (e) {
-        console.warn('⚠️ MeiliSearch bağlantısı başarısız. Arama motoru pasif.', e.message);
+        logger.warn(`MeiliSearch connection failed. Search engine disabled. Details: ${e.message}`);
     }
 };
 

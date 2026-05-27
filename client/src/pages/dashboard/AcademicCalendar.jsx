@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { CalendarIcon, ChevronLeft, ChevronRight, Clock } from 'lucide-react';
 import axiosInstance from '../../api/axiosInstance';
 
 export default function AcademicCalendar() {
@@ -105,3 +105,5 @@ export default function AcademicCalendar() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

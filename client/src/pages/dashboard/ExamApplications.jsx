@@ -1,4 +1,4 @@
-import { FileText, Plus } from 'lucide-react';
+import { CheckCircle, Clock, FileText, Plus } from 'lucide-react';
 
 const examApplications = [
     {
@@ -109,3 +109,4 @@ export default function ExamApplications() {
         </div>
     );
 }
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

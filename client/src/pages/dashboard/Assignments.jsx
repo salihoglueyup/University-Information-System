@@ -1,11 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
-import { Upload, FileText, CheckCircle, Clock, AlertCircle } from 'lucide-react';
+import { AlertCircle, BookOpen, CalendarIcon, CheckCircle, ChevronRight, Clock, FileText, LayoutGrid, ListIcon, Search, Upload } from 'lucide-react';
 
 // Components
-
-
+import AssignmentSubmissionModal from '../../components/dashboard/assignments/AssignmentSubmissionModal';
 
 import axiosInstance from '../../api/axiosInstance';
+import { getUser } from '../../utils/authStorage';
 
 export default function Assignments() {
     const [assignments, setAssignments] = useState([]);
@@ -20,7 +20,7 @@ export default function Assignments() {
     useEffect(() => {
         const fetchAssignments = async () => {
             try {
-                const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+                const storedUser = getUser() || {};
                 const userId = storedUser.id || storedUser._id;
 
                 const res = await axiosInstance.get('/assignments');
@@ -332,3 +332,5 @@ export default function Assignments() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Badge, Button, Card, DataGrid } from '../../components/ui';

@@ -12,9 +12,14 @@ exports.getAllUsers = async () => {
 };
 
 exports.updateUser = async (id, updateData) => {
+    const allowedFields = ['fullName', 'email', 'profilePicture', 'language', 'theme'];
+    const sanitized = {};
+    for (const key of allowedFields) {
+        if (updateData[key] !== undefined) sanitized[key] = updateData[key];
+    }
     return await User.findByIdAndUpdate(
         id,
-        { $set: updateData },
+        { $set: sanitized },
         { new: true }
     ).select('-password');
 };

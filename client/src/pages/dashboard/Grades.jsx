@@ -1,16 +1,18 @@
 import { useEffect } from 'react';
-import { BookOpen, Calendar } from 'lucide-react';
+import { Award, BookOpen, Calendar, TrendingUp } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { Alert, Badge, BarChart, Button, Card, CountUp, LineChart, Table, Tabs } from '../../components/ui';
 
 // Components
 
 
 import { useSocket } from '../../context/SocketContext';
 import { useGrades } from '../../hooks/useGrades';
+import { getUser } from '../../utils/authStorage';
 
 export default function Grades() {
     const defaultUser = { gpa: "3.85", completedCredits: "120" };
-    const user = JSON.parse(localStorage.getItem('user')) || defaultUser;
+    const user = getUser() || defaultUser;
     const userId = user?.id || user?.username || 'all';
 
     const { data: gradesData = { currentSemester: [], history: [], distribution: [] }, isLoading } = useGrades(userId);
@@ -138,7 +140,7 @@ export default function Grades() {
                     { id: 'analysis', label: 'Başarı Analizi' },
                     { id: 'transcript', label: 'Transkript Özeti' },
                 ]}
-                onChange={(id) => console.log(id)}
+                onChange={() => {}}
             >
                 {/* Tab: Grades */}
                 <div id="grades" className="space-y-6">

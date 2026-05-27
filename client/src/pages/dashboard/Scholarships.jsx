@@ -1,4 +1,4 @@
-import { TrendingUp } from 'lucide-react';
+import { Award, HelpCircle, TrendingUp } from 'lucide-react';
 
 // Components
 
@@ -69,3 +69,5 @@ export default function Scholarships() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

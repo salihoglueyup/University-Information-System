@@ -85,3 +85,6 @@ export default function ExamSchedule() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { CalendarDays, Clock, MapPin } from 'lucide-react';
+import { Badge, Button, Card } from '../../components/ui';

@@ -1,4 +1,4 @@
-import { Clock } from 'lucide-react';
+import { Clock, Trophy } from 'lucide-react';
 
 // Components
 
@@ -56,3 +56,5 @@ export default function Sports() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card, ProgressBar } from '../../components/ui';

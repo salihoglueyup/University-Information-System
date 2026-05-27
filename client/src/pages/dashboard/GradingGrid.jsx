@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCourseDetail } from '../../hooks/queries/useCourseDetail';
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 export default function GradingGrid() {
     const { courseId, assessmentId } = useParams();
@@ -72,7 +72,7 @@ export default function GradingGrid() {
     const handleSave = () => {
         toast.success("Notlar kaydedildi!");
         // Simulate sending data back
-        console.log("Saving grades for", assessmentId, students);
+        // TODO: implement save grades
     };
 
     const getGradeColor = (grade) => {
@@ -217,3 +217,5 @@ export default function GradingGrid() {
         </div>
     );
 }
+import { ArrowLeft, BarChart2, Download, Filter, Save, Search } from 'lucide-react';
+import { Badge, Button, Card } from '../../components/ui';

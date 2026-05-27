@@ -1,0 +1,17 @@
+# ==========================================
+# UBIS Docker Ignore (docker/ build context)
+# ==========================================
+# NOTE: The primary .dockerignore at the project root handles
+# docker-compose builds where context is set to "..".
+# This file applies when running standalone builds from docker/.
+
+docker-compose*.yml
+.env
+.env.*
+!.env.example
+!.env.production.example
+prometheus.yml
+grafana/
+mongo-init.js
+healthcheck.sh
+*.md

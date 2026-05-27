@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Map } from 'lucide-react';
+import { ArrowLeft, Box, Layers, Map, MapPin, Search, Users } from 'lucide-react';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { useCampusData } from '../../hooks/queries/useCampusData';
@@ -285,5 +285,6 @@ const CampusMap = () => {
         </div>
     );
 };
+import { Badge, Card, PageHeader } from '../../components/ui';
 
 export default CampusMap;

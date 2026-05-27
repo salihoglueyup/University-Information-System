@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import {
-    BookOpen
-} from 'lucide-react';
+import { AlertCircle, BookOpen, CheckCircle, ChevronRight, Clock, FileText, Filter, MapPin, MoreVertical, PenTool, Search, Users } from 'lucide-react';
 import { instructorCoursesData } from '../../data/mockData';
 import { useNavigate } from 'react-router-dom';
 
@@ -174,3 +172,5 @@ export default function InstructorCourses() {
         </div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

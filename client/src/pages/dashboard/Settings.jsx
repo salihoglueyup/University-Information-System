@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Lock } from 'lucide-react';
+import { getUser, setAuthSession } from '../../utils/authStorage';
 
 // Components
 import { Tabs, Card, Avatar, Button, Input, Switch } from '../../components/ui';
@@ -23,7 +24,7 @@ export default function Settings() {
     const [qrCodeData, setQrCodeData] = useState(null);
     const [twoFactorToken, setTwoFactorToken] = useState("");
     const [is2FAEnabled, setIs2FAEnabled] = useState(() => {
-        const u = JSON.parse(localStorage.getItem('user') || '{}');
+        const u = getUser();
         return !!u.isTwoFactorEnabled;
     });
 
@@ -45,10 +46,9 @@ export default function Settings() {
             setQrCodeData(null);
             
             // Update local user 
-            const u = JSON.parse(localStorage.getItem('user') || '{}');
+            const u = getUser();
             u.isTwoFactorEnabled = true;
-            localStorage.setItem('user', JSON.stringify(u));
-            localStorage.setItem('token', res.data.accessToken);
+            setAuthSession(u, res.data.accessToken);
 
             toast.success("İki Aşamalı Doğrulama (2FA) başarıyla aktif edildi!");
         } catch {

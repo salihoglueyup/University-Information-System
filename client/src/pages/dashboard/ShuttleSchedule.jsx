@@ -70,3 +70,6 @@ export default function ShuttleSchedule() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Bus, Clock, MapPin } from 'lucide-react';
+import { Badge, Card } from '../../components/ui';

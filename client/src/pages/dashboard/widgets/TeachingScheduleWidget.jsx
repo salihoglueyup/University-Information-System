@@ -1,4 +1,7 @@
 
+import { motion } from 'framer-motion';
+import { Calendar, Clock, MapPin } from 'lucide-react';
+
 export default function TeachingScheduleWidget() {
     // Mock schedule for instructor
     const schedule = [

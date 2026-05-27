@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const AttendanceSchema = new mongoose.Schema({
     userId: {
         type: String,
-        default: 'all'
+        required: true
     },
     code: String,
     name: String,
@@ -12,5 +12,7 @@ const AttendanceSchema = new mongoose.Schema({
     absent: Number,
     percent: Number
 }, { timestamps: true });
+
+AttendanceSchema.index({ userId: 1 });
 
 module.exports = mongoose.model('Attendance', AttendanceSchema);

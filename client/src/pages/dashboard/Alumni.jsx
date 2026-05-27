@@ -1,4 +1,4 @@
-import { UserCheck } from 'lucide-react';
+import { Briefcase, MessageSquare, UserCheck, Users } from 'lucide-react';
 
 export default function Alumni() {
     return (
@@ -80,3 +80,5 @@ export default function Alumni() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card } from '../../components/ui';

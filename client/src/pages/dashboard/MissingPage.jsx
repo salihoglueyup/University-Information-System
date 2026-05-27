@@ -28,3 +28,5 @@ export default function MissingPage() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { ArrowLeft, Construction } from 'lucide-react';

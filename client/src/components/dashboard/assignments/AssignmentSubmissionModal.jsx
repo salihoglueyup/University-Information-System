@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import axiosInstance from '../../../api/axiosInstance';
 export default function AssignmentSubmissionModal({ isOpen, onClose, assignment }) {
     const [file, setFile] = useState(null);

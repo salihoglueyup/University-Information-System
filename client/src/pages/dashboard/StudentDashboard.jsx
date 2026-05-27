@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '../../api/axiosInstance';
+import { getUser } from '../../utils/authStorage';
 
 // Widgets
 import StatsWidget from './widgets/StatsWidget';
@@ -8,18 +9,7 @@ import AssignmentsWidget from './widgets/AssignmentsWidget';
 import AnnouncementsWidget from './widgets/AnnouncementsWidget';
 
 export default function StudentDashboard() {
-    const localUser = (() => {
-        try {
-            const rawUser = localStorage.getItem('user');
-            const parsedUser = rawUser ? JSON.parse(rawUser) : null;
-            if (parsedUser && typeof parsedUser === 'object') {
-                return parsedUser;
-            }
-        } catch {
-            // Keep a safe fallback when storage is corrupted.
-        }
-        return { name: 'Ogrenci', id: '' };
-    })();
+    const localUser = getUser() || { name: 'Ogrenci', id: '' };
     const identifier = localUser.username || localUser.id;
 
     // Use TanStack Query to fetch profile and cache it automatically
@@ -43,7 +33,17 @@ export default function StudentDashboard() {
         totalCreditsRequired: 240
     } : localUser;
 
-    if (isLoading && !isError) return <div className="p-8 flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>;
+    // Show loading only if data hasn't arrived AND no error (or on initial fetch)
+    // If data arrived, render it even if React Query state is still updating
+    if (!studentData && isLoading && !isError) {
+        return <div className="p-8 flex items-center justify-center h-64"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>;
+    }
+    
+    // If error occurred after exhausting retries, show error but still render with fallback
+    if (isError && !studentData) {
+        console.warn('Failed to fetch student profile, using fallback');
+    }
+    
     return (
         <div className="space-y-6 pb-8">
             {/* Welcome Section */}

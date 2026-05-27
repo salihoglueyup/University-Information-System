@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Clock, GraduationCap, User } from 'lucide-react';
 
 // Mock Data
 import { semCourses } from '../../data/mockData';
@@ -53,3 +53,5 @@ export default function SemCourses() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react';
 
 const Checkbox = ({ label, checked, onChange, disabled, className = '', ...props }) => {
     return (

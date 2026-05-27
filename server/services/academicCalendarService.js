@@ -1,7 +1,7 @@
 const AcademicCalendar = require('../models/AcademicCalendar');
 
 exports.getAllEvents = async () => {
-    return await AcademicCalendar.find();
+    return await AcademicCalendar.find().sort({ month: 1 }).lean();
 };
 
 exports.createEvent = async (eventData) => {

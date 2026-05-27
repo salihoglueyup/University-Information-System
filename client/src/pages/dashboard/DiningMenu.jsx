@@ -68,3 +68,6 @@ export default function DiningMenu() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Flame, Leaf, Utensils } from 'lucide-react';
+import { Alert, Badge, Card } from '../../components/ui';

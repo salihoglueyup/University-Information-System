@@ -13,8 +13,8 @@ const AssignmentSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    dueDate: { // e.g. "2026-03-15T23:59:00Z" or formatted string
-        type: String,
+    dueDate: {
+        type: Date,
         required: true
     },
     daysLeft: {
@@ -30,5 +30,7 @@ const AssignmentSchema = new mongoose.Schema({
         default: 'Ödev'
     }
 }, { timestamps: true });
+
+AssignmentSchema.index({ status: 1, dueDate: 1 });
 
 module.exports = mongoose.model('Assignment', AssignmentSchema);

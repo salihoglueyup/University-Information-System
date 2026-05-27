@@ -1,4 +1,6 @@
 import { useRef, useState } from 'react';
+import { Eraser, Check } from 'lucide-react';
+import SignatureCanvas from 'react-signature-canvas';
 
 const SignaturePad = ({ onEnd, className = '' }) => {
     const sigCanvas = useRef({});

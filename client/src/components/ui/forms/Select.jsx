@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, X, Search, Check } from 'lucide-react';
 
 const Select = ({
     label,

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ChevronDown, ChevronRight, FolderOpen, Folder, File } from 'lucide-react';
 
 const TreeNode = ({ node, onSelect, level = 0 }) => {
     const [isOpen, setIsOpen] = useState(false);

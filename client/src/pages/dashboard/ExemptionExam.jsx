@@ -103,3 +103,6 @@ export default function ExemptionExam() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { CheckCircle2, FileCheck } from 'lucide-react';
+import { Alert, Badge, Button, Card, Input, Select } from '../../components/ui';

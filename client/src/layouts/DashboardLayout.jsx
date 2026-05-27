@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { Bell, Menu, Search } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
-import toast from 'react-hot-toast';
+import { toast } from 'react-toastify';
 import { useSocket } from '../context/SocketContext';
 import { getUser } from '../utils/authStorage';
 import Sidebar from '../components/layout/Sidebar';
@@ -13,7 +13,7 @@ export default function DashboardLayout() {
     const location = useLocation();
 
     // Using global socket context replacing duplicate inline connection
-    const { notifications, markAsRead } = useSocket();
+    const { notifications, markAsRead, markAllAsRead } = useSocket();
     const unreadCount = notifications.filter(n => !n.read).length;
 
     // User state - reading from localStorage
@@ -39,17 +39,17 @@ export default function DashboardLayout() {
     };
 
     // Listen for new notifications to trigger toast
+    const [lastNotifiedId, setLastNotifiedId] = useState(null);
     useEffect(() => {
         const latestUnread = notifications.find(n => !n.read);
-        if (latestUnread) {
-            toast(latestUnread.message, {
+        if (latestUnread && latestUnread.id !== lastNotifiedId) {
+            setLastNotifiedId(latestUnread.id);
+            toast.info(latestUnread.message, {
                 icon: latestUnread.type === 'success' ? '📝' : '📢',
-                style: { borderRadius: '10px', background: '#333', color: '#fff' }
             });
-            // Auto mark as read after showing toast to prevent continuous popups in this basic implementation
             markAsRead(latestUnread.id);
         }
-    }, [notifications, markAsRead]);
+    }, [notifications, lastNotifiedId, markAsRead]);
 
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-slate-900 flex font-sans overflow-hidden transition-colors duration-300">
@@ -81,7 +81,7 @@ export default function DashboardLayout() {
                     <div className="flex items-center gap-4">
                         <button
                             className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 transition-colors"
-                            onClick={() => notifications.forEach(n => markAsRead(n.id))}
+                            onClick={() => markAllAsRead()}
                         >
                             <Bell size={20} />
                             {unreadCount > 0 && (

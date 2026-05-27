@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ContextMenu = ({ trigger, items = [], className = '' }) => {
     const [coords, setCoords] = useState({ x: 0, y: 0 });

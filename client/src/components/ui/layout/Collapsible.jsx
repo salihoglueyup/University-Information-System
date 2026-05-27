@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Collapsible = ({ trigger, children, open = false, onOpenChange, className = '' }) => {
     const [isOpenInternal, setIsOpenInternal] = useState(open);

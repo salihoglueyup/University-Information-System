@@ -1,4 +1,4 @@
-import { ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight, Briefcase, Building2, CalendarDays, Clock, FileCheck, MapPin } from 'lucide-react';
 
 // Components
 
@@ -129,3 +129,5 @@ export default function Internship() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card, ProgressBar, Tabs } from '../../components/ui';

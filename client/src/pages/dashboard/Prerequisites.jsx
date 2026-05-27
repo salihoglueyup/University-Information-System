@@ -67,3 +67,6 @@ export default function Prerequisites() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { GitMerge, Info } from 'lucide-react';
+import { Alert, Card, Table } from '../../components/ui';

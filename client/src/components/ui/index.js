@@ -93,4 +93,4 @@ export { default as SignaturePad } from './forms/SignaturePad';
 export { ThemeCustomizer, ThemeProvider, useTheme } from './theme/ThemeCustomizer';
 
 // Animation
-export { StaggerContainer, StaggerItem } from './animation/Stagger';
+export { StaggerContainer, StaggerItem } from './animation/Stagger.jsx';

@@ -40,7 +40,7 @@ export default function ProctoringScheduler() {
                         Excel İndir
                     </Button>
                     <Button variant="primary">
-                        <CalendarIcon size={18} className="mr-2" />
+                        <Calendar size={18} className="mr-2" />
                         Yeni Sınav Planla
                     </Button>
                 </div>
@@ -170,3 +170,5 @@ export default function ProctoringScheduler() {
         </div>
     );
 }
+import { Calendar, Clock, Download, MapPin, Search, User, Users } from 'lucide-react';
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

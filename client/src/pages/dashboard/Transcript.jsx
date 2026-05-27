@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Download, Printer } from 'lucide-react';
+import { Download, Info, Printer } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import QRCode from 'qrcode';
@@ -16,14 +16,12 @@ export default function Transcript() {
     React.useEffect(() => {
         const createVerification = async () => {
             try {
-                const userToken = localStorage.getItem('token') || '';
+                // axiosInstance already injects the auth header
                 const studentName = currentUser.name || currentUser.fullName || 'Öğrenci';
                 const res = await axiosInstance.post('/verifications/create', {
                     studentName: studentName,
                     studentId: currentUser.id || currentUser.tc || 'B0000',
                     documentType: 'Transkript'
-                }, {
-                    headers: userToken ? { Authorization: `Bearer ${userToken}` } : {}
                 });
 
                 const hash = res.data.hash;
@@ -280,3 +278,4 @@ export default function Transcript() {
         </div>
     );
 }
+import { Badge, Button, Card, Table } from '../../components/ui';

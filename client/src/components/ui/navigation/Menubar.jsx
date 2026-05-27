@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Menubar = ({ menus = [], className = '' }) => {
     const [activeMenu, setActiveMenu] = useState(null);

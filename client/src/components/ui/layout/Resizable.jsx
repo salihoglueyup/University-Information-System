@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { GripVertical, GripHorizontal } from 'lucide-react';
 
 const Resizable = ({ direction = 'horizontal', children, initialSize = 50, minSize = 20, maxSize = 80, className = '' }) => {
     const [size, setSize] = useState(initialSize); // Percentage

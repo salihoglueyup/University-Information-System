@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react';
+import { BookOpen, CheckSquare, Clock, ExternalLink, Presentation } from 'lucide-react';
 
 const moodleCourses = [
     { id: 1, name: "Yazılım Mimarisi (YZM302)", progress: 75, nextTask: "Rapor Teslimi", deadline: "15 Şubat", code: "YZM302" },
@@ -89,3 +89,5 @@ export default function Moodle() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card, ProgressBar } from '../../components/ui';

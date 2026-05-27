@@ -131,3 +131,5 @@ export default function CourseAssignments() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { AlertCircle, Briefcase, CheckCircle, Search, UserPlus } from 'lucide-react';

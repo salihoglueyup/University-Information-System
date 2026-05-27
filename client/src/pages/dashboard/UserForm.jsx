@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Save } from 'lucide-react';
+import { Building, Mail, Power, Save, Shield, User, X } from 'lucide-react';
 
 // Components
 
@@ -161,3 +161,5 @@ export default function UserForm({ isOpen, onClose, initialData = null, onSave }
         </AnimatePresence>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '../../components/ui';

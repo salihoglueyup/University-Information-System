@@ -10,8 +10,8 @@ mongoose.connect(process.env.MONGO_URL)
     .then(async () => {
         console.log('MongoDB Connected');
 
-        const username = 'salihoglueyup';
-        const passwordPlain = 'Salihoglu61.';
+        const username = process.env.SEED_USERNAME || 'salihoglueyup';
+        const passwordPlain = process.env.SEED_PASSWORD || 'ChangeMe!123';
 
         // Hashing password
         const salt = await bcrypt.genSalt(10);

@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { FileText
-} from 'lucide-react';
+import { Activity, AlertTriangle, ArrowLeft, CheckCircle, FileText, Mail, Phone } from 'lucide-react';
 import axiosInstance from '../../api/axiosInstance';
 
 export default function Student360() {
@@ -121,3 +120,4 @@ export default function Student360() {
         </div>
     );
 }
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

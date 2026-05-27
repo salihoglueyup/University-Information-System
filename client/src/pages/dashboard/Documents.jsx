@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import { Download, Eye, Upload } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { FileText, FileBadge } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 // Components
 import axiosInstance from '../../api/axiosInstance';
-import { API_BASE_URL } from '../../config/apiConfig';
 import { Alert, Badge, Button, Card } from '../../components/ui';
-import { getToken } from '../../utils/authStorage';
 
 export default function Documents() {
     const [documentsData, setDocumentsData] = useState([]);
@@ -47,16 +46,27 @@ export default function Documents() {
             fetchDocs(); // Refresh list after successful upload
         } catch (err) {
             console.error('Yükleme hatası', err);
+            toast.error('Dosya yüklenemedi.');
         } finally {
             setUploading(false);
         }
     };
 
-    const getSecureFileUrl = (fileUrl) => {
-        if (!fileUrl) return null;
-        const token = getToken();
-        if (!token) return `${API_BASE_URL}${fileUrl}`;
-        return `${API_BASE_URL}${fileUrl}?token=${encodeURIComponent(token)}`;
+    const downloadFile = async (fileUrl, fileName) => {
+        try {
+            const res = await axiosInstance.get(fileUrl, { responseType: 'blob' });
+            const url = window.URL.createObjectURL(new Blob([res.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', fileName || 'document');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error('Dosya indirilemedi', err);
+            toast.error('Dosya indirilemedi.');
+        }
     };
 
     return (
@@ -127,8 +137,7 @@ export default function Documents() {
                                 className="flex-1"
                                 icon={Eye}
                                 onClick={() => {
-                                    const url = getSecureFileUrl(doc.fileUrl);
-                                    if (url) window.open(url, '_blank');
+                                    if (doc.fileUrl) window.open(doc.fileUrl, '_blank');
                                 }}
                             >
                                 Onizle
@@ -138,10 +147,7 @@ export default function Documents() {
                                 size="sm"
                                 className="flex-1"
                                 icon={Download}
-                                onClick={() => {
-                                    const url = getSecureFileUrl(doc.fileUrl);
-                                    if (url) window.open(url, '_blank');
-                                }}
+                                onClick={() => downloadFile(doc.fileUrl, doc.title)}
                             >
                                 İndir
                             </Button>

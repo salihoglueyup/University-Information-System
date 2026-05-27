@@ -1,4 +1,6 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Download, UserPlus, UsersIcon } from 'lucide-react';
 import axiosInstance from '../../api/axiosInstance';
 
 export default function Users() {
@@ -33,17 +35,27 @@ export default function Users() {
     }, []);
 
     const handleEdit = (user) => {
-        console.log('Edit user:', user);
+        // TODO: implement edit user
     };
 
-    const handleDelete = (userId) => {
+    const handleDelete = async (userId) => {
         if (window.confirm('Bu kullaniciyi silmek istediginize emin misiniz?')) {
-            setUsers(users.filter((u) => u.id !== userId));
+            try {
+                await axiosInstance.delete(`/users/${userId}`);
+                setUsers(users.filter((u) => u.id !== userId));
+            } catch (error) {
+                console.error('Failed to delete user', error);
+            }
         }
     };
 
-    const handleStatusChange = (userId, newStatus) => {
-        setUsers(users.map((u) => (u.id === userId ? { ...u, status: newStatus } : u)));
+    const handleStatusChange = async (userId, newStatus) => {
+        try {
+            await axiosInstance.patch(`/users/${userId}`, { status: newStatus });
+            setUsers(users.map((u) => (u.id === userId ? { ...u, status: newStatus } : u)));
+        } catch (error) {
+            console.error('Failed to update user status', error);
+        }
     };
 
     return (

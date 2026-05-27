@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Carousel = ({ items = [], autoPlay = false, interval = 3000, className = '' }) => {
     const [currentIndex, setCurrentIndex] = useState(0);

@@ -1,4 +1,4 @@
-import { Database } from 'lucide-react';
+import { AlertTriangle, Archive, Database, Download, RefreshCw, UploadCloud } from 'lucide-react';
 
 const backupLogs = [
     { id: 1, name: "ubis_db_backup_2026_03_01.sql.gz", size: "450 MB", date: "01.03.2026 03:00", type: "Otomatik (Tam)", status: "Başarılı" },
@@ -95,3 +95,4 @@ export default function Backup() {
         </div>
     );
 }
+import { Badge, Button, Card, DataGrid, PageHeader } from '../../components/ui';

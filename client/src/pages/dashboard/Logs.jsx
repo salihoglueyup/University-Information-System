@@ -175,3 +175,5 @@ export default function Logs() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { AlertTriangle, CheckCircle, Clock, Search, Shield } from 'lucide-react';

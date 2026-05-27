@@ -6,7 +6,7 @@ const verifyToken = (req, res, next) => {
     if (authHeader) {
         const token = authHeader.split(" ")[1];
         jwt.verify(token, process.env.JWT_SEC, (err, user) => {
-            if (err) return next(new AppError("Token is not valid!", 403));
+            if (err) return next(new AppError("Token is not valid or has expired!", 401));
             req.user = user;
             next();
         });
@@ -27,8 +27,18 @@ const restrictTo = (...roles) => {
 
 const verifyOwnerOrStaff = (req, res, next) => {
     // Requires verifyToken to be run first
-    // req.params.id is the target user's id
-    if (req.user.id === req.params.id || req.user.role === 'admin' || req.user.role === 'academic') {
+    // req.params.id can be Mongo user id or student number/username (e.g. B085100)
+    const rawParamId = String(req.params.id || '').trim();
+    const userId = String(req.user.id || '').trim();
+    const paramIdLower = rawParamId.toLowerCase();
+    const usernameLower = String(req.user.username || '').trim().toLowerCase();
+
+    if (
+        userId === rawParamId ||
+        usernameLower === paramIdLower ||
+        req.user.role === 'admin' ||
+        req.user.role === 'academic'
+    ) {
         next();
     } else {
         return next(new AppError("You are not authorized to access this resource", 403));
@@ -37,7 +47,8 @@ const verifyOwnerOrStaff = (req, res, next) => {
 
 const verifyRole = (roles) => {
     return (req, res, next) => {
-        verifyToken(req, res, () => {
+        verifyToken(req, res, (err) => {
+            if (err) return next(err);
             if (roles.includes(req.user.role)) {
                 next();
             } else {

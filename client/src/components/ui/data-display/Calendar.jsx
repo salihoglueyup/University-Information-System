@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Calendar = ({ events = [], onDateSelect, className = '' }) => {
     const [currentDate, setCurrentDate] = useState(new Date());

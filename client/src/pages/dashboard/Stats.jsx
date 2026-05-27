@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { BarChart, GraduationCap, Users, BookOpen, Building } from 'lucide-react';
+import { BarChart, BookOpen, Building, GraduationCap, TrendingUp, Users } from 'lucide-react';
+import { ResponsiveContainer, BarChart as RechartsBarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, PieChart, Pie, Cell } from 'recharts';
 
 
 // Mock Data
@@ -171,5 +172,6 @@ const Stats = () => {
         </div>
     );
 };
+import { Card, PageHeader, Select } from '../../components/ui';
 
 export default Stats;

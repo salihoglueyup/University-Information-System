@@ -1,6 +1,9 @@
 
 // Components
 
+import { motion } from 'framer-motion';
+import { Lock, ShieldCheck } from 'lucide-react';
+import { Button, Card } from '../../components/ui';
 export default function Kvkk() {
     return (
         <motion.div

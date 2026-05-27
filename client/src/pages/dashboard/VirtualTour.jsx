@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, PlayCircle, View } from 'lucide-react';
 
 // Components
 
@@ -51,3 +51,5 @@ export default function VirtualTour() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card } from '../../components/ui';

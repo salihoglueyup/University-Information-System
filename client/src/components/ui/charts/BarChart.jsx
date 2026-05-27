@@ -1,5 +1,5 @@
 
-
+import { ResponsiveContainer, BarChart as RechartsBarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar } from 'recharts';
 
 const BarChart = ({
     data,

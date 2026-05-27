@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const PermissionSchema = new mongoose.Schema({
-    date: { type: String, required: true },
+    date: { type: Date, required: true },
     type: { type: String, required: true },
     status: { type: String, enum: ['Bekliyor', 'Onaylandı', 'Reddedildi'], default: 'Bekliyor' }
 });
@@ -19,10 +19,10 @@ const DormitorySchema = new mongoose.Schema({
         friends: [{ type: String }]
     },
     paymentStatus: {
-        lastPaymentBase: { type: String },
+        lastPaymentBase: { type: Date },
         status: { type: String, default: "Ödenmedi" },
-        amount: { type: String, default: "0 ₺" },
-        nextPayment: { type: String }
+        amount: { type: Number, default: 0 },
+        nextPayment: { type: Date }
     },
     permissions: [PermissionSchema]
 }, { timestamps: true });

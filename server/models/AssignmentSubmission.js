@@ -8,7 +8,7 @@ const AssignmentSubmissionSchema = new mongoose.Schema({
     },
     student: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Student', // Assuming User or Student id
+        ref: 'User',
         required: true
     },
     fileUrl: {

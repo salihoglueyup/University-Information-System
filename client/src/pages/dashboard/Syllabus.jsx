@@ -104,3 +104,5 @@ export default function Syllabus() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { BookOpen, Download, FileText, Folder, Plus } from 'lucide-react';

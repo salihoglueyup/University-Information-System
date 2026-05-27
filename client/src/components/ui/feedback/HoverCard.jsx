@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const HoverCard = ({ trigger, content, openDelay = 200, closeDelay = 100, className = '' }) => {
     const [isOpen, setIsOpen] = useState(false);

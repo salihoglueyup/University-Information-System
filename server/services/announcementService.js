@@ -1,4 +1,5 @@
 const Announcement = require('../models/Announcement');
+const logger = require('../utils/logger');
 
 class AnnouncementService {
     async getAllAnnouncements() {
@@ -21,7 +22,7 @@ class AnnouncementService {
                 timestamp: new Date()
             });
         } catch (error) {
-            console.log("Socket emit failed:", error.message);
+            logger.warn("Socket emit failed:", error.message);
         }
 
         return savedAnnouncement;

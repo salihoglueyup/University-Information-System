@@ -3,8 +3,9 @@
  * All API URLs should be imported from here instead of hardcoding.
  */
 
-// Base URL for the backend server (no trailing slash)
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+// Prefer same-origin by default; VITE_API_URL can override when explicitly needed.
+const rawBaseUrl = (import.meta.env.VITE_API_URL || '').trim();
+export const API_BASE_URL = rawBaseUrl.replace(/\/$/, '');
 
 // Full API path prefix
-export const API_URL = `${API_BASE_URL}/api`;
+export const API_URL = API_BASE_URL ? `${API_BASE_URL}/api` : '/api';

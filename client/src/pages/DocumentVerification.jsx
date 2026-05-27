@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { useParams, Link } from 'react-router-dom';
+import { ArrowLeft, XCircle, ShieldCheck, FileText } from 'lucide-react';
 import axiosInstance from '../api/axiosInstance';
+import { Card, Button } from '../components/ui';
 
 export default function DocumentVerification() {
     const { hash } = useParams();

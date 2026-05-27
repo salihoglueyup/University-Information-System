@@ -1,4 +1,4 @@
-import { Plane, FileText } from 'lucide-react';
+import { FileText, Globe2, Plane } from 'lucide-react';
 
 // Components
 
@@ -96,3 +96,5 @@ export default function Erasmus() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Alert, Badge, Button, Card } from '../../components/ui';

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Star } from 'lucide-react';
 
 const Rating = ({ value = 0, max = 5, onChange, readOnly = false, className = '' }) => {
     const [hoverValue, setHoverValue] = useState(null);

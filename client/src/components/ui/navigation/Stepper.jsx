@@ -1,3 +1,4 @@
+import { Check } from 'lucide-react';
 
 const Stepper = ({ steps = [], currentStep = 0, className = '' }) => {
     return (

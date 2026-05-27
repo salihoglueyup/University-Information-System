@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const meiliClient = require('../utils/meiliClient');
+const logger = require('../utils/logger');
 
 const UserSchema = new mongoose.Schema({
     username: {
@@ -20,6 +21,15 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    email: {
+        type: String,
+        unique: true,
+        sparse: true
+    },
+    googleId: {
+        type: String,
+        sparse: true
+    },
     twoFactorSecret: {
         type: String,
         required: false
@@ -27,8 +37,17 @@ const UserSchema = new mongoose.Schema({
     isTwoFactorEnabled: {
         type: Boolean,
         default: false
+    },
+    passwordResetToken: {
+        type: String
+    },
+    passwordResetExpires: {
+        type: Date
     }
 }, { timestamps: true });
+
+UserSchema.index({ role: 1 });
+UserSchema.index({ email: 1 });
 
 // Auto-Sync with Meilisearch
 UserSchema.post('save', async function(doc) {
@@ -36,7 +55,7 @@ UserSchema.post('save', async function(doc) {
         try {
             const obj = { id: doc._id.toString(), username: doc.username, fullName: doc.fullName, email: doc.email };
             await meiliClient.index('students').addDocuments([obj]);
-        } catch (err) { console.error('Meili Index Error (User Save):', err.message); }
+        } catch (err) { logger.error('Meili Index Error (User Save):', err.message); }
     }
 });
 
@@ -45,14 +64,14 @@ UserSchema.post('findOneAndUpdate', async function(doc) {
         try {
             const obj = { id: doc._id.toString(), username: doc.username, fullName: doc.fullName, email: doc.email };
             await meiliClient.index('students').addDocuments([obj]);
-        } catch (err) { console.error('Meili Index Error (User Update):', err.message); }
+        } catch (err) { logger.error('Meili Index Error (User Update):', err.message); }
     }
 });
 
 UserSchema.post('findOneAndDelete', async function(doc) {
     if (doc && doc.role === 'student') {
         try { await meiliClient.index('students').deleteDocument(doc._id.toString()); }
-        catch (err) { console.error('Meili Index Error (User Delete):', err.message); }
+        catch (err) { logger.error('Meili Index Error (User Delete):', err.message); }
     }
 });
 

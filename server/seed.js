@@ -43,7 +43,7 @@ mongoose.connect(process.env.MONGO_URL || 'mongodb://localhost:27017/ubis')
                 console.log('Admin user created successfully.');
             }
             console.log('Username: admin');
-            console.log('Password: 123');
+            console.log('Password: [set via env or default]');
 
             console.log('Seeding courses...');
             await Course.deleteMany({});

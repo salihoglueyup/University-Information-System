@@ -1,4 +1,4 @@
-import { Globe } from 'lucide-react';
+import { Book, FileText, Globe, GraduationCap, Info } from 'lucide-react';
 
 export default function EducationInfo() {
     return (
@@ -79,3 +79,5 @@ export default function EducationInfo() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card } from '../../components/ui';

@@ -1,4 +1,4 @@
-import { UploadCloud } from 'lucide-react';
+import { AlertCircle, Calendar, FileCheck, Stethoscope, UploadCloud } from 'lucide-react';
 
 // Components
 
@@ -78,3 +78,5 @@ export default function HealthReports() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Calendar, Card } from '../../components/ui';

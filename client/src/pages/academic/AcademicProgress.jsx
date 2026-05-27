@@ -1,4 +1,4 @@
-import { GraduationCap } from 'lucide-react';
+import { AlertCircle, Award, BookOpen, Calendar, CheckCircle, Clock, GraduationCap } from 'lucide-react';
 import { academicMilestones } from '../../data/mockData';
 
 export default function AcademicProgress() {
@@ -181,3 +181,4 @@ function UserIcon({ size }) {
         </svg>
     )
 }
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

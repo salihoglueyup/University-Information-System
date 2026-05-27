@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Save } from 'lucide-react';
+import { AlertTriangle, BookOpen, CalendarIcon, CheckCircle, Clock, MapPin, Save, Search, X } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 // Dummy Course Catalog
 const courseCatalog = [
@@ -71,7 +72,7 @@ export default function CourseRegistration() {
         setIsSaving(true);
         setTimeout(() => {
             setIsSaving(false);
-            alert("Dersleriniz başarıyla danışman onayına gönderildi!");
+            toast.success('Dersleriniz başarıyla danışman onayına gönderildi!');
         }, 1500);
     };
 
@@ -300,3 +301,5 @@ export default function CourseRegistration() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Badge, Button } from '../../components/ui';

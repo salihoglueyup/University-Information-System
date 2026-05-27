@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Calendar, CarFront, ShieldCheck } from 'lucide-react';
 
 // Components
 
@@ -77,3 +77,5 @@ export default function VehicleSticker() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Alert, Badge, Button, Calendar, Card, Input } from '../../components/ui';

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
+import { getUser } from '../../utils/authStorage';
 // Components
 
 export default function RegistrationInfo() {
@@ -10,7 +11,7 @@ export default function RegistrationInfo() {
     useEffect(() => {
         const fetchStudentData = async () => {
             try {
-                const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+                const storedUser = getUser() || {};
                 const username = storedUser.username || storedUser.id;
                 if (!username) return;
                 const res = await axiosInstance.get('/students/${username}/360');
@@ -263,3 +264,6 @@ export default function RegistrationInfo() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Award, BookOpen, CalendarDays, Fingerprint, GraduationCap, MapPin, Phone } from 'lucide-react';
+import { Alert, Badge, Card, Tabs } from '../../components/ui';

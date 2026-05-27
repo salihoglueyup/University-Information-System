@@ -1,3 +1,5 @@
+import { ArrowUp, ArrowDown, ChevronsUpDown } from 'lucide-react';
+import Checkbox from '../forms/Checkbox';
 
 const Table = ({
     headers = [],

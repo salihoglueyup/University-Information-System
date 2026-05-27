@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { Download, Printer } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Download, Printer, Users } from 'lucide-react';
 
 // Components
 import axiosInstance from '../../api/axiosInstance';
@@ -111,3 +111,5 @@ export default function DepartmentSchedule() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

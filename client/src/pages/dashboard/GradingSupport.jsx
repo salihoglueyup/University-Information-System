@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react';
-import { PenTool } from 'lucide-react';
+import { CheckCircle, Clock, Download, FileSpreadsheet, PenTool, Upload } from 'lucide-react';
 import * as XLSX from 'xlsx';
+import { toast } from 'react-toastify';
 
 // Mock Data
 const initialGradingTasks = [
@@ -39,8 +40,7 @@ export default function GradingSupport() {
             const worksheet = workbook.Sheets[sheetName];
             const json = XLSX.utils.sheet_to_json(worksheet);
 
-            console.log("Imported Grades for Task", taskId, ":", json);
-            alert(`${json.length} öğrenci notu sisteme 'Taslak' olarak aktarıldı. Yayınlamayı unutmayın!`);
+            toast.success(`${json.length} öğrenci notu sisteme 'Taslak' olarak aktarıldı. Yayınlamayı unutmayın!`);
 
             // Update state to 'Taslak' (Draft) instead of 'Tamamlandı'
             setTasks(tasks.map(t => t.id === taskId ? { ...t, status: 'Taslak', unread: 0, draftData: json } : t));
@@ -50,7 +50,7 @@ export default function GradingSupport() {
 
     const handlePublish = (taskId) => {
         setTasks(tasks.map(t => t.id === taskId ? { ...t, status: 'Yayınlandı', draftData: null } : t));
-        alert('Notlar başarıyla öğrencilere yayınlandı ve dekanlığa iletildi!');
+        toast.success('Notlar başarıyla öğrencilere yayınlandı ve dekanlığa iletildi!');
     };
     const columns = [
         { field: 'course', headerName: 'Ders', flex: 2 },
@@ -181,3 +181,4 @@ export default function GradingSupport() {
         </div>
     );
 }
+import { Badge, Card, DataGrid, PageHeader } from '../../components/ui';

@@ -1,4 +1,4 @@
-import { CalendarCheck2 } from 'lucide-react';
+import { Briefcase, CalendarCheck2, Clock } from 'lucide-react';
 
 // Components
 
@@ -74,3 +74,5 @@ export default function PartTimeWork() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card, ProgressBar } from '../../components/ui';

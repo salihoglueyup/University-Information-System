@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { BarChart2 } from 'lucide-react';
+import { BarChart2, BookOpen, DollarSign, TrendingUp, Users } from 'lucide-react';
+import { ResponsiveContainer, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Bar, PieChart, Pie, Cell } from 'recharts';
 import axiosInstance from '../../api/axiosInstance';
 
 const Analytics = () => {
@@ -139,5 +140,6 @@ const Analytics = () => {
         </div>
     );
 };
+import { Card, PageHeader } from '../../components/ui';
 
 export default Analytics;

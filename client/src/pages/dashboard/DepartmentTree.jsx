@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { Plus, Edit, Trash2
-} from 'lucide-react';
+import { Building, ChevronDown, ChevronRight, Edit, GraduationCap, Plus, Trash2 } from 'lucide-react';
 
 // Components
 
@@ -125,16 +124,16 @@ const TreeNode = ({ node, level = 0, onEdit, onDelete, onAdd }) => {
 export default function DepartmentTree() {
     const [structure] = useState(initialStructure);
 
-    const handleEdit = (node) => {
-        console.log("Edit", node);
+    const handleEdit = (_node) => {
+        // TODO: implement edit
     };
 
-    const handleDelete = (id) => {
-        console.log("Delete", id);
+    const handleDelete = (_id) => {
+        // TODO: implement delete
     };
 
-    const handleAdd = (parentId) => {
-        console.log("Add to", parentId);
+    const handleAdd = (_parentId) => {
+        // TODO: implement add child
     };
 
     return (
@@ -161,3 +160,5 @@ export default function DepartmentTree() {
         </Card>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button, Card } from '../../components/ui';

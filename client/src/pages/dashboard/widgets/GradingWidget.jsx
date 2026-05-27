@@ -1,4 +1,6 @@
 import { gradingQueue } from '../../../data/mockData';
+import { motion } from 'framer-motion';
+import { PenTool, FileText, ChevronRight } from 'lucide-react';
 
 export default function GradingWidget() {
     return (

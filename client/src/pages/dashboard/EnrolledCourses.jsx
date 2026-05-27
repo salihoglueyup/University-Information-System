@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { MoreHorizontal, GraduationCap } from 'lucide-react';
+import { Clock, GraduationCap, MapPin, MoreHorizontal, User } from 'lucide-react';
 
 // Components
 import { useEnrolledCourses } from '../../hooks/useEnrolledCourses';
@@ -102,3 +102,5 @@ export default function EnrolledCourses() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Avatar, Badge, Button, Card, Separator } from '../../components/ui';

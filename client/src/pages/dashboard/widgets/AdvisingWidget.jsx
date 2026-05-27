@@ -1,4 +1,7 @@
 
+import { motion } from 'framer-motion';
+import { Users, AlertCircle, CheckCircle } from 'lucide-react';
+
 export default function AdvisingWidget() {
     const advisees = [
         { id: 1, name: 'Ahmet Yılmaz', year: 4, status: 'Onay Bekliyor', issue: 'Ders Çakışması' },

@@ -1,4 +1,4 @@
-import { Languages } from 'lucide-react';
+import { Globe, Languages } from 'lucide-react';
 
 // Components
 
@@ -58,3 +58,5 @@ export default function LanguageExam() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Alert, Badge, Button, Card } from '../../components/ui';

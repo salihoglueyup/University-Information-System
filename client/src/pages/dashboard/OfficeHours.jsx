@@ -120,3 +120,5 @@ export default function OfficeHours() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Clock, Edit2, MapPin, Plus, Trash2, Users } from 'lucide-react';

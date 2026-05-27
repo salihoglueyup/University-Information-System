@@ -7,8 +7,10 @@ exports.getGeneralAnalytics = async () => {
     const activeStudentsCount = await User.countDocuments({ role: 'student', status: 'active' });
 
     // Gelir Hesaplama (Tüm başarılı işlemlerin toplamı)
-    const allTransactions = await Transaction.find({ status: 'completed' });
-    const totalRevenue = allTransactions.reduce((acc, curr) => acc + curr.amount, 0);
+    const revenueResult = await Transaction.aggregate([
+        { $group: { _id: null, totalRevenue: { $sum: '$amount' } } }
+    ]);
+    const totalRevenue = revenueResult[0]?.totalRevenue || 0;
 
     const scholarshipRate = 24.5;
 
@@ -54,9 +56,12 @@ exports.getFacultyGpaDistribution = async () => {
             $match: { gpa: { $exists: true, $nin: [null, ""] } }
         },
         {
+            $addFields: { gpaNum: { $toDouble: "$gpa" } }
+        },
+        {
             $group: {
                 _id: "$faculty",
-                averageGpa: { $avg: { $toDouble: "$gpa" } },
+                averageGpa: { $avg: "$gpaNum" },
                 studentCount: { $sum: 1 }
             }
         },

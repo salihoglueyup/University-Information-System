@@ -1,5 +1,5 @@
 
-
+import { ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
 const PieChart = ({
     data,

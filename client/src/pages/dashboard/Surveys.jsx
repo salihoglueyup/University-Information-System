@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Send } from 'lucide-react';
+import { AlertCircle, CheckCircle, ChevronDown, ChevronUp, ClipboardList, Clock, Send } from 'lucide-react';
 // Components
 import axiosInstance from '../../api/axiosInstance';
 export default function Surveys() {
@@ -292,3 +292,5 @@ export default function Surveys() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Badge, Button, Card, Rating } from '../../components/ui';

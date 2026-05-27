@@ -1,6 +1,8 @@
 name: ubis-dev
 
 services:
+  # ─── Infrastructure ────────────────────────────────────────
+
   mongo:
     image: mongo:7
     container_name: ubis_mongo
@@ -9,6 +11,8 @@ services:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - backend
     healthcheck:
       test: ["CMD", "mongosh", "--quiet", "--eval", "db.runCommand({ ping: 1 }).ok"]
       interval: 10s
@@ -19,10 +23,14 @@ services:
     image: redis:7-alpine
     container_name: ubis_redis
     restart: unless-stopped
-    ports:
-      - "6379:6379"
+    # Port only exposed internally in Docker network
+    # Removed host exposure to prevent cross-protocol attacks
+    expose:
+      - "6379"
     volumes:
       - redis_data:/data
+    networks:
+      - backend
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -35,9 +43,11 @@ services:
     restart: unless-stopped
     ports:
       - "5672:5672"
-      - "15672:15672"
+      - "15672:15672"       # Management UI — dev only
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - backend
     healthcheck:
       test: ["CMD", "rabbitmq-diagnostics", "check_running"]
       interval: 10s
@@ -54,6 +64,15 @@ services:
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-}
     volumes:
       - meili_data:/meili_data/data.ms
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:7700/health"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+
+  # ─── Application ───────────────────────────────────────────
 
   server:
     build:
@@ -70,9 +89,12 @@ services:
       rabbitmq:
         condition: service_healthy
       meilisearch:
-        condition: service_started
+        condition: service_healthy
     ports:
       - "${SERVER_PORT:-5000}:5000"
+    env_file:
+      - path: .env
+        required: false
     environment:
       NODE_ENV: development
       PORT: 5000
@@ -82,9 +104,23 @@ services:
       MEILI_MASTER_KEY: ${MEILI_MASTER_KEY:-}
       RABBITMQ_URL: amqp://rabbitmq:5672
       CLIENT_URL: http://localhost:5173
+      JWT_SEC: ${JWT_SEC:-ubis_jwt_secret_dev_only}
+      CSRF_SECRET: ${CSRF_SECRET:-ubis_csrf_secret_dev_only}
     volumes:
       - ../server:/app
       - server_node_modules:/app/node_modules
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://localhost:5000/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   client:
     build:
@@ -99,10 +135,58 @@ services:
       - "5173:5173"
     environment:
       VITE_DEV_PROXY_TARGET: http://server:5000
-      VITE_API_URL: http://localhost:${SERVER_PORT:-5000}
     volumes:
       - ../client:/app
       - client_node_modules:/app/node_modules
+    networks:
+      - frontend
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget --spider -q http://127.0.0.1:5173/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ─── Optional Services (activate with --profile) ───────────
+
+  # Nginx API Gateway
+  # Usage: docker compose --profile gateway up -d
+  nginx-gateway:
+    image: nginx:1.27-alpine
+    container_name: ubis_nginx_gateway
+    restart: unless-stopped
+    profiles:
+      - gateway
+    depends_on:
+      - client
+      - server
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - frontend
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+# ─── Networks ──────────────────────────────────────────────
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
+
+# ─── Volumes ───────────────────────────────────────────────
 
 volumes:
   mongo_data:

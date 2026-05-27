@@ -1,4 +1,4 @@
-import { Send } from 'lucide-react';
+import { FileQuestion, LifeBuoy, MessageCircle, Send } from 'lucide-react';
 
 // Mock Data
 import { supportTickets } from '../../data/mockData';
@@ -91,3 +91,5 @@ export default function Support() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

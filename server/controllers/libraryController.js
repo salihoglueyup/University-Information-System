@@ -15,7 +15,7 @@ exports.getBorrowedBooks = catchAsync(async (req, res, next) => {
     res.status(200).json(books);
 });
 
-exports.borrowBook = catchAsync(async (req, res, next) => {
+exports.borrowBook = async (req, res, next) => {
     try {
         const savedBook = await libraryService.borrowBook(req.user.id, req.body.bookId);
         res.status(201).json(savedBook);
@@ -25,4 +25,4 @@ exports.borrowBook = catchAsync(async (req, res, next) => {
         if (err.message === 'STOCK_EMPTY') return next(new AppError('Bu kitaptan stokta kalmamıştır.', 400));
         return next(new AppError('Kitap ödünç alınırken hata oluştu.', 500));
     }
-});
+};

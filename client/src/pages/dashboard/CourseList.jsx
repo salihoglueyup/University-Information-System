@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Edit2, Trash2
-} from 'lucide-react';
+import { BookOpen, Edit2, Filter, Search, Trash2 } from 'lucide-react';
 
 // Components
 
@@ -143,3 +142,5 @@ export default function CourseList({ courses, onEdit, onDelete }) {
         </div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '../../components/ui';

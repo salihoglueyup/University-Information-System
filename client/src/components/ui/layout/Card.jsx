@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 
 const Card = ({ children, className = '', title, footer, noHover = false, ...props }) => {
     return (

@@ -1,4 +1,5 @@
 const AppError = require('../utils/AppError');
+const logger = require('../utils/logger');
 
 const errorHandler = (err, req, res, _next) => {
     err.statusCode = err.statusCode || 500;
@@ -6,7 +7,8 @@ const errorHandler = (err, req, res, _next) => {
 
     // Duplicate key error (Mongoose)
     if (err.code === 11000) {
-        const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
+        const match = (err.errmsg || err.message || '').match(/(["'])(\\?.)*?\1/);
+        const value = match ? match[0] : 'unknown';
         const message = `Duplicate field value: ${value}. Please use another value!`;
         err = new AppError(message, 400);
     }
@@ -34,8 +36,8 @@ const errorHandler = (err, req, res, _next) => {
         err = new AppError('Your token has expired! Please log in again.', 401);
     }
 
-    // CSRF Errors
-    if (err.code === 'EBADCSRFTOKEN') {
+    // CSRF Errors (supports both csurf legacy and csrf-csrf)
+    if (err.code === 'EBADCSRFTOKEN' || (err.message && err.message.includes('csrf token') && !err.name.includes('Type'))) {
         err = new AppError('Invalid or missing CSRF token. Please refresh the page.', 403);
     }
 
@@ -57,7 +59,7 @@ const errorHandler = (err, req, res, _next) => {
             });
         } else {
             // Programming or other unknown error: don't leak error details
-            console.error('ERROR 💥', err);
+            logger.error('Unexpected error:', err);
             res.status(500).json({
                 status: 'error',
                 message: 'Something went very wrong!'

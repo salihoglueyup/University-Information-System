@@ -52,7 +52,7 @@ class AssignmentController {
 
             const result = await assignmentService.submitAssignment(assignmentId, studentId, req.file);
 
-            res.status(200).json({
+            res.status(201).json({
                 status: 'success',
                 message: 'Assignment submitted successfully!',
                 data: result

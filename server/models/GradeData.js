@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const GradeDataSchema = new mongoose.Schema({
     userId: {
         type: String,
-        default: 'all'
+        required: true
     },
     currentSemester: [{
         code: String,
@@ -24,5 +24,7 @@ const GradeDataSchema = new mongoose.Schema({
         value: Number
     }]
 }, { timestamps: true });
+
+GradeDataSchema.index({ userId: 1 });
 
 module.exports = mongoose.model('GradeData', GradeDataSchema);

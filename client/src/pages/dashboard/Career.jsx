@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react';
+import { Briefcase, ExternalLink } from 'lucide-react';
 
 // Components
 
@@ -67,3 +67,5 @@ export default function Career() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

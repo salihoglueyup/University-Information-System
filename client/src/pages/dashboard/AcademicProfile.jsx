@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import {
-    User, Book, Calendar, Briefcase, GraduationCap
-} from 'lucide-react';
+import { AlertCircle, AwardIcon, Book, Briefcase, Calendar, Globe, GraduationCap, Mail, MapPin, Smartphone, User, Users } from 'lucide-react';
 import { useStaffDetail } from '../../hooks/queries/useStaffDetail';
 
 export default function AcademicProfile() {
@@ -333,3 +331,4 @@ export default function AcademicProfile() {
         </div>
     );
 }
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

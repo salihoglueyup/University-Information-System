@@ -15,4 +15,6 @@ const TuitionSchema = new mongoose.Schema({
     }]
 });
 
+TuitionSchema.index({ userId: 1 });
+
 module.exports = mongoose.model('Tuition', TuitionSchema);

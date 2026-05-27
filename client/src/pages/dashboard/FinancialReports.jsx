@@ -1,4 +1,5 @@
 import { financialReports } from '../../data/mockData';
+import { ResponsiveContainer, PieChart as RePieChart, Pie, Cell, Tooltip, Legend, AreaChart, CartesianGrid, XAxis, YAxis, Area } from 'recharts';
 
 export default function FinancialReports() {
     return (
@@ -114,3 +115,5 @@ export default function FinancialReports() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { CreditCard, DollarSign, PieChart, Wallet } from 'lucide-react';

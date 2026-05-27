@@ -1,4 +1,4 @@
-import { UserPlus } from 'lucide-react';
+import { UserPlus, Users } from 'lucide-react';
 
 // Components
 
@@ -54,3 +54,5 @@ export default function StudentClubs() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card } from '../../components/ui';

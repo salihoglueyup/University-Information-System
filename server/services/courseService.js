@@ -2,7 +2,7 @@ const Course = require('../models/Course');
 
 class CourseService {
     async getAllCourses() {
-        return await Course.find();
+        return await Course.find().limit(500);
     }
 
     async createCourse(courseData) {

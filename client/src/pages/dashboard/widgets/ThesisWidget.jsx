@@ -1,4 +1,6 @@
 import { thesisStudents } from '../../../data/mockData';
+import { motion } from 'framer-motion';
+import { GraduationCap, Clock } from 'lucide-react';
 
 export default function ThesisWidget() {
     return (

@@ -197,3 +197,5 @@ export default function AppointmentScheduler() {
         </div>
     );
 }
+import { CalendarIcon, CheckCircle, Clock, MapPin, MoreHorizontal, Plus, Search, Users, Video, XCircle } from 'lucide-react';
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const DepartmentNode = ({ node, level = 0, onAdd, onEdit, onDelete }) => {
     const [isOpen, setIsOpen] = useState(true);

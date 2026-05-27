@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, Command } from 'lucide-react';
 
 const CommandPalette = ({ isOpen, onClose, items = [] }) => {
     const [query, setQuery] = useState('');

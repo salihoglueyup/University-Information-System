@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { getUser } from '../../utils/authStorage';
 import AnnouncementsWidget from './widgets/AnnouncementsWidget';
 import AdvisingWidget from './widgets/AdvisingWidget';
 import DepartmentTasksWidget from './widgets/DepartmentTasksWidget';
@@ -27,14 +28,7 @@ const CalendarFallbackWidget = () => {
 };
 
 export default function AcademicDashboard() {
-    const [user] = useState(() => {
-        try {
-            const storedUser = localStorage.getItem('user');
-            return storedUser ? JSON.parse(storedUser) : {};
-        } catch {
-            return {};
-        }
-    });
+    const [user] = useState(() => getUser() || {});
 
     const academicTitle = user.academicTitle || 'LECTURER'; // Fallback
 

@@ -1,4 +1,5 @@
 const redisClient = require('../utils/redisClient');
+const logger = require('../utils/logger');
 
 const CACHE_TTL = 600; // 600 seconds = 10 minutes
 
@@ -18,19 +19,19 @@ const cacheMiddleware = async (req, res, next) => {
     try {
         // If Redis is not connected, just skip caching
         if (!redisClient.isReady) {
-            console.warn("Redis is not ready. Skipping cache.");
+            logger.warn("Redis is not ready. Skipping cache.");
             return next();
         }
 
         const cachedData = await redisClient.get(key);
 
         if (cachedData) {
-            console.log(`🚀 [Redis] Cache hit for ${key}`);
+            // logger.info(`🚀 [Redis] Cache hit for ${key}`);
             res.set('X-Cache', 'HIT');
             return res.status(200).json(JSON.parse(cachedData));
         }
 
-        console.log(`🐌 [Redis] Cache miss for ${key}`);
+        // logger.info(`🐌 [Redis] Cache miss for ${key}`);
         res.set('X-Cache', 'MISS');
         // Intercept res.json
         res.originalJson = res.json;
@@ -38,14 +39,14 @@ const cacheMiddleware = async (req, res, next) => {
             if (res.statusCode >= 200 && res.statusCode < 300) {
                 // Save to Redis async in the background
                 redisClient.setEx(key, CACHE_TTL, JSON.stringify(body)).catch(err => {
-                    console.error("Redis Cache Save Error:", err);
+                    logger.error(`Redis Cache Save Error: ${err.message}`);
                 });
             }
             res.originalJson(body);
         };
         next();
     } catch (err) {
-        console.error("Redis Cache Middleware Error:", err);
+        logger.error(`Redis Cache Middleware Error: ${err.message}`);
         next();
     }
 };

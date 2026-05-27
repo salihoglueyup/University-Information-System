@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react';
+import { BookOpen, Database, ExternalLink, Globe, Library, Lock, Search } from 'lucide-react';
 
 // Mock Data
 import { infoCenterResources } from '../../data/mockData';
@@ -90,3 +90,5 @@ export default function InfoCenter() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card } from '../../components/ui';

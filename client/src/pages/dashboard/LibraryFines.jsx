@@ -1,4 +1,4 @@
-import { CreditCard } from 'lucide-react';
+import { AlertTriangle, BookX, CreditCard, History } from 'lucide-react';
 
 // Components
 
@@ -79,3 +79,5 @@ export default function LibraryFines() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Alert, Button, Card } from '../../components/ui';

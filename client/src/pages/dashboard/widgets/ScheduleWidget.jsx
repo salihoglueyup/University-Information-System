@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { Calendar, ChevronRight, MapPin, Coffee } from 'lucide-react';
 import axiosInstance from '../../../api/axiosInstance';
+import { Button, StaggerContainer, StaggerItem } from '../../../components/ui';
 
 export default function ScheduleWidget() {
     const navigate = useNavigate();

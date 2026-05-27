@@ -2,6 +2,7 @@ const meiliClient = require('../utils/meiliClient');
 const User = require('../models/User');
 const Announcement = require('../models/Announcement');
 const Course = require('../models/Course');
+const logger = require('../utils/logger');
 
 class SearchService {
     async globalSearch(query) {
@@ -19,14 +20,14 @@ class SearchService {
                 courses: courseResults.hits
             };
         } catch (error) {
-            console.error('Search Engine Error:', error);
+            logger.error('Search Engine Error:', error);
             return { students: [], announcements: [], courses: [] }; // Fallback
         }
     }
 
     async syncAllData() {
         try {
-            console.log('🔄 Indexing data to MeiliSearch...');
+            logger.info('Indexing data to MeiliSearch...');
 
             // Sync Students
             const students = await User.find({ role: 'student' }).select('fullName username email department faculty').lean();
@@ -49,9 +50,9 @@ class SearchService {
                 await meiliClient.index('courses').addDocuments(formattedCourses);
             }
 
-            console.log('✅ Indexing completed!');
+            logger.info('Indexing completed!');
         } catch (error) {
-            console.error('Migration Error to MeiliSearch:', error.message);
+            logger.error('Migration Error to MeiliSearch:', error.message);
             throw error;
         }
     }

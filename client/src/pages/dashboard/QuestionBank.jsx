@@ -128,3 +128,5 @@ export default function QuestionBank() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Database, Eye, Plus, Search, Tag, Trash2 } from 'lucide-react';

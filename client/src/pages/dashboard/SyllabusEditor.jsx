@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useCourseDetail } from '../../hooks/queries/useCourseDetail';
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 export default function SyllabusEditor() {
     const { courseId } = useParams();
@@ -170,3 +170,5 @@ export default function SyllabusEditor() {
         </div>
     );
 }
+import { ArrowLeft, GripVertical, Plus, Save, Trash2 } from 'lucide-react';
+import { Button, Card, Input, PageHeader } from '../../components/ui';

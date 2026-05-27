@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { AlertCircle, ChevronRight, Clock, Calendar, CheckCircle2 } from 'lucide-react';
 import axiosInstance from '../../../api/axiosInstance';
+import { getUser } from '../../../utils/authStorage';
+import { Badge, Button, StaggerContainer, StaggerItem } from '../../../components/ui';
 
 export default function AssignmentsWidget() {
     const navigate = useNavigate();
@@ -10,7 +14,7 @@ export default function AssignmentsWidget() {
     useEffect(() => {
         const fetchAssignments = async () => {
             try {
-                const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+                const storedUser = getUser() || {};
                 const userId = storedUser.id || storedUser._id;
 
                 const res = await axiosInstance.get('/assignments');

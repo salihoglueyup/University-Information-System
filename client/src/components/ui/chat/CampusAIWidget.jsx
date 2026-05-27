@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { MessageSquare, Cpu, CheckCircle2, ChevronDown, Send } from 'lucide-react';
 import { DataManager } from '../../../utils/DataManager';
 
 export default function CampusAIWidget() {

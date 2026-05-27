@@ -1,4 +1,4 @@
-import { Phone } from 'lucide-react';
+import { CalendarCheck, HeartPulse, Phone, Stethoscope } from 'lucide-react';
 
 // Components
 
@@ -82,3 +82,5 @@ export default function HealthCenter() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card } from '../../components/ui';

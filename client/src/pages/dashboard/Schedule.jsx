@@ -1,4 +1,5 @@
-import { Download, Printer } from 'lucide-react';
+import React from 'react';
+import { Clock, Download, MapPin, Printer } from 'lucide-react';
 
 // Components
 
@@ -140,3 +141,5 @@ export default function Schedule() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card } from '../../components/ui';

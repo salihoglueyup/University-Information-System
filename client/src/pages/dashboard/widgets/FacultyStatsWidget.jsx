@@ -1,4 +1,7 @@
 
+import { motion } from 'framer-motion';
+import { BarChart2, Users, TrendingUp, BookOpen } from 'lucide-react';
+
 export default function FacultyStatsWidget() {
     return (
         <motion.div

@@ -1,5 +1,5 @@
 
-
+import { ResponsiveContainer, LineChart as RechartsLineChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, Line } from 'recharts';
 
 const LineChart = ({
     data,

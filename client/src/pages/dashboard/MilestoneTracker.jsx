@@ -167,3 +167,5 @@ export default function MilestoneTracker() {
         </div>
     );
 }
+import { AlertCircle, ArrowLeft, Award, Calendar, CheckCircle, ChevronRight, Circle, Clock, FileText, MessageSquare } from 'lucide-react';
+import { Badge, Button, Card } from '../../components/ui';

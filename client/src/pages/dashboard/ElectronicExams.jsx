@@ -1,4 +1,4 @@
-import { CalendarCheck } from 'lucide-react';
+import { CalendarCheck, MapPin, Monitor } from 'lucide-react';
 
 // Components
 
@@ -58,3 +58,5 @@ export default function ElectronicExams() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

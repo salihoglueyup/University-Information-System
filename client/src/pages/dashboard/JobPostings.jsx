@@ -1,4 +1,4 @@
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Briefcase, Building, Calendar, MapPin, Search } from 'lucide-react';
 
 // Mock Data
 import { jobPostings } from '../../data/mockData';
@@ -72,3 +72,5 @@ export default function JobPostings() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Calendar, Card } from '../../components/ui';

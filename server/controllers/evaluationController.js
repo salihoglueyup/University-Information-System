@@ -7,7 +7,7 @@ exports.getStudentEvaluations = catchAsync(async (req, res) => {
 });
 
 exports.getAcademicEvaluations = catchAsync(async (req, res) => {
-    const evaluations = await evaluationService.getAcademicEvaluations(req.user.name);
+    const evaluations = await evaluationService.getAcademicEvaluations(req.user.fullName || req.user.username);
     res.status(200).json(evaluations);
 });
 

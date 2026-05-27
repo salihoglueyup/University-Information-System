@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-d
 import ErrorBoundary from './components/ErrorBoundary';
 import PwaInstallPrompt from './components/PwaInstallPrompt';
 import { SocketProvider } from './context/SocketContext';
-import { getUserRole, isAuthenticated } from './utils/authStorage';
+import { getUserRole, isAuthenticated, clearAuthSession } from './utils/authStorage';
 import CorporateLogin from './pages/CorporateLogin';
 
 // Layouts
@@ -150,8 +150,7 @@ const Loading = () => {
         <button
           type="button"
           onClick={() => {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
+            clearAuthSession();
             window.location.href = '/login';
           }}
           className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
@@ -256,12 +255,12 @@ const App = () => {
                 <Route path="job-postings" element={<JobPostings />} />
                 <Route path="alumni" element={<Alumni />} />
                 <Route path="digital-id" element={<DigitalID />} />
-                <Route path="proctoring" element={<Proctoring />} />
-                <Route path="labs" element={<Labs />} />
-                <Route path="dept-tasks" element={<DepartmentTasks />} />
-                <Route path="advisees" element={<Advisees />} />
-                <Route path="thesis" element={<Thesis />} />
-                <Route path="grading" element={<Grading />} />
+                <Route path="proctoring" element={<RoleRoute allowedRoles={['admin', 'academic']}><Proctoring /></RoleRoute>} />
+                <Route path="labs" element={<RoleRoute allowedRoles={['admin', 'academic']}><Labs /></RoleRoute>} />
+                <Route path="dept-tasks" element={<RoleRoute allowedRoles={['admin', 'academic']}><DepartmentTasks /></RoleRoute>} />
+                <Route path="advisees" element={<RoleRoute allowedRoles={['admin', 'academic']}><Advisees /></RoleRoute>} />
+                <Route path="thesis" element={<RoleRoute allowedRoles={['admin', 'academic']}><Thesis /></RoleRoute>} />
+                <Route path="grading" element={<RoleRoute allowedRoles={['admin', 'academic']}><Grading /></RoleRoute>} />
                 <Route path="users" element={<RoleRoute allowedRoles={['admin']}><Users /></RoleRoute>} />
                 <Route path="departments" element={<RoleRoute allowedRoles={['admin']}><Departments /></RoleRoute>} />
                 <Route path="curriculum" element={<RoleRoute allowedRoles={['admin']}><Curriculum /></RoleRoute>} />
@@ -277,27 +276,27 @@ const App = () => {
                 <Route path="syllabus" element={<RoleRoute allowedRoles={['admin', 'academic']}><Syllabus /></RoleRoute>} />
                 <Route path="office-hours" element={<RoleRoute allowedRoles={['admin', 'academic']}><OfficeHours /></RoleRoute>} />
                 <Route path="question-bank" element={<RoleRoute allowedRoles={['admin', 'academic']}><QuestionBank /></RoleRoute>} />
-                <Route path="teaching-courses" element={<InstructorCourses />} />
+                <Route path="teaching-courses" element={<RoleRoute allowedRoles={['admin', 'academic']}><InstructorCourses /></RoleRoute>} />
                 <Route path="course/:courseId" element={<CourseDetail />} />
                 <Route path="syllabus-editor/:courseId" element={<SyllabusEditor />} />
                 <Route path="resource-hub/:courseId" element={<ResourceHub />} />
-                <Route path="grading/:courseId/:assessmentId" element={<GradingGrid />} />
-                <Route path="proctoring-scheduler" element={<ProctoringScheduler />} />
+                <Route path="grading/:courseId/:assessmentId" element={<RoleRoute allowedRoles={['admin', 'academic']}><GradingGrid /></RoleRoute>} />
+                <Route path="proctoring-scheduler" element={<RoleRoute allowedRoles={['admin', 'academic']}><ProctoringScheduler /></RoleRoute>} />
                 <Route path="exam-result/:resultId" element={<ExamResultView />} />
-                <Route path="student-360/:studentId" element={<Student360 />} />
-                <Route path="thesis-kanban" element={<ThesisKanban />} />
+                <Route path="student-360/:studentId" element={<RoleRoute allowedRoles={['admin', 'academic']}><Student360 /></RoleRoute>} />
+                <Route path="thesis-kanban" element={<RoleRoute allowedRoles={['admin', 'academic']}><ThesisKanban /></RoleRoute>} />
                 <Route path="milestone-tracker/:id" element={<MilestoneTracker />} />
-                <Route path="transcript-view/:studentId" element={<TranscriptView />} />
+                <Route path="transcript-view/:studentId" element={<RoleRoute allowedRoles={['admin', 'academic']}><TranscriptView /></RoleRoute>} />
 
 
                 <Route path="profile" element={<AcademicProfile />} />
                 <Route path="staff/:staffId" element={<AcademicProfile />} />
 
                 {/* Research Assistant Routes */}
-                <Route path="thesis-support" element={<ThesisSupport />} />
-                <Route path="academic-progress" element={<AcademicProgress />} />
-                <Route path="grading-support" element={<GradingSupport />} />
-                <Route path="trainings" element={<Trainings />} />
+                <Route path="thesis-support" element={<RoleRoute allowedRoles={['admin', 'academic']}><ThesisSupport /></RoleRoute>} />
+                <Route path="academic-progress" element={<RoleRoute allowedRoles={['admin', 'academic']}><AcademicProgress /></RoleRoute>} />
+                <Route path="grading-support" element={<RoleRoute allowedRoles={['admin', 'academic']}><GradingSupport /></RoleRoute>} />
+                <Route path="trainings" element={<RoleRoute allowedRoles={['admin', 'academic']}><Trainings /></RoleRoute>} />
 
                 {/* Placeholders for pending features */}
                 {/* Placeholders for pending features */}
@@ -313,6 +312,9 @@ const App = () => {
 
 
               </Route>
+
+              {/* 404 Catch-all */}
+              <Route path="*" element={<Navigate to="/login" replace />} />
             </Routes>
           </Suspense>
           <PwaInstallPrompt />

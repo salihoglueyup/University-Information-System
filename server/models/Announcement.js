@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const meiliClient = require('../utils/meiliClient');
+const logger = require('../utils/logger');
 
 const AnnouncementSchema = new mongoose.Schema({
     title: {
@@ -27,12 +28,15 @@ const AnnouncementSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+AnnouncementSchema.index({ category: 1, createdAt: -1 });
+AnnouncementSchema.index({ priority: 1 });
+
 // Auto-Sync with Meilisearch
 AnnouncementSchema.post('save', async function(doc) {
     try {
         const obj = { id: doc._id.toString(), title: doc.title, text: doc.text, category: doc.category };
         await meiliClient.index('announcements').addDocuments([obj]);
-    } catch (err) { console.error('Meili Index Error (Announcement Save):', err.message); }
+    } catch (err) { logger.error('Meili Index Error (Announcement Save):', err.message); }
 });
 
 AnnouncementSchema.post('findOneAndUpdate', async function(doc) {
@@ -40,14 +44,14 @@ AnnouncementSchema.post('findOneAndUpdate', async function(doc) {
         try {
             const obj = { id: doc._id.toString(), title: doc.title, text: doc.text, category: doc.category };
             await meiliClient.index('announcements').addDocuments([obj]);
-        } catch (err) { console.error('Meili Index Error (Announcement Update):', err.message); }
+        } catch (err) { logger.error('Meili Index Error (Announcement Update):', err.message); }
     }
 });
 
 AnnouncementSchema.post('findOneAndDelete', async function(doc) {
     if (doc) {
         try { await meiliClient.index('announcements').deleteDocument(doc._id.toString()); }
-        catch (err) { console.error('Meili Index Error (Announcement Delete):', err.message); }
+        catch (err) { logger.error('Meili Index Error (Announcement Delete):', err.message); }
     }
 });
 

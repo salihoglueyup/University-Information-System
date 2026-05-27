@@ -92,3 +92,6 @@ export default function Attendance() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { AlertTriangle } from 'lucide-react';
+import { Alert, Badge, Card, ProgressBar } from '../../components/ui';

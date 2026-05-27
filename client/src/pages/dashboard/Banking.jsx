@@ -1,4 +1,4 @@
-import { ArrowDownLeft } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpRight, CreditCard, ShieldCheck, Wallet } from 'lucide-react';
 
 // Components
 
@@ -112,3 +112,5 @@ export default function Banking() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

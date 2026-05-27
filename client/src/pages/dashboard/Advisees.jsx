@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AlertTriangle, CheckCircle } from 'lucide-react';
+import { AlertTriangle, CheckCircle, FileText, Filter, MessageSquare, Search, User } from 'lucide-react';
 
 // Mock Data for Advisees
 const mockAdvisees = [
@@ -169,3 +169,4 @@ export default function Advisees() {
         </div>
     );
 }
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

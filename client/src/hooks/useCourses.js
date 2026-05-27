@@ -11,15 +11,3 @@ export const useCourses = () => {
         staleTime: 10 * 60 * 1000, 
     });
 };
-
-export const useEnrolledCourses = (userId) => {
-    return useQuery({
-        queryKey: ['enrolledCourses', userId],
-        queryFn: async () => {
-            const response = await axiosInstance.get(`/courses/enrolled`);
-            return response.data;
-        },
-        enabled: !!userId, // only fetch if we know the user
-        staleTime: 5 * 60 * 1000
-    });
-};

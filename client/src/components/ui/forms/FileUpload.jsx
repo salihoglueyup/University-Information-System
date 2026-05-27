@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { File, UploadCloud } from 'lucide-react';
 
 const FileUpload = ({ onFileSelect, accept, label = "Dosya Yükle", className = '' }) => {
     const [dragActive, setDragActive] = useState(false);

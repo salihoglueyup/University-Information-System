@@ -1,4 +1,4 @@
-import { ExternalLink } from 'lucide-react';
+import { Calendar, Clock, ExternalLink, PlayCircle, Wifi } from 'lucide-react';
 
 // Components
 
@@ -92,3 +92,5 @@ export default function OnlineCourses() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Calendar, Card, ProgressBar } from '../../components/ui';

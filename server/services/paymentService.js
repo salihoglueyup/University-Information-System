@@ -1,37 +1,14 @@
 const Transaction = require('../models/Transaction');
 const Tuition = require('../models/Tuition');
 const User = require('../models/User');
+const AppError = require('../utils/AppError');
 
 exports.getPaymentOverview = async (userIdStr) => {
     const user = await User.findById(userIdStr);
-    if (!user) throw new Error('USER_NOT_FOUND');
+    if (!user) throw new AppError('Kullanıcı bulunamadı', 404);
 
-    let transactions = await Transaction.find({ userId: user.username }).sort({ date: -1 });
-    let tuition = await Tuition.findOne({ userId: user.username });
-
-    if (transactions.length === 0) {
-        const dummyTransactions = [
-            { userId: user.username, title: "Yemekhane", amount: -45, type: 'expense', category: "Yemek" },
-            { userId: user.username, title: "Kantın Harcaması", amount: -25, type: 'expense', category: "Yiyecek" },
-            { userId: user.username, title: "Kütüphane Cezası", amount: -15, type: 'expense', category: "Ceza" },
-            { userId: user.username, title: "Para Yükleme", amount: 500, type: 'income', category: "Transfer" }
-        ];
-        await Transaction.insertMany(dummyTransactions);
-        transactions = await Transaction.find({ userId: user.username }).sort({ date: -1 });
-    }
-
-    if (!tuition) {
-        tuition = await Tuition.create({
-            userId: user.username,
-            totalAmount: 140000,
-            scholarship: "%50 İndirim + %5 Peşin",
-            paidAmount: 65000,
-            installments: [
-                { term: "2025-2026 Güz", amount: 65000, status: "Ödendi", date: new Date("2025-09-01"), method: "Kredi Kartı", receipt: "dekont_123.pdf" },
-                { term: "2025-2026 Bahar", amount: 75000, status: "Ödenmedi", date: new Date("2026-02-28"), method: "-" }
-            ]
-        });
-    }
+    const transactions = await Transaction.find({ userId: user.username }).sort({ date: -1 });
+    const tuition = await Tuition.findOne({ userId: user.username });
 
     return {
         transactions,
@@ -51,33 +28,58 @@ exports.getPaymentOverview = async (userIdStr) => {
 
 exports.payTuition = async (userIdStr, installmentId) => {
     const user = await User.findById(userIdStr);
-    if (!user) throw new Error('USER_NOT_FOUND');
+    if (!user) throw new AppError('Kullanıcı bulunamadı', 404);
 
-    const tuition = await Tuition.findOne({ userId: user.username });
-    if (!tuition) throw new Error('TUITION_NOT_FOUND');
+    // Atomic update: only update if installment is still unpaid
+    const tuition = await Tuition.findOneAndUpdate(
+        {
+            userId: user.username,
+            'installments._id': installmentId,
+            'installments.status': 'Ödenmedi'
+        },
+        {
+            $set: {
+                'installments.$.status': 'Ödendi',
+                'installments.$.method': 'Sanal Pos'
+            },
+            $inc: { paidAmount: 0 } // placeholder, will calculate below
+        },
+        { new: false } // return old doc to get the amount
+    );
 
-    const inst = tuition.installments.id(installmentId);
-    if (!inst || inst.status === 'Ödendi') {
-        throw new Error('INVALID_INSTALLMENT');
+    if (!tuition) {
+        // Distinguish: no tuition record vs already-paid installment
+        const exists = await Tuition.findOne({ userId: user.username });
+        if (!exists) {
+            throw new AppError('Harç bilgisi bulunamadı', 404);
+        }
+        throw new AppError('Geçersiz veya ödenmiş taksit', 400);
     }
 
-    inst.status = 'Ödendi';
-    inst.method = 'Sanal Pos';
-    tuition.paidAmount += inst.amount;
+    // Get the installment amount and do the actual paidAmount increment atomically
+    const inst = tuition.installments.id(installmentId);
+    await Tuition.updateOne(
+        { _id: tuition._id },
+        { $inc: { paidAmount: inst.amount } }
+    );
 
-    await tuition.save();
-    return tuition;
+    const updatedTuition = await Tuition.findById(tuition._id);
+    return updatedTuition;
 };
 
 exports.createTransaction = async (userIdStr, transData) => {
     const { title, amount, type, category } = transData;
+    const parsedAmount = Number(amount);
+    if (!Number.isFinite(parsedAmount) || Math.abs(parsedAmount) > 1_000_000) {
+        throw new AppError('Geçersiz tutar', 400);
+    }
     const user = await User.findById(userIdStr);
-    if (!user) throw new Error('USER_NOT_FOUND');
+    if (!user) throw new AppError('Kullanıcı bulunamadı', 404);
 
     const newTrans = new Transaction({
         userId: user.username,
         title,
-        amount: Number(amount),
+        amount: parsedAmount,
         type,
         category
     });

@@ -8,6 +8,7 @@ import logo from '../assets/Istanbul_Aydın_University_logo.svg.png';
 import loginBg from '../assets/03.jpg';
 import axiosInstance from '../api/axiosInstance';
 import { setAuthSession } from '../utils/authStorage';
+import { toast } from 'react-toastify';
 
 // Background Particles Component
 const Particles = () => {
@@ -128,10 +129,10 @@ export default function CorporateLogin() {
             window.location.href = '/dashboard';
         } catch (error) {
             console.error("Login error:", error);
-            if (error.response?.status === 400 || error.response?.status === 404) {
-                alert(error.response.data.message || 'Giriş başarısız. Bilgilerinizi kontrol ediniz.');
+            if (error.response) {
+                toast.error(error.response.data?.message || 'Giriş başarısız. Bilgilerinizi kontrol ediniz.');
             } else {
-                alert('Sunucuya bağlanılamadı. Lütfen daha sonra tekrar deneyin.');
+                toast.error('Sunucuya bağlanılamadı. Lütfen daha sonra tekrar deneyin.');
             }
         } finally {
             setIsLoading(false);
@@ -160,7 +161,7 @@ export default function CorporateLogin() {
             setAuthSession(mappedUser, accessToken);
             window.location.href = '/dashboard';
         } catch {
-            alert('Geçersiz OTP kodu. Lütfen tekrar deneyin.');
+            toast.error('Geçersiz OTP kodu. Lütfen tekrar deneyin.');
         } finally {
             setIsLoading(false);
         }

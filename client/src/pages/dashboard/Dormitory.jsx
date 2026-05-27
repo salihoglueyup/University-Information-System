@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { CalendarCheck } from 'lucide-react';
+import { BedDouble, CalendarCheck, Home, Wallet } from 'lucide-react';
 
 // Components
 import axiosInstance from '../../api/axiosInstance';
@@ -127,3 +127,5 @@ export default function Dormitory() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

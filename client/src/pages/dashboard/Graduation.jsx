@@ -84,3 +84,6 @@ export default function Graduation() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { CheckCircle2, FileCheck, GraduationCap, XCircle } from 'lucide-react';
+import { Button, Card, ProgressBar } from '../../components/ui';

@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
 
 const AudioPlayer = ({ src, title, artist, className = '' }) => {
     const audioRef = useRef(null);

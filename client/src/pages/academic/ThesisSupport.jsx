@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GraduationCap } from 'lucide-react';
+import { CheckCircle, ChevronRight, Clock, FileText, GraduationCap, MessageSquare, Search, User, Users } from 'lucide-react';
 import { thesisAssistance } from '../../data/mockData';
 
 export default function ThesisSupport() {
@@ -196,3 +196,5 @@ export default function ThesisSupport() {
         </div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

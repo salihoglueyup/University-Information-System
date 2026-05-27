@@ -1,4 +1,6 @@
 import { proctoringDuties } from '../../../data/mockData';
+import { motion } from 'framer-motion';
+import { ShieldCheck, Calendar, Clock, CheckCircle, MapPin, User } from 'lucide-react';
 
 export default function ProctoringWidget() {
     return (

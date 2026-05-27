@@ -3,7 +3,7 @@ const gradeController = require('../controllers/gradeController');
 const { verifyToken, restrictTo } = require('../middleware/auth');
 
 // GET GRADES FOR USER
-router.get('/', gradeController.getByUser);
+router.get('/', verifyToken, gradeController.getByUser);
 
 // CREATE/UPDATE GRADES FOR USER
 // Only admins/academics can create/update grades

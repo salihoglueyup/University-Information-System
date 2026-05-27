@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle, AlertCircle, Info, XCircle } from 'lucide-react';
 
 const ToastContext = createContext(null);

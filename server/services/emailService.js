@@ -5,16 +5,7 @@ exports.getUserEmails = async (userId) => {
     const user = await User.findById(userId);
     if (!user) return null;
 
-    let emails = await Email.find({ receiver: user.username }).sort({ createdAt: -1 });
-
-    if (emails.length === 0) {
-        const dummyEmails = [
-            { sender: "Sistem Yöneticisi", receiver: user.username, subject: "Sisteme Hoşgeldiniz", preview: "UBIS sistemine başarıyla giriş yaptınız. Lütfen parolanızı güncellemeyi unutmayın.", read: false, folder: 'Gelen Kutusu', date: "Bugün" },
-            { sender: "Öğrenci İşleri", receiver: user.username, subject: "Bahar Dönemi Kayıtları", preview: "Kayıt yenileme işlemleri yarın başlayacaktır.", read: true, folder: 'Gelen Kutusu', date: "Dün" }
-        ];
-        await Email.insertMany(dummyEmails);
-        emails = await Email.find({ receiver: user.username }).sort({ createdAt: -1 });
-    }
+    const emails = await Email.find({ receiver: user.username }).sort({ createdAt: -1 }).lean();
 
     return { currentUser: user.username, emails };
 };
@@ -30,7 +21,7 @@ exports.sendEmail = async (senderId, emailData) => {
         preview: emailData.preview,
         read: false,
         folder: 'Gelen Kutusu',
-        date: "Şimdi"
+        date: new Date()
     });
 
     return await newEmail.save();

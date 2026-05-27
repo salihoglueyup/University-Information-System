@@ -22,5 +22,5 @@ exports.updateUser = catchAsync(async (req, res) => {
 
 exports.deleteUser = catchAsync(async (req, res) => {
     await userService.deleteUser(req.params.id);
-    res.status(200).json("User has been deleted...");
+    res.status(204).end();
 });

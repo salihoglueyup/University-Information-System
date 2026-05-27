@@ -1,9 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { io } from 'socket.io-client';
 import { toast } from 'react-toastify';
-import { API_URL } from '../config/apiConfig';
-import { getUser } from '../utils/authStorage';
+import { getUser, getToken } from '../utils/authStorage';
 
 const SocketContext = createContext();
 
@@ -12,16 +11,33 @@ export const useSocket = () => {
 };
 
 export const SocketProvider = ({ children }) => {
-    const socket = useMemo(() => io(API_URL.replace('/api', ''), {
-        transports: ['websocket', 'polling']
-    }), []);
+    const socket = useMemo(() => {
+        return io('/', {
+            path: '/socket.io',
+            transports: ['polling', 'websocket'],
+            withCredentials: true,
+            autoConnect: false,
+            reconnection: true,
+            reconnectionAttempts: 10,
+            reconnectionDelay: 2000,
+            timeout: 60000,
+            auth: { token: getToken() }
+        });
+    }, []);
     const [notifications, setNotifications] = useState([]);
 
     useEffect(() => {
+        const user = getUser();
+
+        // Only connect when user is authenticated
+        if (!user) return;
+
+        if (!socket.connected) {
+            socket.connect();
+        }
+
         const registerIdentity = () => {
             try {
-                const user = getUser();
-                if (!user) return;
                 const userId = user?.id || user?._id;
                 const username = user?.username;
 
@@ -91,16 +107,28 @@ export const SocketProvider = ({ children }) => {
 
         return () => {
             socket.off('connect', registerIdentity);
+            socket.off('new_announcement');
+            socket.off('new_assignment');
+            socket.off('new_grade');
+            socket.off('new_notification');
             socket.close();
         };
     }, [socket]);
 
-    const markAsRead = (id) => {
+    const markAsRead = useCallback((id) => {
         setNotifications(prev => prev.map(notif => notif.id === id ? { ...notif, read: true } : notif));
-    };
+    }, []);
+
+    const markAllAsRead = useCallback(() => {
+        setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
+    }, []);
+
+    const contextValue = useMemo(() => ({
+        socket, notifications, markAsRead, markAllAsRead
+    }), [socket, notifications, markAsRead, markAllAsRead]);
 
     return (
-        <SocketContext.Provider value={{ socket, notifications, markAsRead }}>
+        <SocketContext.Provider value={contextValue}>
             {children}
         </SocketContext.Provider>
     );

@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-    ClipboardList
-} from 'lucide-react';
+import { BarChart2, CheckCircle, ChevronRight, ClipboardList, Clock } from 'lucide-react';
 import { instructorCoursesData, gradingQueue } from '../../data/mockData';
 
 export default function Grading() {
@@ -134,3 +132,5 @@ export default function Grading() {
         </div>
     );
 }
+import { motion } from 'framer-motion';
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

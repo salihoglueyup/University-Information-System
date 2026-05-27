@@ -1,4 +1,4 @@
-import { CreditCard, Download, AlertCircle } from 'lucide-react';
+import { AlertCircle, CreditCard, Download, Landmark } from 'lucide-react';
 
 // Components
 
@@ -88,3 +88,5 @@ export default function TuitionFees() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Alert, Badge, Button, Card } from '../../components/ui';

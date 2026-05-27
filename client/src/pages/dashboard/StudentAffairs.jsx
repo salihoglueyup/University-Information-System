@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { CheckCircle, Clock, Download, FileText, Search, XCircle } from 'lucide-react';
 
 const MOCK_REQUESTS = [
     { id: 'REQ-1024', student: 'Ahmet Yılmaz', no: '20231045', type: 'Öğrenci Belgesi', date: '2024-03-15', status: 'pending' },
@@ -182,5 +182,7 @@ const StudentAffairs = () => {
         </div>
     );
 };
+import { motion } from 'framer-motion';
+import { Badge, Button, Card, Input, PageHeader, Select, Table } from '../../components/ui';
 
 export default StudentAffairs;

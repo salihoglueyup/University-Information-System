@@ -1,3 +1,5 @@
+const logger = require('../utils/logger');
+
 class AiController {
     async ask(req, res) {
         try {
@@ -29,16 +31,13 @@ class AiController {
                 reply = "Anlıyorum. Sana nasıl yardımcı olabileceğimi tam olarak kavramam için lütfen daha spesifik bir akademik soru sorabilir misin? Örneğin notlarım, devamsızlığım veya ders kaydım hakkında diyebilirsin.";
             }
 
-            // Simulate LLM Network Latency
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
             return res.status(200).json({
                 success: true,
                 reply
             });
 
         } catch (error) {
-            console.error('AI Error:', error);
+            logger.error('AI Error:', error);
             res.status(500).json({ error: 'AI servisi şu anda yanıt veremiyor.' });
         }
     }

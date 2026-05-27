@@ -1,4 +1,5 @@
 const swaggerJsDoc = require('swagger-jsdoc');
+const path = require('path');
 
 const options = {
     definition: {
@@ -14,8 +15,8 @@ const options = {
         },
         servers: [
             {
-                url: 'http://localhost:5000/api',
-                description: 'Lokal Geliştirme Sunucusu'
+                url: process.env.API_URL || 'http://localhost:5000/api',
+                description: 'API Sunucusu'
             }
         ],
         components: {
@@ -34,7 +35,7 @@ const options = {
         ]
     },
     // Rotaların (endpoint'lerin) açıklamasını nerede bulacağı
-    apis: ['./server/routes/*.js', './server/controllers/*.js']
+    apis: [path.join(__dirname, 'routes/*.js'), path.join(__dirname, 'controllers/*.js')]
 };
 
 const swaggerSpec = swaggerJsDoc(options);

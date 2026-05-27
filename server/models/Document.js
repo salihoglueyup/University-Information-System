@@ -7,7 +7,10 @@ const DocumentSchema = new mongoose.Schema({
     fileUrl: { type: String, required: true },
     type: { type: String, enum: ['Dilekçe', 'Staj Evrağı', 'Transkript Talebi', 'Diğer', 'Kimlik Fotokopisi'], default: 'Dilekçe' },
     status: { type: String, enum: ['Onaylandı', 'Bekliyor', 'Reddedildi'], default: 'Bekliyor' },
-    size: { type: String } // e.g., "245 KB"
+    size: { type: Number } // bytes
 }, { timestamps: true });
+
+DocumentSchema.index({ userId: 1, createdAt: -1 });
+DocumentSchema.index({ status: 1 });
 
 module.exports = mongoose.model('Document', DocumentSchema);

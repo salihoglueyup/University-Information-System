@@ -18,15 +18,15 @@ export default function PwaInstallPrompt() {
 
         window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
-        // Optionally, hide the button if the app is successfully installed
-        window.addEventListener('appinstalled', () => {
+        const handleAppInstalled = () => {
             setShowInstallBtn(false);
             setDeferredPrompt(null);
-            console.log('PWA was installed');
-        });
+        };
+        window.addEventListener('appinstalled', handleAppInstalled);
 
         return () => {
             window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+            window.removeEventListener('appinstalled', handleAppInstalled);
         };
     }, []);
 
@@ -37,8 +37,7 @@ export default function PwaInstallPrompt() {
         deferredPrompt.prompt();
         
         // Wait for the user to respond to the prompt
-        const { outcome } = await deferredPrompt.userChoice;
-        console.log(`User response to the install prompt: ${outcome}`);
+        const { outcome: _outcome } = await deferredPrompt.userChoice;
         
         // We've used the prompt, and can't use it again, throw it away
         setDeferredPrompt(null);

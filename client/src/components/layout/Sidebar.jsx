@@ -6,6 +6,7 @@ import { Search, ChevronDown, ChevronRight, Monitor, LogOut } from 'lucide-react
 import { AnimatePresence, motion } from 'framer-motion';
 import logo from '../../assets/Istanbul_Aydın_University_logo.svg.png';
 import { roleNavigation } from '../../config/navigationConfig';
+import { clearAuthSession } from '../../utils/authStorage';
 
 export default function Sidebar({ isSidebarOpen, user }) {
     const navigate = useNavigate();
@@ -234,7 +235,7 @@ export default function Sidebar({ isSidebarOpen, user }) {
 
                         <button
                             onClick={() => {
-                                localStorage.removeItem('user');
+                                clearAuthSession();
                                 navigate('/login');
                             }}
                             className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-blue-200 hover:bg-red-500/20 hover:text-red-100 transition-colors group"

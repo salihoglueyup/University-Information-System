@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Popover = ({ trigger, content, position = 'bottom', className = '' }) => {
     const [isOpen, setIsOpen] = useState(false);

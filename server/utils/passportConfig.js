@@ -1,6 +1,7 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/User');
+const crypto = require('crypto');
 
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID || 'dummy_client_id',
@@ -15,9 +16,10 @@ passport.use(new GoogleStrategy({
                 // Yoksa oluştur
                 const username = profile.emails[0].value.split('@')[0];
                 user = await User.create({
-                    username: username + Math.floor(Math.random() * 1000),
+                    username: username + crypto.randomBytes(4).toString('hex'),
                     email: profile.emails[0].value,
-                    password: 'sso_generated_password_123!', // Normal şifre girişi yapılmayacak
+                    password: crypto.randomBytes(32).toString('hex'),
+                    googleId: profile.id,
                     fullName: profile.displayName,
                     role: 'student' // Default role
                 });

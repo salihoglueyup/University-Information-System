@@ -13,6 +13,7 @@ import {
     useSortable
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { GripVertical, Plus } from 'lucide-react';
 
 // Sortable Item Component
 const SortableItem = ({ id, content }) => {

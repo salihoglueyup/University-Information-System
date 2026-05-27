@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const dormitoryController = require('../controllers/dormitoryController');
+const { verifyToken } = require('../middleware/auth');
 
 // GET /api/dormitory
-router.get('/', dormitoryController.getDormitoryInfo);
+router.get('/', verifyToken, dormitoryController.getDormitoryInfo);
 
 module.exports = router;

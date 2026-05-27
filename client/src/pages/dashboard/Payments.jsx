@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Wallet } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowDownRight, ArrowUpRight, CheckCircle, Clock, CreditCard, Wallet } from 'lucide-react';
 import axiosInstance from '../../api/axiosInstance';
+import { toast } from 'react-toastify';
 
 export default function Payments() {
     const [paymentsData, setPaymentsData] = useState(null);
@@ -29,9 +31,9 @@ export default function Payments() {
 
             // Re-fetch to update UI
             fetchPayments();
-            alert("Ödeme başarıyla tamamlandı!");
+            toast.success('Ödeme başarıyla tamamlandı!');
         } catch (err) {
-            alert(err.message);
+            toast.error(err.message);
         }
     };
 
@@ -167,3 +169,4 @@ export default function Payments() {
         </motion.div>
     );
 }
+import { Badge, Button, Card } from '../../components/ui';

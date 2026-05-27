@@ -1,4 +1,6 @@
 import { labSections } from '../../../data/mockData';
+import { motion } from 'framer-motion';
+import { Monitor, Users, Clock, ClipboardList, ChevronRight } from 'lucide-react';
 
 export default function LabDutiesWidget() {
     return (

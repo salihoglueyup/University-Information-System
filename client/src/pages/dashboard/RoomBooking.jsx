@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar as CalendarIcon, CalendarIcon, CheckCircle, Clock, MapPin, Search, Users } from 'lucide-react';
 
 const ROOMS = [
     { id: '101', name: 'A-101 Toplantı Salonu', capacity: 20, type: 'Toplantı', status: 'available' },
@@ -211,5 +211,6 @@ const RoomBooking = () => {
         </div>
     );
 };
+import { Badge, Button, Card, Input, PageHeader, Select } from '../../components/ui';
 
 export default RoomBooking;

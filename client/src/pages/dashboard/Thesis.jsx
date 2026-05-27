@@ -1,9 +1,7 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-    BookOpen
-} from 'lucide-react';
+import { BookOpen, ChevronRight, Plus, Search } from 'lucide-react';
 import { thesisStudents } from '../../data/mockData';
 
 export default function Thesis() {
@@ -138,3 +136,4 @@ export default function Thesis() {
         </div>
     );
 }
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

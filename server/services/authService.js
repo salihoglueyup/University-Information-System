@@ -44,7 +44,7 @@ class AuthService {
         const accessToken = jwt.sign(
             { id: user._id, role: user.role, username: user.username },
             process.env.JWT_SEC,
-            { expiresIn: "3d" }
+            { expiresIn: "1h" }
         );
 
         const { password: _userPassword, ...otherDetails } = user._doc;
@@ -104,7 +104,7 @@ class AuthService {
             const accessToken = jwt.sign(
                 { id: user._id, role: user.role, username: user.username },
                 process.env.JWT_SEC,
-                { expiresIn: "3d" }
+                { expiresIn: "1h" }
             );
 
             const { password: _password, twoFactorSecret: _twoFactorSecret, ...otherDetails } = user._doc;
@@ -112,6 +112,14 @@ class AuthService {
         }
 
         throw new Error('Invalid OTP Token');
+    }
+
+    generateToken(user) {
+        return jwt.sign(
+            { id: user._id, role: user.role, username: user.username },
+            process.env.JWT_SEC,
+            { expiresIn: '1h' }
+        );
     }
 }
 

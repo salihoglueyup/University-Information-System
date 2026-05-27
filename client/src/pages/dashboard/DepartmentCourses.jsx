@@ -67,3 +67,6 @@ export default function DepartmentCourses() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { BookOpen } from 'lucide-react';
+import { Badge, Card, DataGrid } from '../../components/ui';

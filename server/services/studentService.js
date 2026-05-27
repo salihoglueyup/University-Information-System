@@ -76,8 +76,8 @@ class StudentService {
             riskFactors.push("Mezuniyet şartları için not ortalaması risk taşıyor");
         }
 
-        if (riskFactors.length === 0 && Math.random() > 0.7) {
-            riskFactors.push("Devamsızlık oranı yüksek (%25)");
+        if (riskFactors.length === 0) {
+            // Check attendance from actual data if available
         }
 
         return {

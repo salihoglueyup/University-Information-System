@@ -110,3 +110,6 @@ export default function Proctoring() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Calendar, CheckCircle, Clock, Filter, MapPin, Search, ShieldCheck, User } from 'lucide-react';
+import { Calendar } from '../../components/ui';

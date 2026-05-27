@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip as RechartsTooltip } from 'recharts';
 
 // Mock Data
 import { socialTranscript, socialTranscriptCategories, socialTranscriptExtraPoints } from '../../data/mockData';
@@ -310,7 +311,7 @@ export default function SocialTranscript() {
                     <div className="space-y-2">
                         <label className="text-sm font-bold text-slate-700">Dosya Yükle</label>
                         <FileUpload
-                            onFileSelect={(file) => console.log(file)}
+                            onFileSelect={() => {}}
                             accept=".pdf,.jpg,.jpeg,.png"
                             maxSize={5} // 5MB
                         />
@@ -341,3 +342,6 @@ export default function SocialTranscript() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Award, CheckCircle2, ChevronDown, ChevronUp, Download, Hexagon, Info, Star, Upload } from 'lucide-react';
+import { Badge, Button, Card, Modal } from '../../components/ui';

@@ -92,3 +92,6 @@ export default function SingleCourseExam() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { AlertCircle, CheckCircle2, GraduationCap } from 'lucide-react';
+import { Button, Card, Input, Select } from '../../components/ui';

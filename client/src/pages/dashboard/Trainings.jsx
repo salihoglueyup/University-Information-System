@@ -1,4 +1,4 @@
-import { Video } from 'lucide-react';
+import { BookOpen, CheckCircle, Clock, PlayCircle, Video } from 'lucide-react';
 
 // Mock Data
 const trainingsList = [
@@ -133,3 +133,4 @@ export default function Trainings() {
         </div>
     );
 }
+import { Badge, Button, Card, PageHeader } from '../../components/ui';

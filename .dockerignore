@@ -1,11 +1,77 @@
+# ==========================================
+# UBIS — Docker Build Context Ignore
+# ==========================================
+# Build context is the project root (context: ..)
+# This file prevents unnecessary files from being sent
+# to the Docker daemon during builds.
+
+# ----- Dependencies -----
 **/node_modules
+
+# ----- Build outputs -----
 **/dist
 **/build
 **/.cache
 **/.turbo
 **/.next
+
+# ----- Version control -----
 **/.git
+**/.gitignore
+**/.githooks
+
+# ----- Mock data (735K files, ~465 MB — development only) -----
+**/static-data/records
+**/data/records
+
+# ----- Documentation & tooling (not needed in containers) -----
+docs/
+scripts/
+k8s/
+.github/
+*.md
+LICENSE
+
+# ----- IDE & OS artefacts -----
 **/.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+Thumbs.db
+
+# ----- Logs & test artefacts -----
 **/*.log
 server/logs
+server/test.log
+server/test_output.txt
+server/test_results.json
+server/err.log
+server/error.log
+
+# ----- Environment files (secrets — never bake into an image) -----
+**/.env
+**/.env.*
+!docker/.env.example
+!docker/.env.production.example
+
+# ----- Server utility scripts (dev-only) -----
+server/add-student.js
+server/check-user.js
+server/fixImports.js
+server/seed.js
+server/seed-real-data.js
+server/sync-students-to-users.js
+server/update-student-info.js
+
+# ----- Uploads (runtime data, not build-time) -----
 server/uploads
+
+# ----- Docker meta files (should not copy themselves) -----
+docker/docker-compose*.yml
+docker/.env*
+docker/prometheus.yml
+docker/grafana/
+docker/mongo-init.js
+docker/healthcheck.sh
+docker/.dockerignore

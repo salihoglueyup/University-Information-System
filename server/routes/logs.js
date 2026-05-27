@@ -1,10 +1,11 @@
 const router = require('express').Router();
 const logController = require('../controllers/logController');
+const { restrictTo, verifyToken } = require('../middleware/auth');
 
 // GET ALL LOGS
-router.get('/', logController.getAllLogs);
+router.get('/', restrictTo('admin'), logController.getAllLogs);
 
 // CREATE A LOG
-router.post('/', logController.createLog);
+router.post('/', verifyToken, logController.createLog);
 
 module.exports = router;

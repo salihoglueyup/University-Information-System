@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useMemo } from 'react';
+import { Clock } from 'lucide-react';
 
 const TimePicker = ({ label, value, onChange, className = '' }) => {
     const [isOpen, setIsOpen] = useState(false);

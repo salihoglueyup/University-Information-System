@@ -8,10 +8,6 @@ const getTokenFromRequest = (req) => {
         return authHeader.split(' ')[1];
     }
 
-    if (req.query && typeof req.query.token === 'string' && req.query.token.trim()) {
-        return req.query.token.trim();
-    }
-
     return null;
 };
 

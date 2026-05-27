@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Send } from 'lucide-react';
+import { MessageSquarePlus, Send, ThumbsUp } from 'lucide-react';
 
 // Components
 
@@ -95,3 +95,5 @@ export default function Suggestions() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Button, Card, Input, Select } from '../../components/ui';

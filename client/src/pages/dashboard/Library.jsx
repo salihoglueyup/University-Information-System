@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 // Components
 import axiosInstance from '../../api/axiosInstance';
@@ -38,7 +39,7 @@ export default function Library() {
             const data = res.data;
 
             if (data) {
-                alert(`"${data.title}" başarıyla ödünç alındı.`);
+                toast.success(`"${data.title}" başarıyla ödünç alındı.`);
                 setLibraryBooks((prev) => [...prev, data]);
                 // Reduce available count in catalog
                 setCatalog((prev) => prev.map((b) => {
@@ -49,11 +50,11 @@ export default function Library() {
                     return b;
                 }));
             } else {
-                alert(`Hata: ${data?.message || 'İşlem tamamlanamadı'}`);
+                toast.error(`Hata: ${data?.message || 'İşlem tamamlanamadı'}`);
             }
         } catch (err) {
             console.error("Ödünç alma hatası:", err);
-            alert("Bir hata oluştu.");
+            toast.error('Bir hata oluştu.');
         } finally {
             setIsBorrowing(false);
         }
@@ -210,3 +211,6 @@ export default function Library() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Book, CalendarDays, Clock, Search } from 'lucide-react';
+import { Badge, Button, Card, Input } from '../../components/ui';

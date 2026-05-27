@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { systemSettings } from '../../data/mockData';
+import { toast } from 'react-toastify';
 
 export default function SystemSettings() {
     const [settings, setSettings] = useState(systemSettings);
@@ -10,7 +11,7 @@ export default function SystemSettings() {
         setTimeout(() => {
             setIsSaving(false);
             // In a real app, this would be an API call
-            alert("Ayarlar başarıyla kaydedildi!");
+            toast.success('Ayarlar başarıyla kaydedildi!');
         }, 1000);
     };
 
@@ -159,3 +160,5 @@ export default function SystemSettings() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Power, RefreshCw, Save, Server, Settings, Shield } from 'lucide-react';

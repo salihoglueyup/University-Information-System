@@ -2,7 +2,13 @@ const attendanceService = require('../services/attendanceService');
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAttendances = catchAsync(async (req, res) => {
-    const userId = req.query.userId || 'all';
+    const role = req.user?.role;
+    let userId;
+    if (role === 'admin' || role === 'academic') {
+        userId = req.query.userId || req.user.id;
+    } else {
+        userId = req.user.id;
+    }
     const attendances = await attendanceService.getAttendances(userId);
     res.status(200).json(attendances);
 });

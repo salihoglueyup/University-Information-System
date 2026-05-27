@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Mail, Star, Trash2, Archive, Search } from 'lucide-react';
 
 // Components
 import axiosInstance from '../../api/axiosInstance';
+import { Button, Card, Checkbox, Input } from '../../components/ui';
 export default function Emails() {
     const [emailsData, setEmailsData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);

@@ -12,8 +12,7 @@ class AnnouncementController {
 
     async create(req, res, next) {
         try {
-            const io = req.app.get('io');
-            const result = await announcementService.createAnnouncement(req.body, io);
+            const result = await announcementService.createAnnouncement(req.body);
             res.status(201).json(result);
         } catch (err) {
             next(err);

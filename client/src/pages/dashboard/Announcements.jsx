@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Megaphone, Calendar, FileText, AlertCircle, Plus } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Megaphone, Calendar, FileText, AlertCircle, Plus, Search, ChevronRight, Bell, X } from 'lucide-react';
+import DOMPurify from 'dompurify';
 import axiosInstance from '../../api/axiosInstance';
 import { getUser } from '../../utils/authStorage';
+import { Card, Badge, Button, Input, PageHeader, RichTextEditor } from '../../components/ui';
+import { toast } from 'react-toastify';
 
 export default function Announcements() {
     const [announcements, setAnnouncements] = useState([]);
@@ -38,7 +42,7 @@ export default function Announcements() {
 
     const handleCreateAnnouncement = async () => {
         if (!newTitle.trim() || !newContent.trim()) {
-            alert('Lütfen başlık ve içeriği doldurun.');
+            toast.warn('Lütfen başlık ve içeriği doldurun.');
             return;
         }
 
@@ -63,7 +67,7 @@ export default function Announcements() {
 
         } catch (error) {
             console.error('Duyuru eklenirken hata:', error);
-            alert("Duyuru oluşturulamadı.");
+            toast.error('Duyuru oluşturulamadı.');
         } finally {
             setIsSubmitting(false);
         }
@@ -196,7 +200,7 @@ export default function Announcements() {
                                         {/* RENDER HTML CONTENT SAFELY */}
                                         <div
                                             className="text-slate-600 dark:text-slate-400 mb-6 flex-grow line-clamp-3 leading-relaxed text-sm prose prose-sm dark:prose-invert max-w-none"
-                                            dangerouslySetInnerHTML={{ __html: announcement.text || announcement.content }}
+                                            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(announcement.text || announcement.content) }}
                                         />
 
                                         <div className="flex justify-between items-center pt-4 border-t border-slate-100 dark:border-slate-800 mt-auto">

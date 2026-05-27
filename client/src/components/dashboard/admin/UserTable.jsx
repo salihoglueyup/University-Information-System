@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function UserTable({ users, onEdit, onDelete, onStatusChange }) {
     const [searchTerm, setSearchTerm] = useState('');

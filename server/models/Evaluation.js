@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const evaluationSchema = new mongoose.Schema({
     student: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Student',
+        ref: 'User',
         required: true
     },
     course: {
@@ -35,5 +35,8 @@ const evaluationSchema = new mongoose.Schema({
         default: true
     }
 }, { timestamps: true });
+
+evaluationSchema.index({ student: 1 });
+evaluationSchema.index({ academicName: 1 });
 
 module.exports = mongoose.model('Evaluation', evaluationSchema);

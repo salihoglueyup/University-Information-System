@@ -53,3 +53,6 @@ export default function AccessLogs() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Clock, Footprints, MapPin } from 'lucide-react';
+import { Badge, Card } from '../../components/ui';

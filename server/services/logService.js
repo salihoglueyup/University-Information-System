@@ -1,7 +1,7 @@
 const Log = require('../models/Log');
 
 exports.getAllLogs = async () => {
-    return await Log.find().sort({ createdAt: -1 });
+    return await Log.find().sort({ createdAt: -1 }).limit(500).lean();
 };
 
 exports.createLog = async (logData) => {

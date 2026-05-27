@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { BookOpen, FileText,
-    Users, BarChart2,
-    PenTool
-} from 'lucide-react';
+import { ArrowLeft, BarChart2, BookOpen, Calendar, CheckCircle, Clock, Download, FileText, MapPin, MoreHorizontal, PenTool, Plus, Settings, Upload, Users, Video } from 'lucide-react';
 import { useCourseDetail } from '../../hooks/queries/useCourseDetail';
 
 export default function CourseDetail() {
@@ -414,3 +411,5 @@ function StudentsTab({ students }) {
         </Card>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Badge, Button, Card } from '../../components/ui';

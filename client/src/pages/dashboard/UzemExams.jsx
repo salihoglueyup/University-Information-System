@@ -1,4 +1,4 @@
-import { PlayCircle } from 'lucide-react';
+import { AlertTriangle, Clock, PlayCircle, Wifi } from 'lucide-react';
 
 // Components
 
@@ -68,3 +68,5 @@ export default function UzemExams() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Alert, Badge, Button, Card } from '../../components/ui';

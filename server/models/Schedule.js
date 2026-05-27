@@ -35,4 +35,6 @@ const ScheduleSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+ScheduleSchema.index({ userId: 1 });
+
 module.exports = mongoose.model('Schedule', ScheduleSchema);

@@ -1,8 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-    Download, Printer, ArrowLeft
-} from 'lucide-react';
+import { ArrowLeft, Download, Printer, ShieldCheck } from 'lucide-react';
 import { useReactToPrint } from 'react-to-print';
 import QRCode from 'qrcode';
 // Components
@@ -68,15 +66,10 @@ export default function TranscriptView() {
     useEffect(() => {
         const createVerification = async () => {
             try {
-                // Determine user token if any, to post
-                const userToken = localStorage.getItem('token') || '';
-
                 const res = await axiosInstance.post('/verifications/create', {
                     studentName: transcriptData.student.name,
                     studentId: transcriptData.student.id,
                     documentType: 'Transkript'
-                }, {
-                    headers: userToken ? { Authorization: `Bearer ${userToken}` } : {}
                 });
 
                 const hash = res.data.hash;
@@ -261,3 +254,4 @@ export default function TranscriptView() {
         </div>
     );
 }
+import { Button } from '../../components/ui';

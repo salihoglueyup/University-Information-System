@@ -57,3 +57,6 @@ export default function Contracts() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Check, Clock, FileSignature } from 'lucide-react';
+import { Badge, Button, Card } from '../../components/ui';

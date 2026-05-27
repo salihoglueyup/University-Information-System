@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ChevronRight, ChevronLeft, ChevronsRight, ChevronsLeft } from 'lucide-react';
+import Button from '../navigation/Button';
 
 const ListBox = ({ items, selected, onSelect, title }) => (
     <div className="flex flex-col h-64 border border-slate-200 rounded-xl overflow-hidden bg-white">

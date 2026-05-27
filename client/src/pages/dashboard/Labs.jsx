@@ -109,3 +109,6 @@ export default function Labs() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { BarChart2, Calendar, ChevronRight, ClipboardList, Clock, MapPin, Monitor, Users } from 'lucide-react';
+import { Calendar } from '../../components/ui';

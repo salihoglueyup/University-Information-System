@@ -135,9 +135,6 @@ export class DataManager {
     }
 
     static async getInstructorCourses(instructorId) {
-        // Mock method: Returns a fixed list of courses for demo purposes
-        // In reality, this would query a backend or an index file
-        console.log("Fetching courses for instructor:", instructorId);
         const demoCourses = ["YZM101", "YZM302", "BIL101"];
 
         try {

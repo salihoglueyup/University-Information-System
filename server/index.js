@@ -9,7 +9,7 @@ const RedisStore = require('rate-limit-redis').default;
 const redisClient = require('./utils/redisClient');
 const mongoSanitizeCompat = require('./middleware/mongoSanitizeCompat');
 const cookieParser = require('cookie-parser');
-const csrf = require('csurf');
+const { doubleCsrf } = require('csrf-csrf');
 const authRoute = require('./routes/auth');
 const promBundle = require('express-prom-bundle');
 const logger = require('./utils/logger');
@@ -80,8 +80,15 @@ mongoose.connect(process.env.MONGO_URL)
     });
 
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
+const allowedOrigins = CLIENT_URL.split(',').map(o => o.trim());
 app.use(cors({
-    origin: CLIENT_URL,
+    origin: (origin, callback) => {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true
 }));
@@ -139,24 +146,52 @@ const authLimiter = rateLimit(buildRateLimitOptions({
 }));
 
 app.use(cookieParser());
-const csrfProtection = csrf({ cookie: true });
+
+// CSRF Protection using Double Submit Cookie pattern (csrf-csrf)
+// Replaces deprecated csurf package, fully compatible with Express 5
+const { doubleCsrfProtection, generateToken } = doubleCsrf({
+    getSecret: () => {
+        if (!process.env.CSRF_SECRET && !process.env.JWT_SEC) {
+            logger.error('CSRF_SECRET or JWT_SEC environment variable must be set');
+            throw new Error('Missing CSRF secret configuration');
+        }
+        return process.env.CSRF_SECRET || process.env.JWT_SEC;
+    },
+    cookieName: process.env.NODE_ENV === 'production'
+        ? '__Host-ubis.x-csrf-token'
+        : 'ubis.x-csrf-token',
+    cookieOptions: {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+        path: '/'
+    },
+    size: 64,
+    ignoredMethods: ['GET', 'HEAD', 'OPTIONS'],
+    getTokenFromRequest: (req) => req.headers['x-csrf-token']
+});
 
 app.use('/api/', generalLimiter);
 app.use('/api/auth', authLimiter);
+app.use("/api/auth", authRoute);
 
 // Provide CSRF Token to Frontend
-app.get('/api/csrf-token', csrfProtection, (req, res) => {
-    res.json({ csrfToken: req.csrfToken() });
+app.get('/api/csrf-token', (req, res) => {
+    try {
+        const csrfToken = generateToken(req, res);
+        res.json({ csrfToken });
+    } catch (error) {
+        logger.error(`CSRF token generation failed: ${error.message}`);
+        res.status(500).json({ error: 'Failed to generate CSRF token' });
+    }
 });
 
-// Protect all /api routes below with CSRF (except GET requests implicitly allowed by csurf)
-app.use('/api', csrfProtection);
-
-app.use("/api/auth", authRoute);
+// Protect all /api routes below with CSRF (except GET/HEAD/OPTIONS)
+app.use('/api', doubleCsrfProtection);
 app.use("/api/verifications", verificationsRoute);
-app.use("/api/courses", coursesRoute);
-app.use("/api/announcements", announcementsRoute);
-app.use("/api/assignments", assignmentsRoute);
+app.use("/api/courses", verifyToken, coursesRoute);
+app.use("/api/announcements", verifyToken, announcementsRoute);
+app.use("/api/assignments", verifyToken, assignmentsRoute);
 // Protect API routes
 app.use("/api/academic-calendar", verifyToken, academicCalendarRoute);
 app.use("/api/schedule", verifyToken, scheduleRoute);
@@ -231,6 +266,11 @@ startHttpServer(BASE_PORT);
 // ============================
 const gracefulShutdown = async (signal) => {
     logger.info(`Received ${signal}. Starting Graceful Shutdown...`);
+
+    if (!http_server) {
+        logger.warn('HTTP server was not started yet. Exiting directly.');
+        process.exit(0);
+    }
 
     http_server.close(async () => {
         logger.info('HTTP server closed.');

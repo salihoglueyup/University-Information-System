@@ -1,5 +1,6 @@
 const authService = require('../services/authService');
 const { authAttemptsTotal, authOperationDurationMs } = require('../utils/metrics');
+const logger = require('../utils/logger');
 
 class AuthController {
     async register(req, res) {
@@ -28,11 +29,8 @@ class AuthController {
             res.status(200).json(result);
         } catch (err) {
             authAttemptsTotal.inc({ action: 'login', result: 'error' });
-            if (err.message === 'User not found') {
-                return res.status(404).json({ message: err.message });
-            }
-            if (err.message === 'Wrong password') {
-                return res.status(400).json({ message: err.message });
+            if (err.message === 'User not found' || err.message === 'Wrong password') {
+                return res.status(401).json({ message: 'Invalid credentials' });
             }
             res.status(500).json({ error: err.message || err });
         } finally {
@@ -47,24 +45,38 @@ class AuthController {
             if (!email) {
                 return res.status(400).json({ message: 'E-posta adresi gereklidir' });
             }
-            // For now, assume it's valid and send a mock reset link
+
+            const crypto = require('crypto');
+            const resetToken = crypto.randomBytes(32).toString('hex');
+
+            // Hash the token and persist it on the user
+            const hashedToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+            const User = require('../models/User');
+            const user = await User.findOne({ email });
+            if (user) {
+                user.passwordResetToken = hashedToken;
+                user.passwordResetExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+                await user.save({ validateBeforeSave: false });
+            }
+
+            // Always respond success to prevent email enumeration
             const messageBroker = require('../utils/messageBroker');
+            const resetUrl = `${process.env.CLIENT_URL || 'http://localhost:5173'}/auth/reset-password?token=${resetToken}`;
+            const message = `Şifre sıfırlama talebinizi aldık. Lütfen aşağıdaki güvenli bağlantıyı kullanarak şifrenizi yenileyiniz:\n\n${resetUrl}\n\nBu işlemi siz talep etmediyseniz, lütfen Kampüs Bilgi İşlem ile iletişime geçiniz.`;
 
-            const message = `Şifre sıfırlama talebinizi aldık. Lütfen aşağıdaki güvenli bağlantıyı kullanarak şifrenizi yenileyiniz:\n\nhttp://localhost:5173/auth/reset-password?token=mock_secure_token_123\n\nBu işlemi siz talep etmediyseniz, lütfen Kampüs Bilgi İşlem ile iletişime geçiniz.`;
-
-            // Add to RabbitMQ background events
-            await messageBroker.publishEvent('email_notifications', {
-                email,
-                subject: 'UBIS Hesap Şifre Sıfırlama',
-                message
-            });
+            if (user) {
+                await messageBroker.publishEvent('email_notifications', {
+                    email,
+                    subject: 'UBIS Hesap Şifre Sıfırlama',
+                    message
+                });
+            }
 
             authAttemptsTotal.inc({ action: 'forgot_password', result: 'success' });
-
             res.status(200).json({ message: 'Şifre sıfırlama bağlantısı e-posta adresinize gönderildi.' });
         } catch (err) {
             authAttemptsTotal.inc({ action: 'forgot_password', result: 'error' });
-            console.error(err);
+            logger.error(err);
             res.status(500).json({ error: 'E-posta gönderiminde bir sorun oluştu.' });
         } finally {
             endTimer();
@@ -100,6 +112,46 @@ class AuthController {
                 return res.status(401).json({ message: err.message });
             }
             res.status(500).json({ error: err.message || err });
+        } finally {
+            endTimer();
+        }
+    }
+
+    async resetPassword(req, res) {
+        const endTimer = authOperationDurationMs.startTimer({ action: 'reset_password' });
+        try {
+            const { token, password } = req.body;
+            if (!token || !password) {
+                return res.status(400).json({ message: 'Token ve yeni şifre gereklidir' });
+            }
+            if (password.length < 6) {
+                return res.status(400).json({ message: 'Şifre en az 6 karakter olmalıdır' });
+            }
+
+            const crypto = require('crypto');
+            const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+            const User = require('../models/User');
+
+            const user = await User.findOne({
+                passwordResetToken: hashedToken,
+                passwordResetExpires: { $gt: new Date() }
+            });
+
+            if (!user) {
+                return res.status(400).json({ message: 'Token geçersiz veya süresi dolmuş' });
+            }
+
+            const bcrypt = require('bcrypt');
+            user.password = await bcrypt.hash(password, 10);
+            user.passwordResetToken = undefined;
+            user.passwordResetExpires = undefined;
+            await user.save();
+
+            authAttemptsTotal.inc({ action: 'reset_password', result: 'success' });
+            res.status(200).json({ message: 'Şifreniz başarıyla değiştirildi' });
+        } catch (err) {
+            authAttemptsTotal.inc({ action: 'reset_password', result: 'error' });
+            res.status(500).json({ error: 'Şifre sıfırlamada bir sorun oluştu' });
         } finally {
             endTimer();
         }

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 
 import { useCourseDetail } from '../../hooks/queries/useCourseDetail';
-import { toast } from 'react-hot-toast';
+import { toast } from 'react-toastify';
 
 export default function ResourceHub() {
     const { courseId } = useParams();
@@ -220,3 +220,5 @@ export default function ResourceHub() {
         </div>
     );
 }
+import { ArrowLeft, Download, File, FileText, Folder, Grid, List, MoreVertical, Search, Trash2, Upload } from 'lucide-react';
+import { Button, Card } from '../../components/ui';

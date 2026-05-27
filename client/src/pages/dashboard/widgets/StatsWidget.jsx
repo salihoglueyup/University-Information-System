@@ -1,4 +1,5 @@
 import { BookOpen, Calendar, GraduationCap, FileText } from 'lucide-react';
+import { StaggerContainer, StaggerItem } from '../../../components/ui';
 
 export default function StatsWidget({ user = {} }) {
     const stats = [

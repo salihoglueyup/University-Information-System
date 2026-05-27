@@ -7,8 +7,8 @@ exports.createVerification = catchAsync(async (req, res) => {
     const endTimer = verificationLookupDurationMs.startTimer({ operation: 'create' });
     const savedDoc = await verificationService.createVerification(req.body);
     verificationRequestsTotal.inc({ operation: 'create', result: 'success' });
-    res.status(201).json(savedDoc);
     endTimer();
+    res.status(201).json(savedDoc);
 });
 
 exports.getVerificationByHash = catchAsync(async (req, res, next) => {
@@ -20,6 +20,6 @@ exports.getVerificationByHash = catchAsync(async (req, res, next) => {
         return next(new AppError('Belge sistemde bulunamadı veya geçersiz.', 404));
     }
     verificationRequestsTotal.inc({ operation: 'lookup', result: 'success' });
-    res.status(200).json(doc);
     endTimer();
+    res.status(200).json(doc);
 });

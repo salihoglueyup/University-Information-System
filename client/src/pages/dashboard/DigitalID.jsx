@@ -273,3 +273,6 @@ export default function DigitalID() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Building2, Download, RotateCcw, Share2, Shield, Wifi } from 'lucide-react';
+import { Button } from '../../components/ui';

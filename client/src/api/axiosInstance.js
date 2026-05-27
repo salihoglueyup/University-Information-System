@@ -1,13 +1,14 @@
 import axios from 'axios';
-import { getToken } from '../utils/authStorage';
+import { getToken, clearAuthSession } from '../utils/authStorage';
 
 let csrfToken = null;
+const directApiFallbackBase = import.meta.env.VITE_API_FALLBACK || 'http://localhost:5000/api';
 
 // Initial Axios config
 const axiosInstance = axios.create({
-    baseURL: '/api', // Proxy will handle it, or http://localhost:5000/api if no proxy
+    baseURL: '/api', // Proxy will handle it through Vite dev server
     withCredentials: true, // Important for cookies like CSRF
-    timeout: 15000 // Avoid indefinite pending requests in dashboard loading states
+    timeout: 30000 // 30s timeout for slower Docker network
 });
 
 // Fetch CSRF Token ONCE upon application load or via a helper function
@@ -46,17 +47,29 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     async (error) => {
+        const originalRequest = error.config || {};
+
+        // Fallback retry ONLY for local development (not Docker)
+        // Docker: Don't retry to localhost:5000 from container - use proxy instead
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (!error.response && originalRequest && !originalRequest._retryDirectBase && isLocalhost) {
+            const normalizedBase = (originalRequest.baseURL || '').toString();
+            if (normalizedBase.startsWith('/')) {
+                originalRequest._retryDirectBase = true;
+                originalRequest.baseURL = directApiFallbackBase;
+                return axiosInstance(originalRequest);
+            }
+        }
+
         if (error.response) {
             // Handle specific status codes
             const status = error.response.status;
-            const originalRequest = error.config || {};
             const errorMessage = error.response?.data?.message || '';
             
             if (status === 401) {
-                // Unauthorized - Kick out or attempt refresh
-                console.warn('Unauthorized. JWT expired or invalid.');
-                // localStorage.removeItem('token');
-                // window.location.href = '/login';
+                // Unauthorized - Clear session and redirect to login
+                clearAuthSession();
+                window.location.href = '/login';
             } else if (status === 403) {
                 // Forbidden - Usually bad CSRF or Role mismatch
                 console.warn('Forbidden access.');
@@ -71,6 +84,7 @@ axiosInstance.interceptors.response.use(
                         return axiosInstance(originalRequest);
                     } catch (csrfRefreshError) {
                         console.warn('CSRF refresh failed', csrfRefreshError);
+                        return Promise.reject(csrfRefreshError);
                     }
                 }
             } else if (status === 400) {

@@ -1,4 +1,6 @@
 import { deptTasks } from '../../../data/mockData';
+import { motion } from 'framer-motion';
+import { ClipboardList, MoreHorizontal, CheckSquare, Clock } from 'lucide-react';
 
 const priorityColors = {
     high: 'bg-red-50 text-red-600 border-red-100',

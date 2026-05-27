@@ -9,7 +9,6 @@ const schemas = {
         email: z.string().email("Geçerli bir e-posta adresi giriniz"),
         password: z.string().min(6, "Şifre en az 6 karakter olmalıdır").max(128, "Şifre en fazla 128 karakter olabilir"),
         fullName: z.string().min(2, "Ad soyad en az 2 karakter olmalıdır").max(100).optional(),
-        role: z.enum(['student', 'academic', 'admin']).optional(),
         faculty: z.string().optional(),
         department: z.string().optional()
     }),

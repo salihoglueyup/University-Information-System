@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Library as LibraryIcon } from 'lucide-react';
+import { Book, Bookmark, BookmarkCheck, Library as LibraryIcon, Search } from 'lucide-react';
 
 const MOCK_BOOKS = [
     { id: 'B-1001', title: 'Clean Code: A Handbook of Agile Software Craftsmanship', author: 'Robert C. Martin', year: '2008', category: 'Bilgisayar Müh.', status: 'available', isbn: '978-0132350884' },
@@ -155,5 +155,6 @@ const LibraryDb = () => {
         </div>
     );
 };
+import { Badge, Button, Card, PageHeader, Select, Table } from '../../components/ui';
 
 export default LibraryDb;

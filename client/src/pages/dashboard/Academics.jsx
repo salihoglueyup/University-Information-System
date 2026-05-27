@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useFaculties } from '../../hooks/queries/useFaculties';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, ChevronRight, FolderOpen, Layers } from 'lucide-react';
 // Destructuring unsupported parts since our ui module just exports Card, we will use plain divs for Header/Title/Content.
 
 const Academics = () => {
@@ -79,5 +79,6 @@ const Academics = () => {
         </div>
     );
 };
+import { Badge, Card, PageHeader } from '../../components/ui';
 
 export default Academics;

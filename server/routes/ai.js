@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const aiController = require('../controllers/aiController');
+const { verifyToken } = require('../middleware/auth');
 
 /**
  * @swagger
@@ -24,6 +25,6 @@ const aiController = require('../controllers/aiController');
  *       200:
  *         description: AI Yanıtı
  */
-router.post('/ask', aiController.ask);
+router.post('/ask', verifyToken, aiController.ask);
 
 module.exports = router;

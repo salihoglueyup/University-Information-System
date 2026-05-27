@@ -1,4 +1,6 @@
 
+import { motion } from 'framer-motion';
+
 export const StaggerContainer = ({ children, className = '', delay = 0, staggerChildren = 0.1, ...props }) => {
     return (
         <motion.div

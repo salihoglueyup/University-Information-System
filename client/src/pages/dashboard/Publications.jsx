@@ -131,3 +131,5 @@ export default function Publications() {
         </motion.div>
     );
 }
+import { motion, AnimatePresence } from 'framer-motion';
+import { Award, BookOpen, FileText, Plus, Search, Trophy } from 'lucide-react';

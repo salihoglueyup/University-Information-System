@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const DropdownMenu = ({ trigger, items = [], width = "w-48", align = "right" }) => {
     const [isOpen, setIsOpen] = useState(false);

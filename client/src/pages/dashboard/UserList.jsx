@@ -1,6 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Plus, Edit, Trash2
-} from 'lucide-react';
+import { CheckCircle, Edit, Filter, Plus, Search, Shield, Trash2, User } from 'lucide-react';
 
 // Components
 
@@ -246,3 +245,4 @@ export default function UserList() {
         </div>
     );
 }
+import { Avatar, Badge, Button, Card } from '../../components/ui';

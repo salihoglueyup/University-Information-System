@@ -86,3 +86,6 @@ export default function ExamResults() {
         </motion.div>
     );
 }
+import { motion } from 'framer-motion';
+import { Award, FileText } from 'lucide-react';
+import { Badge, Card } from '../../components/ui';

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { X } from 'lucide-react';
 
 const TagInput = ({ tags = [], onTagsChange, label, placeholder = "Etiket ekle...", className = '' }) => {
     const [input, setInput] = useState('');

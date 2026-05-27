@@ -16,6 +16,7 @@ server/test_results.json
 *.log
 logs/
 server/logs/
+server_logs.txt
 
 # Environment files
 .env

@@ -89,6 +89,9 @@ router.post('/login', validate('login'), authController.login);
 // FORGOT PASSWORD
 router.post('/forgot-password', validate('forgotPassword'), authController.forgotPassword);
 
+// RESET PASSWORD
+router.post('/reset-password', authController.resetPassword);
+
 /**
  * @swagger
  * /auth/google:

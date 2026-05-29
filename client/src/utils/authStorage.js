@@ -16,11 +16,15 @@ export const getUser = () => {
 
 export const getUserRole = () => getUser()?.role || 'student';
 
-export const isAuthenticated = () => Boolean(getUser() && getToken());
+// The JWT now lives in an httpOnly cookie (not readable by JS), so the client
+// considers itself authenticated based on the stored user object alone.
+export const isAuthenticated = () => Boolean(getUser());
 
-export const setAuthSession = (user, token) => {
+export const setAuthSession = (user) => {
     localStorage.setItem(USER_KEY, JSON.stringify(user));
-    localStorage.setItem(TOKEN_KEY, token);
+    // Never persist the token in localStorage (XSS-readable). The server sets it
+    // as an httpOnly cookie. Purge any token stored by older versions.
+    localStorage.removeItem(TOKEN_KEY);
 };
 
 export const clearAuthSession = () => {

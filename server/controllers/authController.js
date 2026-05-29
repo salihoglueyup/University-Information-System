@@ -2,6 +2,17 @@ const authService = require('../services/authService');
 const { authAttemptsTotal, authOperationDurationMs } = require('../utils/metrics');
 const logger = require('../utils/logger');
 
+// httpOnly auth cookie: not readable by JS, so a stolen-via-XSS token is no
+// longer possible. sameSite=strict pairs with the existing CSRF protection.
+const TOKEN_COOKIE_OPTIONS = {
+    httpOnly: true,
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
+    path: '/',
+    maxAge: 60 * 60 * 1000 // 1h — matches the JWT "expiresIn"
+};
+const setTokenCookie = (res, token) => res.cookie('token', token, TOKEN_COOKIE_OPTIONS);
+
 class AuthController {
     async register(req, res) {
         const endTimer = authOperationDurationMs.startTimer({ action: 'register' });
@@ -26,6 +37,8 @@ class AuthController {
             const { username, password } = req.body;
             const result = await authService.loginUser(username, password);
             authAttemptsTotal.inc({ action: 'login', result: 'success' });
+            // Set the token as an httpOnly cookie (skip the 2FA-pending temp token).
+            if (result.accessToken) setTokenCookie(res, result.accessToken);
             res.status(200).json(result);
         } catch (err) {
             authAttemptsTotal.inc({ action: 'login', result: 'error' });
@@ -105,6 +118,7 @@ class AuthController {
             // or a standard token if enabling from settings.
             const result = await authService.verify2FA(req.user.id, token);
             authAttemptsTotal.inc({ action: 'verify_2fa', result: 'success' });
+            if (result.accessToken) setTokenCookie(res, result.accessToken);
             res.status(200).json(result);
         } catch (err) {
             authAttemptsTotal.inc({ action: 'verify_2fa', result: 'error' });
@@ -115,6 +129,11 @@ class AuthController {
         } finally {
             endTimer();
         }
+    }
+
+    async logout(req, res) {
+        res.clearCookie('token', { httpOnly: true, sameSite: 'strict', secure: process.env.NODE_ENV === 'production', path: '/' });
+        res.status(200).json({ message: 'Çıkış yapıldı' });
     }
 
     async resetPassword(req, res) {

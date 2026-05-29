@@ -65,6 +65,9 @@ router.post('/register', validate('register'), authController.register);
 // LOGIN
 router.post('/login', validate('login'), authController.login);
 
+// LOGOUT — clears the httpOnly auth cookie
+router.post('/logout', authController.logout);
+
 /**
  * @swagger
  * /auth/forgot-password:
@@ -111,13 +114,21 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
 router.get('/google/callback',
     passport.authenticate('google', { session: false, failureRedirect: '/login' }),
     async (req, res) => {
-        // Create JWT token and redirect to frontend
+        // Issue the JWT as an httpOnly cookie instead of putting it in the redirect
+        // URL (URLs leak into logs, browser history and Referer headers).
         const authService = require('../services/authService');
         const token = authService.generateToken(req.user);
 
-        // Redirect to React dashboard with token
+        res.cookie('token', token, {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production',
+            path: '/',
+            maxAge: 60 * 60 * 1000
+        });
+
         const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
-        res.redirect(`${clientUrl}/auth/callback?token=${token}`);
+        res.redirect(`${clientUrl}/auth/callback`);
     }
 );
 

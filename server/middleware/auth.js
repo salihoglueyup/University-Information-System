@@ -5,20 +5,23 @@ const AppError = require('../utils/AppError');
 // Only the /2fa/verify route should allow it — every other protected route
 // must reject pending tokens so 2FA cannot be bypassed by using the temp token.
 const buildVerifyToken = (allowPending) => (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    if (authHeader) {
-        const token = authHeader.split(" ")[1];
-        jwt.verify(token, process.env.JWT_SEC, (err, user) => {
-            if (err) return next(new AppError("Token is not valid or has expired!", 401));
-            if (user && user.is2FAPending && !allowPending) {
-                return next(new AppError("Two-factor authentication is required to complete sign-in.", 401));
-            }
-            req.user = user;
-            next();
-        });
-    } else {
+    // Prefer the httpOnly cookie (not readable by JS -> not exposed to XSS);
+    // fall back to the Authorization header for API clients / backward compat.
+    const headerToken = req.headers.authorization ? req.headers.authorization.split(" ")[1] : null;
+    const token = (req.cookies && req.cookies.token) || headerToken;
+
+    if (!token) {
         return next(new AppError("You are not authenticated!", 401));
     }
+
+    jwt.verify(token, process.env.JWT_SEC, (err, user) => {
+        if (err) return next(new AppError("Token is not valid or has expired!", 401));
+        if (user && user.is2FAPending && !allowPending) {
+            return next(new AppError("Two-factor authentication is required to complete sign-in.", 401));
+        }
+        req.user = user;
+        next();
+    });
 };
 
 const verifyToken = buildVerifyToken(false);

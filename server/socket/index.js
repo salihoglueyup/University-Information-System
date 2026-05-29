@@ -31,8 +31,17 @@ module.exports = {
         });
 
         // Socket.io authentication middleware
+        const parseCookie = (cookieHeader, name) => {
+            if (!cookieHeader) return null;
+            const match = cookieHeader.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
+            return match ? decodeURIComponent(match[1]) : null;
+        };
         io.use((socket, next) => {
-            const token = socket.handshake.auth?.token || socket.handshake.headers?.authorization?.split(' ')[1];
+            // Accept the httpOnly cookie (sent with withCredentials) as well as the
+            // legacy auth.token / Authorization header.
+            const token = socket.handshake.auth?.token
+                || parseCookie(socket.handshake.headers?.cookie, 'token')
+                || socket.handshake.headers?.authorization?.split(' ')[1];
             if (!token) {
                 return next(new Error('Authentication required'));
             }

@@ -1,10 +1,9 @@
 
 // Components
-
-// Mock Data
-import { diningMenu } from '../../data/mockData';
+import { useDiningMenu } from '../../hooks/queries/useDiningMenu';
 
 export default function DiningMenu() {
+    const { data: diningMenu = [], isLoading } = useDiningMenu();
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -26,6 +25,10 @@ export default function DiningMenu() {
                     Vejetaryen menü seçeneğimiz mevcuttur.
                 </p>
             </Alert>
+
+            {!isLoading && diningMenu.length === 0 && (
+                <p className="text-slate-400 text-sm">Bu hafta için menü henüz yayınlanmadı.</p>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                 {diningMenu.map((menu, idx) => (

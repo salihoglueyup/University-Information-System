@@ -1,6 +1,7 @@
-import { labSections } from '../../data/mockData';
+import { useLabs } from '../../hooks/queries/useLabs';
 
 export default function Labs() {
+    const { data: labSections = [] } = useLabs();
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -85,7 +86,7 @@ export default function Labs() {
                                         <Calendar size={12} /> Sonraki
                                     </div>
                                     <p className="font-semibold text-emerald-600 text-sm">
-                                        {new Date(lab.nextSession).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' })}
+                                        {lab.nextSession ? new Date(lab.nextSession).toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' }) : '—'}
                                     </p>
                                 </div>
                             </div>

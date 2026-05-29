@@ -50,6 +50,7 @@ const erasmusRoute = require('./routes/erasmus');
 const jobsRoute = require('./routes/jobs');
 const contractsRoute = require('./routes/contracts');
 const examsRoute = require('./routes/exams');
+const labsRoute = require('./routes/labs');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -241,6 +242,7 @@ app.use("/api/erasmus", verifyToken, erasmusRoute);
 app.use("/api/jobs", verifyToken, jobsRoute);
 app.use("/api/contracts", verifyToken, contractsRoute);
 app.use("/api/exams", verifyToken, examsRoute);
+app.use("/api/labs", verifyToken, labsRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

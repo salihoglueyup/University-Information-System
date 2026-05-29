@@ -1,11 +1,8 @@
-import { Briefcase, ExternalLink } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { jobPostings } from '../../data/mockData';
+import { Briefcase, Building, ExternalLink } from 'lucide-react';
+import { useJobPostings } from '../../hooks/queries/useJobPostings';
 
 export default function Career() {
+    const { data: jobPostings = [] } = useJobPostings();
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -24,10 +21,15 @@ export default function Career() {
             <div className="grid lg:grid-cols-3 gap-6">
                 <div className="lg:col-span-2 space-y-4">
                     <h3 className="font-bold text-slate-800 text-lg px-1">Öne Çıkan İlanlar</h3>
-                    {jobPostings.map((job) => (
+                    {jobPostings.length === 0 && (
+                        <p className="text-slate-400 text-sm px-1">Şu anda öne çıkan ilan bulunmuyor.</p>
+                    )}
+                    {jobPostings.slice(0, 5).map((job) => (
                         <Card key={job.id} className="flex gap-4 p-4 hover:shadow-md transition-shadow cursor-pointer group">
                             <div className="w-16 h-16 bg-white border border-slate-200 rounded-lg p-2 flex items-center justify-center">
-                                <img src={job.image} alt={job.company} className="max-w-full max-h-full object-contain" />
+                                {job.image
+                                    ? <img src={job.image} alt={job.company} className="max-w-full max-h-full object-contain" />
+                                    : <Building className="text-slate-300" size={24} />}
                             </div>
                             <div className="flex-1">
                                 <div className="flex justify-between items-start">

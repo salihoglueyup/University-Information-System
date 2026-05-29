@@ -67,7 +67,7 @@ export default function FinancialReports() {
                         <ResponsiveContainer width="100%" height="100%">
                             <RePieChart>
                                 <Pie
-                                    data={financialReports.paymentStats}
+                                    data={financialReports.paymentStats || []}
                                     cx="50%"
                                     cy="50%"
                                     innerRadius={60}
@@ -75,7 +75,7 @@ export default function FinancialReports() {
                                     paddingAngle={5}
                                     dataKey="value"
                                 >
-                                    {financialReports.paymentStats.map((entry, index) => (
+                                    {(financialReports.paymentStats || []).map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.color} />
                                     ))}
                                 </Pie>
@@ -93,7 +93,7 @@ export default function FinancialReports() {
                     <h3 className="text-lg font-bold text-gray-800 mb-6">Aylık Tahsilat Grafiği</h3>
                     <div className="h-80">
                         <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={financialReports.monthlyRevenue}>
+                            <AreaChart data={financialReports.monthlyRevenue || []}>
                                 <defs>
                                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor="#10B981" stopOpacity={0.8} />

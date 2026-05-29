@@ -168,7 +168,7 @@ export default function TranscriptView() {
 
                     {/* Tables */}
                     <div className="space-y-6 relative z-10">
-                        {transcriptData.semesters.map((semester, idx) => (
+                        {(transcriptData.semesters || []).map((semester, idx) => (
                             <div key={idx}>
                                 <div className="bg-gray-100 px-4 py-1 font-bold text-sm border-y border-black flex justify-between">
                                     <span>{semester.name}</span>

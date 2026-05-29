@@ -39,7 +39,7 @@ export default function AcademicProgress() {
                             {/* Line */}
                             <div className="absolute top-4 left-0 w-full h-0.5 bg-white/10 -z-10" />
 
-                            {academicMilestones.milestones.slice(0, 5).map((milestone, idx) => {
+                            {(academicMilestones.milestones || []).slice(0, 5).map((milestone, idx) => {
                                 const isCompleted = milestone.status === 'Tamamlandı';
 
                                 return (
@@ -101,7 +101,7 @@ export default function AcademicProgress() {
                 {/* Milestones Detail List */}
                 <Card title="Süreç Detayları">
                     <div className="space-y-4">
-                        {academicMilestones.milestones.map((item) => (
+                        {(academicMilestones.milestones || []).map((item) => (
                             <div key={item.id} className="flex items-start gap-4 p-3 hover:bg-gray-50 rounded-xl transition-colors border border-transparent hover:border-gray-100">
                                 <div className={`mt-1 p-2 rounded-lg ${item.status === 'Tamamlandı' ? 'bg-green-100 text-green-700' :
                                     item.status === 'Yaklaşıyor' ? 'bg-amber-100 text-amber-700' :
@@ -145,7 +145,7 @@ export default function AcademicProgress() {
                     action={<Button size="xs" variant="ghost">Tümünü Gör</Button>}
                 >
                     <div className="space-y-3">
-                        {academicMilestones.publications.map((pub) => (
+                        {(academicMilestones.publications || []).map((pub) => (
                             <div key={pub.id} className="group border border-gray-100 p-4 rounded-xl hover:shadow-md hover:border-indigo-100 transition-all">
                                 <div className="flex justify-between items-start mb-2">
                                     <Badge variant={pub.status === 'Yayınlandı' ? 'success' : 'warning'} className="mb-2">

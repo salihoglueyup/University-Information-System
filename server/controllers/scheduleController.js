@@ -10,11 +10,10 @@ class ScheduleController {
             const schedules = await scheduleService.getAllSchedules(req.user.id);
             res.status(200).json(schedules);
         } catch (err) {
-            if (err.status) {
-                res.status(err.status).json({ message: err.message });
-            } else {
-                next(err);
-            }
+            // Delegate to the global error handler (err.statusCode is numeric there).
+            // Previously used res.status(err.status) where err.status is a string
+            // ('fail'/'error'), which threw "Invalid status code" -> 500 on any error.
+            next(err);
         }
     }
 

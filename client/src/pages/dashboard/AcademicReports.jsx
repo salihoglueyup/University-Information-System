@@ -67,7 +67,7 @@ export default function AcademicReports() {
                     <h3 className="text-lg font-bold text-gray-800 mb-6">Fakülte Bazlı Öğrenci Dağılımı</h3>
                     <div className="h-80">
                         <ResponsiveContainer width="100%" height="100%">
-                            <RechartsBarChart data={academicReports.facultyStats}>
+                            <RechartsBarChart data={academicReports.facultyStats || []}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                                 <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} dy={10} />
                                 <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />
@@ -86,7 +86,7 @@ export default function AcademicReports() {
                     <h3 className="text-lg font-bold text-gray-800 mb-6">Yıllara Göre Kayıt Eğilimi</h3>
                     <div className="h-80">
                         <ResponsiveContainer width="100%" height="100%">
-                            <LineChart data={academicReports.enrollmentTrends}>
+                            <LineChart data={academicReports.enrollmentTrends || []}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                                 <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} dy={10} />
                                 <YAxis axisLine={false} tickLine={false} tick={{ fill: '#6B7280', fontSize: 12 }} />

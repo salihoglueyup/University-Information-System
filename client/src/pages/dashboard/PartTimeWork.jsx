@@ -58,7 +58,7 @@ export default function PartTimeWork() {
                         <Clock size={18} className="text-slate-400" /> Son Çalışmalar
                     </h3>
                     <div className="space-y-4">
-                        {partTimeWork.shifts.map((shift, idx) => (
+                        {(partTimeWork.shifts || []).map((shift, idx) => (
                             <div key={idx} className="flex justify-between items-center pb-3 border-b border-slate-100 last:border-0 last:pb-0">
                                 <div>
                                     <span className="block font-bold text-slate-700">{shift.date}</span>

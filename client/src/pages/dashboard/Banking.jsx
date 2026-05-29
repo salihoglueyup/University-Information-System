@@ -25,7 +25,7 @@ export default function Banking() {
             <div className="grid lg:grid-cols-3 gap-6">
                 {/* Cards Section */}
                 <div className="lg:col-span-2 grid md:grid-cols-2 gap-6">
-                    {bankData.cards.map((card) => (
+                    {(bankData.cards || []).map((card) => (
                         <div key={card.id} className={`p-6 rounded-2xl shadow-lg relative overflow-hidden text-white ${card.theme}`}>
                             <div className="absolute top-0 right-0 p-4 opacity-20">
                                 <CreditCard size={100} />
@@ -61,7 +61,7 @@ export default function Banking() {
                         <PieChart className="text-slate-400" /> Harcama Analizi
                     </h3>
                     <div className="space-y-4">
-                        {bankData.spendingData.map((item, idx) => (
+                        {(bankData.spendingData || []).map((item, idx) => (
                             <div key={idx} className="flex justify-between items-center pb-2 border-b border-slate-100 last:border-0 last:pb-0">
                                 <div className="flex items-center gap-3">
                                     <span className={`w-3 h-3 rounded-full ${item.color}`}></span>
@@ -87,7 +87,7 @@ export default function Banking() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
-                                {bankData.transactions.map((tx) => (
+                                {(bankData.transactions || []).map((tx) => (
                                     <tr key={tx.id} className="hover:bg-slate-50 transition-colors group">
                                         <td className="px-6 py-4 font-bold text-slate-800 flex items-center gap-3">
                                             <div className={`w-8 h-8 rounded-full flex items-center justify-center ${tx.type === 'income' ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-600'}`}>

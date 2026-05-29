@@ -3,7 +3,7 @@ import { syllabusData, courseCatalog } from '../../data/mockData';
 
 export default function Syllabus() {
     const [weeks] = useState(syllabusData);
-    const [selectedCourse, setSelectedCourse] = useState(courseCatalog[0].id);
+    const [selectedCourse, setSelectedCourse] = useState(courseCatalog[0]?.id);
 
     return (
         <motion.div

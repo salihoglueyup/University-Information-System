@@ -136,7 +136,7 @@ export default function SocialTranscript() {
                     <Award className="text-amber-500" /> Rozetlerim
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4">
-                    {socialTranscript.badges.map((badge) => (
+                    {(socialTranscript.badges || []).map((badge) => (
                         <div key={badge.id} className="flex flex-col items-center text-center p-4 border border-slate-100 rounded-xl hover:bg-slate-50 transition-colors group">
                             <div className="w-16 h-16 bg-gradient-to-br from-amber-100 to-amber-50 rounded-full flex items-center justify-center text-amber-600 mb-3 group-hover:scale-110 transition-transform shadow-sm">
                                 <Star size={32} fill="currentColor" className="text-amber-500" />

@@ -126,8 +126,8 @@ function DroppableContainer({ id, title, count, items, onClickItem }) {
 
 export default function ThesisKanban() {
     const navigate = useNavigate();
-    const [columns] = useState(thesisKanbanData.columns);
-    const [items, setItems] = useState(thesisKanbanData.items);
+    const [columns] = useState(thesisKanbanData.columns || []);
+    const [items, setItems] = useState(thesisKanbanData.items || []);
     const [activeId, setActiveId] = useState(null);
 
     const sensors = useSensors(

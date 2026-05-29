@@ -46,7 +46,7 @@ export default function Internship() {
 
                         <h4 className="font-bold text-slate-700 mb-4">Gerekli Belgeler</h4>
                         <div className="space-y-3">
-                            {internshipData.documents.map((doc, idx) => (
+                            {(internshipData.documents || []).map((doc, idx) => (
                                 <div key={idx} className="flex items-center justify-between p-3 bg-white border border-slate-100 rounded-xl hover:shadow-sm transition-shadow">
                                     <div className="flex items-center gap-3">
                                         <FileCheck className={doc.status === 'Onaylandı' ? "text-emerald-500" : "text-slate-300"} size={20} />
@@ -62,7 +62,7 @@ export default function Internship() {
                         <Card className="p-6">
                             <h3 className="font-bold text-slate-800 mb-4">Staj Geçmişi</h3>
                             <div className="space-y-4">
-                                {internshipData.history.map((item) => (
+                                {(internshipData.history || []).map((item) => (
                                     <div key={item.id} className="bg-slate-50 p-4 rounded-xl relative overflow-hidden">
                                         <div className="absolute top-0 right-0 p-2 opacity-5">
                                             <Briefcase size={60} />

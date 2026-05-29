@@ -92,6 +92,18 @@ const schemas = {
         day: z.string().min(1, "Gün gereklidir").max(20),
         time: z.string().min(1, "Saat gereklidir").max(40),
         location: z.string().max(80).optional()
+    }),
+
+    erasmusApply: z.object({
+        year: z.string().min(1, "Dönem yılı gereklidir").max(20),
+        term: z.string().max(20).optional(),
+        score: z.coerce.number().min(0).max(100).optional()
+    }),
+
+    erasmusChoice: z.object({
+        university: z.string().min(1, "Üniversite gereklidir").max(150),
+        country: z.string().max(60).optional(),
+        quota: z.coerce.number().int().min(0).max(1000).optional()
     })
 };
 

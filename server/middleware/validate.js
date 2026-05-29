@@ -104,6 +104,10 @@ const schemas = {
         university: z.string().min(1, "Üniversite gereklidir").max(150),
         country: z.string().max(60).optional(),
         quota: z.coerce.number().int().min(0).max(1000).optional()
+    }),
+
+    contractStatus: z.object({
+        status: z.enum(['Onay Bekliyor', 'Onaylandı'])
     })
 };
 

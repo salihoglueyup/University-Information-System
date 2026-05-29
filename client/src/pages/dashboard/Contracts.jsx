@@ -1,10 +1,20 @@
-
-// Components
-
-// Mock Data
-import { contracts } from '../../data/mockData';
+import { motion } from 'framer-motion';
+import { Check, Clock, FileSignature } from 'lucide-react';
+import { toast } from 'react-toastify';
+import { Badge, Button, Card } from '../../components/ui';
+import { useContracts, useSignContract } from '../../hooks/queries/useContracts';
 
 export default function Contracts() {
+    const { data: contracts = [], isLoading } = useContracts();
+    const signContract = useSignContract();
+
+    const handleSign = (id) => {
+        signContract.mutate(id, {
+            onSuccess: () => toast.success('Sözleşme onaylandı.'),
+            onError: () => toast.error('Sözleşme onaylanamadı.')
+        });
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -31,10 +41,14 @@ export default function Contracts() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
-                        {contracts.map((contract) => (
+                        {isLoading ? (
+                            <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-400">Yükleniyor...</td></tr>
+                        ) : contracts.length === 0 ? (
+                            <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-400">Sözleşmeniz bulunmuyor.</td></tr>
+                        ) : contracts.map((contract) => (
                             <tr key={contract.id} className="hover:bg-slate-50 transition-colors">
                                 <td className="px-6 py-4 font-medium text-slate-800">{contract.name}</td>
-                                <td className="px-6 py-4 text-slate-500 font-mono">{contract.date}</td>
+                                <td className="px-6 py-4 text-slate-500 font-mono">{contract.date || '—'}</td>
                                 <td className="px-6 py-4">
                                     {contract.status === 'Onaylandı' ? (
                                         <Badge variant="success" className="bg-emerald-100 text-emerald-700">
@@ -47,7 +61,13 @@ export default function Contracts() {
                                     )}
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    <Button variant="outline" size="sm">Görüntüle</Button>
+                                    {contract.status === 'Onaylandı' ? (
+                                        <Button variant="outline" size="sm">Görüntüle</Button>
+                                    ) : (
+                                        <Button variant="primary" size="sm" disabled={signContract.isPending} onClick={() => handleSign(contract.id)}>
+                                            Onayla
+                                        </Button>
+                                    )}
                                 </td>
                             </tr>
                         ))}
@@ -57,6 +77,3 @@ export default function Contracts() {
         </motion.div>
     );
 }
-import { motion } from 'framer-motion';
-import { Check, Clock, FileSignature } from 'lucide-react';
-import { Badge, Button, Card } from '../../components/ui';

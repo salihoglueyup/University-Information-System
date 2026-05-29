@@ -2,10 +2,12 @@ import { ArrowDownLeft, ArrowUpRight, CreditCard, ShieldCheck, Wallet } from 'lu
 
 // Components
 
-// Mock Data
-import { bankData } from '../../data/mockData';
+import { usePaymentOverview } from '../../hooks/queries/usePaymentOverview';
 
 export default function Banking() {
+    // Real data from the API ({ cards, spendingData, transactions, tuition }).
+    // Defaults to {} while loading; the (x || []) guards below handle empty state.
+    const { data: bankData = {} } = usePaymentOverview();
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}

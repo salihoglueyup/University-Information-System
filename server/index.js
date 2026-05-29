@@ -38,6 +38,7 @@ const aiRoute = require('./routes/ai');
 const notificationsRoute = require('./routes/notifications');
 const lostFoundRoute = require('./routes/lostfound');
 const leaveRoute = require('./routes/leave');
+const supportRoute = require('./routes/support');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -217,6 +218,7 @@ app.use("/api/ai", verifyToken, aiRoute);
 app.use("/api/notifications", verifyToken, notificationsRoute);
 app.use("/api/lost-found", verifyToken, lostFoundRoute);
 app.use("/api/leave", verifyToken, leaveRoute);
+app.use("/api/support", verifyToken, supportRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

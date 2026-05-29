@@ -1,10 +1,9 @@
 
 // Components
-
-// Mock Data
-import { events } from '../../data/mockData';
+import { useEvents } from '../../hooks/queries/useEvents';
 
 export default function Events() {
+    const { data: events = [], isLoading } = useEvents();
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -19,6 +18,10 @@ export default function Events() {
                     <p className="text-slate-500 text-sm">Üniversitedeki güncel etkinlikler, konferanslar ve festivaller</p>
                 </div>
             </div>
+
+            {!isLoading && events.length === 0 && (
+                <p className="text-slate-400 text-sm">Şu anda planlanmış etkinlik bulunmuyor.</p>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {events.map((event) => (

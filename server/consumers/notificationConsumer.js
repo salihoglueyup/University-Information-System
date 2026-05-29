@@ -1,6 +1,7 @@
 const messageBroker = require('../utils/messageBroker');
 const logger = require('../utils/logger');
 const socketAPI = require('../socket');
+const Notification = require('../models/Notification');
 
 const formatError = (err) => {
     if (!err) {
@@ -34,43 +35,49 @@ async function startNotificationConsumer() {
 
         logger.info(`RabbitMQ Consumer started listening on ${queueName}`);
 
-        ch.consume(queueName, (msg) => {
-            if (msg !== null) {
-                try {
-                    const payload = JSON.parse(msg.content.toString());
-                    logger.debug(`[Consumer] Processing event for user: ${payload.userId || payload.username}`);
+        ch.consume(queueName, async (msg) => {
+            if (msg === null) return;
+            try {
+                const payload = JSON.parse(msg.content.toString());
+                logger.debug(`[Consumer] Processing event for user: ${payload.userId || payload.username}`);
 
-                    // Emit Web Socket Notification
-                    const targetKeys = [payload.userId, payload.username]
-                        .filter(Boolean)
-                        .map((value) => String(value));
+                const title = payload.title || 'Sistem Bildirimi';
+                const message = payload.message || 'Yeni bir bildiriminiz var.';
+                const type = payload.type || 'info';
 
-                    if (targetKeys.length > 0) {
-                        const io = socketAPI.getIO();
-                        const onlineUsers = socketAPI.getOnlineUsers();
-                        const socketId = targetKeys
-                            .map((key) => onlineUsers.get(key))
-                            .find(Boolean);
+                const targetKeys = [payload.userId, payload.username]
+                    .filter(Boolean)
+                    .map((value) => String(value));
 
-                        if (socketId) {
-                            io.to(socketId).emit('new_notification', {
-                                title: payload.title || 'Sistem Bildirimi',
-                                message: payload.message || 'Yeni bir bildiriminiz var.',
-                                type: payload.type || 'info',
-                                timestamp: new Date()
-                            });
-                        }
+                if (targetKeys.length > 0) {
+                    // Persist first so the notification survives even if the user is
+                    // offline; the socket emit below is best-effort delivery.
+                    const recipient = String(payload.username || payload.userId);
+                    try {
+                        await Notification.create({ recipient, title, message, type });
+                    } catch (persistErr) {
+                        logger.error(`[Consumer] Failed to persist notification: ${persistErr.message}`);
                     }
 
-                    // Acknowledge the message to drop it from queue safely
-                    ch.ack(msg);
-                } catch (err) {
-                    logger.error(`[Consumer] Error processing message: ${err.message}`);
-                    // Drop the poison message (requeue=false) instead of leaving it
-                    // unacked — an unacked malformed message is redelivered on every
-                    // reconnect and loops forever.
-                    try { ch.nack(msg, false, false); } catch { /* channel may be closed */ }
+                    const io = socketAPI.getIO();
+                    const onlineUsers = socketAPI.getOnlineUsers();
+                    const socketId = targetKeys
+                        .map((key) => onlineUsers.get(key))
+                        .find(Boolean);
+
+                    if (socketId) {
+                        io.to(socketId).emit('new_notification', { title, message, type, timestamp: new Date() });
+                    }
                 }
+
+                // Acknowledge the message to drop it from queue safely
+                ch.ack(msg);
+            } catch (err) {
+                logger.error(`[Consumer] Error processing message: ${err.message}`);
+                // Drop the poison message (requeue=false) instead of leaving it
+                // unacked — an unacked malformed message is redelivered on every
+                // reconnect and loops forever.
+                try { ch.nack(msg, false, false); } catch { /* channel may be closed */ }
             }
         });
         

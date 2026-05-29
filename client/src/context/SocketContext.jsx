@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { io } from 'socket.io-client';
 import { toast } from 'react-toastify';
 import { getUser, getToken } from '../utils/authStorage';
+import axiosInstance from '../api/axiosInstance';
 
 const SocketContext = createContext();
 
@@ -115,12 +116,36 @@ export const SocketProvider = ({ children }) => {
         };
     }, [socket]);
 
+    // Load notifications persisted while the user was offline.
+    useEffect(() => {
+        if (!getUser()) return;
+        let cancelled = false;
+        axiosInstance.get('/notifications')
+            .then(res => {
+                if (cancelled || !Array.isArray(res.data)) return;
+                const persisted = res.data.map(n => ({
+                    id: n._id,
+                    type: n.type || 'info',
+                    title: n.title,
+                    message: n.message,
+                    read: Boolean(n.read)
+                }));
+                // Keep any already-received live notifications on top.
+                setNotifications(prev => [...prev, ...persisted]);
+            })
+            .catch(() => { /* notifications are best-effort */ });
+        return () => { cancelled = true; };
+    }, []);
+
     const markAsRead = useCallback((id) => {
         setNotifications(prev => prev.map(notif => notif.id === id ? { ...notif, read: true } : notif));
+        // Persist read state (no-op for live, non-DB ids).
+        axiosInstance.patch(`/notifications/${id}/read`).catch(() => {});
     }, []);
 
     const markAllAsRead = useCallback(() => {
         setNotifications(prev => prev.map(notif => ({ ...notif, read: true })));
+        axiosInstance.patch('/notifications/read-all').catch(() => {});
     }, []);
 
     const contextValue = useMemo(() => ({

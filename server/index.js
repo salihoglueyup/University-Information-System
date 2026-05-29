@@ -40,6 +40,7 @@ const lostFoundRoute = require('./routes/lostfound');
 const leaveRoute = require('./routes/leave');
 const supportRoute = require('./routes/support');
 const scholarshipsRoute = require('./routes/scholarships');
+const internshipRoute = require('./routes/internship');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -221,6 +222,7 @@ app.use("/api/lost-found", verifyToken, lostFoundRoute);
 app.use("/api/leave", verifyToken, leaveRoute);
 app.use("/api/support", verifyToken, supportRoute);
 app.use("/api/scholarships", verifyToken, scholarshipsRoute);
+app.use("/api/internship", verifyToken, internshipRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

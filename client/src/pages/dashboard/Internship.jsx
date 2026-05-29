@@ -1,12 +1,13 @@
 import { ArrowUpRight, Briefcase, Building2, CalendarDays, Clock, FileCheck, MapPin } from 'lucide-react';
 
 // Components
-
-// Mock Data
-import { internshipData, internshipOffers } from '../../data/mockData';
+import { useInternshipStatus, useInternshipOffers } from '../../hooks/queries/useInternship';
 
 export default function Internship() {
-    const daysProgress = (internshipData.mandatory.completedDays / internshipData.mandatory.totalDays) * 100;
+    const { data: internshipData = { mandatory: { completedDays: 0, totalDays: 30 }, documents: [], history: [] } } = useInternshipStatus();
+    const { data: internshipOffers = [] } = useInternshipOffers();
+    const mandatory = internshipData.mandatory || { completedDays: 0, totalDays: 30 };
+    const daysProgress = mandatory.totalDays ? (mandatory.completedDays / mandatory.totalDays) * 100 : 0;
 
     return (
         <motion.div
@@ -35,8 +36,8 @@ export default function Internship() {
 
                         <div className="mb-8 p-6 bg-slate-50 rounded-2xl border border-slate-100">
                             <div className="flex justify-between text-sm mb-2 font-medium">
-                                <span className="text-slate-600">Tamamlanan Gün: {internshipData.mandatory.completedDays}</span>
-                                <span className="text-indigo-600">Hedef: {internshipData.mandatory.totalDays} Gün</span>
+                                <span className="text-slate-600">Tamamlanan Gün: {mandatory.completedDays}</span>
+                                <span className="text-indigo-600">Hedef: {mandatory.totalDays} Gün</span>
                             </div>
                             <ProgressBar value={daysProgress} max={100} color="bg-indigo-600" height="h-3" />
                             {daysProgress === 0 && (

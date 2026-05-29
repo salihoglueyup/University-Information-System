@@ -1,7 +1,27 @@
+import { useState } from 'react';
 import { AlertCircle, Award, BookOpen, Calendar, CheckCircle, Clock, GraduationCap } from 'lucide-react';
-import { academicMilestones } from '../../data/mockData';
+import { toast } from 'react-toastify';
+import { useAcademicProgress, useAddPublication } from '../../hooks/queries/useAcademicProgress';
+
+const DEFAULT_PROGRESS = { program: '', stage: '', advisor: '', completedCredits: 0, requiredCredits: 0, gpa: 0, milestones: [], publications: [] };
+const EMPTY_PUB = { title: '', journal: '', status: 'Hazırlanıyor' };
 
 export default function AcademicProgress() {
+    const { data: academicMilestones = DEFAULT_PROGRESS } = useAcademicProgress();
+    const addPublication = useAddPublication();
+    const [pubModal, setPubModal] = useState(false);
+    const [pubForm, setPubForm] = useState(EMPTY_PUB);
+
+    const pubField = (k) => (e) => setPubForm(p => ({ ...p, [k]: e.target.value }));
+    const submitPub = (e) => {
+        e.preventDefault();
+        if (!pubForm.title.trim()) { toast.warning('Başlık gereklidir.'); return; }
+        addPublication.mutate(pubForm, {
+            onSuccess: () => { toast.success('Yayın eklendi.'); setPubForm(EMPTY_PUB); setPubModal(false); },
+            onError: (err) => toast.error(err?.response?.data?.message || 'Yayın eklenemedi.')
+        });
+    };
+
     return (
         <div className="space-y-6">
             <PageHeader
@@ -163,12 +183,30 @@ export default function AcademicProgress() {
                             </div>
                         ))}
 
-                        <button className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-gray-400 font-medium hover:border-indigo-400 hover:text-indigo-600 transition-all flex items-center justify-center gap-2 bg-gray-50/50 hover:bg-indigo-50/50">
+                        <button onClick={() => setPubModal(true)} className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-gray-400 font-medium hover:border-indigo-400 hover:text-indigo-600 transition-all flex items-center justify-center gap-2 bg-gray-50/50 hover:bg-indigo-50/50">
                             <span className="text-2xl">+</span> Yeni Yayın Ekle
                         </button>
                     </div>
                 </Card>
             </div>
+
+            <Modal isOpen={pubModal} onClose={() => setPubModal(false)} title="Yeni Yayın Ekle">
+                <form onSubmit={submitPub} className="space-y-4">
+                    <Input label="Başlık" placeholder="Yayın başlığı" value={pubForm.title} onChange={pubField('title')} required />
+                    <Input label="Dergi / Konferans" placeholder="Örn. IEEE Access" value={pubForm.journal} onChange={pubField('journal')} />
+                    <Select label="Durum" value={pubForm.status} onChange={pubField('status')} options={[
+                        { value: 'Hazırlanıyor', label: 'Hazırlanıyor' },
+                        { value: 'İncelemede', label: 'İncelemede' },
+                        { value: 'Yayınlandı', label: 'Yayınlandı' },
+                    ]} />
+                    <div className="flex justify-end gap-2 pt-2">
+                        <Button type="button" variant="outline" onClick={() => setPubModal(false)}>İptal</Button>
+                        <Button type="submit" variant="primary" disabled={addPublication.isPending}>
+                            {addPublication.isPending ? 'Ekleniyor...' : 'Ekle'}
+                        </Button>
+                    </div>
+                </form>
+            </Modal>
         </div>
     );
 }
@@ -181,4 +219,4 @@ function UserIcon({ size }) {
         </svg>
     )
 }
-import { Badge, Button, Card, PageHeader } from '../../components/ui';
+import { Badge, Button, Card, Input, Modal, PageHeader, Select } from '../../components/ui';

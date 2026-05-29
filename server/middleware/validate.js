@@ -108,6 +108,12 @@ const schemas = {
 
     contractStatus: z.object({
         status: z.enum(['Onay Bekliyor', 'Onaylandı'])
+    }),
+
+    publication: z.object({
+        title: z.string().min(1, "Başlık gereklidir").max(300),
+        journal: z.string().max(200).optional(),
+        status: z.enum(['Yayınlandı', 'İncelemede', 'Hazırlanıyor']).optional()
     })
 };
 

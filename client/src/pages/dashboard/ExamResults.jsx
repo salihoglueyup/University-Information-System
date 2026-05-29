@@ -1,10 +1,10 @@
 
 // Components
 
-// Mock Data
-import { examResults } from '../../data/mockData';
+import { useExamResults } from '../../hooks/queries/useExams';
 
 export default function ExamResults() {
+    const { data: examResults = [] } = useExamResults();
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}

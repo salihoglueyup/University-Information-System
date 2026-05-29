@@ -1,10 +1,10 @@
 
 // Components
 
-// Mock Data
-import { examSchedule } from '../../data/mockData';
+import { useExamSchedule } from '../../hooks/queries/useExams';
 
 export default function ExamSchedule() {
+    const { data: examSchedule = [], isLoading } = useExamSchedule();
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -23,6 +23,10 @@ export default function ExamSchedule() {
                     <Button variant="primary" size="sm">Yazdır</Button>
                 </div>
             </div>
+
+            {!isLoading && examSchedule.length === 0 && (
+                <p className="text-slate-400 text-sm">Yaklaşan sınav kaydınız bulunmuyor.</p>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {examSchedule.map((exam, idx) => (

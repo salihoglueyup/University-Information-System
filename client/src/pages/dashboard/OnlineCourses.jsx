@@ -93,4 +93,4 @@ export default function OnlineCourses() {
     );
 }
 import { motion } from 'framer-motion';
-import { Badge, Button, Calendar, Card, ProgressBar } from '../../components/ui';
+import { Badge, Button, Card, ProgressBar } from '../../components/ui';

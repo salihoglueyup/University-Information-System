@@ -53,4 +53,4 @@ export default function Events() {
 }
 import { motion } from 'framer-motion';
 import { Calendar, Clock, MapPin } from 'lucide-react';
-import { Badge, Button, Calendar, Card } from '../../components/ui';
+import { Badge, Button, Card } from '../../components/ui';

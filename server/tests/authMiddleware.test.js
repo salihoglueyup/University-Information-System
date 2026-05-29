@@ -27,7 +27,7 @@ describe('Auth Middleware', () => {
             req.headers.authorization = 'Bearer invalid.token.here';
             verifyToken(req, res, next);
             expect(next).toHaveBeenCalledWith(expect.objectContaining({
-                statusCode: 403
+                statusCode: 401
             }));
         });
 

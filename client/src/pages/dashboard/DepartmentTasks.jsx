@@ -132,4 +132,4 @@ export default function DepartmentTasks() {
 }
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertTriangle, Calendar, ClipboardList, MoreHorizontal, Plus } from 'lucide-react';
-import { Calendar, Checkbox } from '../../components/ui';
+import { Checkbox } from '../../components/ui';

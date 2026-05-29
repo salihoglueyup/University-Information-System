@@ -36,6 +36,9 @@ Thumbs.db
 # Docker local volumes and runtime
 **/data/
 **/tmp/
+# but keep the client's source mock data (was lost once due to **/data/)
+!client/src/data/
+!client/src/data/**
 
 # Uploads and generated assets
 server/uploads/

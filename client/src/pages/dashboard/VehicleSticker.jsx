@@ -78,4 +78,4 @@ export default function VehicleSticker() {
     );
 }
 import { motion } from 'framer-motion';
-import { Alert, Badge, Button, Calendar, Card, Input } from '../../components/ui';
+import { Alert, Badge, Button, Card, Input } from '../../components/ui';

@@ -135,4 +135,3 @@ export default function LeaveManagement() {
 }
 import { motion, AnimatePresence } from 'framer-motion';
 import { AlertCircle, Calendar, CheckCircle, Clock, FileText, Plane, Plus } from 'lucide-react';
-import { Calendar } from '../../components/ui';

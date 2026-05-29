@@ -39,6 +39,33 @@ const schemas = {
         diagnosis: z.string().min(2, "Tanı en az 2 karakter olmalıdır").max(200),
         date: z.string().min(1, "Rapor tarihi zorunludur"),
         days: z.coerce.number().int("Gün sayısı tam sayı olmalıdır").min(1, "Gün sayısı en az 1 olmalıdır").max(60, "Gün sayısı en fazla 60 olabilir")
+    }),
+
+    lostFound: z.object({
+        item: z.string().min(1, "Eşya adı gereklidir").max(120),
+        type: z.enum(['found', 'lost']).optional(),
+        category: z.string().max(60).optional(),
+        location: z.string().max(120).optional(),
+        description: z.string().max(1000).optional()
+    }),
+
+    leaveRequest: z.object({
+        type: z.string().max(40).optional(),
+        reason: z.string().max(500).optional(),
+        startDate: z.string().min(1, "Başlangıç tarihi gereklidir"),
+        endDate: z.string().min(1, "Bitiş tarihi gereklidir")
+    }),
+
+    supportTicket: z.object({
+        subject: z.string().min(1, "Konu gereklidir").max(150),
+        category: z.string().max(60).optional(),
+        message: z.string().min(1, "Mesaj gereklidir").max(2000)
+    }),
+
+    scholarshipApply: z.object({
+        name: z.string().min(1, "Burs adı gereklidir").max(120),
+        type: z.string().max(40).optional(),
+        amount: z.string().max(40).optional()
     })
 };
 

@@ -2,11 +2,11 @@ import React from 'react';
 import { Clock, Download, MapPin, Printer } from 'lucide-react';
 
 // Components
-
-// Mock Data
-import { schedule } from '../../data/mockData';
+import { useSchedule } from '../../hooks/queries/useSchedule';
 
 export default function Schedule() {
+    // Real schedule from the API; defaults to [] while loading.
+    const { data: schedule = [] } = useSchedule();
     const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma'];
     const timeSlots = Array.from({ length: 9 }, (_, i) => i + 9); // 09:00 - 17:00 (Start hours)
 

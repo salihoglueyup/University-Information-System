@@ -1,11 +1,23 @@
 import { AlertTriangle, BookX, CreditCard, History } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { libraryFines } from '../../data/mockData';
+import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
+import { Alert, Button, Card } from '../../components/ui';
+import { useLibraryFines, usePayFine } from '../../hooks/queries/useLibraryFines';
 
 export default function LibraryFines() {
+    const { data: fines = [] } = useLibraryFines();
+    const payFine = usePayFine();
+
+    const unpaid = fines.filter(f => f.status !== 'Ödendi');
+    const paid = fines.filter(f => f.status === 'Ödendi');
+
+    const handlePay = (id) => {
+        payFine.mutate(id, {
+            onSuccess: () => toast.success('Ödeme alındı.'),
+            onError: () => toast.error('Ödeme yapılamadı.')
+        });
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -27,13 +39,12 @@ export default function LibraryFines() {
                         <AlertTriangle className="text-amber-500" /> Ödenmemiş Cezalar
                     </h3>
 
-                    {libraryFines.length > 0 ? (
+                    {unpaid.length > 0 ? (
                         <div className="space-y-4">
-                            {libraryFines.map((fine) => (
+                            {unpaid.map((fine) => (
                                 <div key={fine.id} className="border border-red-100 bg-red-50 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-16 bg-slate-200 rounded shadow-sm overflow-hidden flex-shrink-0">
-                                            {/* Placeholder for book cover */}
                                             <div className="w-full h-full bg-slate-300"></div>
                                         </div>
                                         <div>
@@ -42,11 +53,13 @@ export default function LibraryFines() {
                                                 <span className="font-bold">Ceza Tutarı: {fine.fine}</span>
                                             </div>
                                             <div className="text-xs text-slate-500 mt-1">
-                                                İade Tarihi: {fine.returnDate} (Son Gün: {fine.dueDate})
+                                                İade Tarihi: {fine.returnDate || '—'} (Son Gün: {fine.dueDate || '—'})
                                             </div>
                                         </div>
                                     </div>
-                                    <Button variant="danger" icon={CreditCard}>Ödeme Yap</Button>
+                                    <Button variant="danger" icon={CreditCard} disabled={payFine.isPending} onClick={() => handlePay(fine.id)}>
+                                        Ödeme Yap
+                                    </Button>
                                 </div>
                             ))}
                         </div>
@@ -66,9 +79,20 @@ export default function LibraryFines() {
                         <h3 className="font-bold text-slate-800 mb-4 flex items-center gap-2">
                             <History className="text-slate-400" /> Geçmiş Ödemeler
                         </h3>
-                        <div className="text-center py-8 text-sm text-slate-400 border border-dashed border-slate-200 rounded-xl bg-slate-50">
-                            Kayıt bulunamadı.
-                        </div>
+                        {paid.length > 0 ? (
+                            <div className="space-y-2">
+                                {paid.map((fine) => (
+                                    <div key={fine.id} className="flex justify-between items-center text-sm p-2 rounded-lg bg-slate-50 border border-slate-100">
+                                        <span className="font-medium text-slate-700 truncate mr-2">{fine.book}</span>
+                                        <span className="text-emerald-600 font-bold whitespace-nowrap">{fine.fine}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-8 text-sm text-slate-400 border border-dashed border-slate-200 rounded-xl bg-slate-50">
+                                Kayıt bulunamadı.
+                            </div>
+                        )}
                     </Card>
 
                     <Alert variant="info" title="Ceza Hesaplaması">
@@ -79,5 +103,3 @@ export default function LibraryFines() {
         </motion.div>
     );
 }
-import { motion } from 'framer-motion';
-import { Alert, Button, Card } from '../../components/ui';

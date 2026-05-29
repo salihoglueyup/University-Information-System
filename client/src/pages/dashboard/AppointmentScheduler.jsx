@@ -1,10 +1,42 @@
 import { useState } from 'react';
-
-import { appointments, officeHours } from '../../data/mockData';
+import { toast } from 'react-toastify';
+import { useAppointments, useUpdateAppointmentStatus, useOfficeHours, useCreateOfficeHour } from '../../hooks/queries/useAppointments';
 
 export default function AppointmentScheduler() {
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
+    const [isOhModalOpen, setIsOhModalOpen] = useState(false);
+    const [ohForm, setOhForm] = useState({ day: '', time: '', location: '' });
+
+    const { data: appointments = [] } = useAppointments();
+    const { data: officeHours = [] } = useOfficeHours();
+    const updateStatus = useUpdateAppointmentStatus();
+    const createOfficeHour = useCreateOfficeHour();
+
+    const handleOhField = (k) => (e) => setOhForm(prev => ({ ...prev, [k]: e.target.value }));
+
+    const handleStatusChange = (id, status) => {
+        updateStatus.mutate({ id, status }, {
+            onSuccess: () => toast.success('Randevu durumu güncellendi.'),
+            onError: () => toast.error('Durum güncellenemedi.')
+        });
+    };
+
+    const handleOhSubmit = (e) => {
+        e.preventDefault();
+        if (!ohForm.day.trim() || !ohForm.time.trim()) {
+            toast.warning('Gün ve saat alanları gereklidir.');
+            return;
+        }
+        createOfficeHour.mutate(ohForm, {
+            onSuccess: () => {
+                toast.success('Ofis saati eklendi.');
+                setOhForm({ day: '', time: '', location: '' });
+                setIsOhModalOpen(false);
+            },
+            onError: () => toast.error('Ofis saati eklenemedi.')
+        });
+    };
 
     const filteredAppointments = appointments.filter(apt => {
         const matchesStatus = filterStatus === 'All' || apt.status === filterStatus;
@@ -38,7 +70,7 @@ export default function AppointmentScheduler() {
                         <CalendarIcon size={18} className="mr-2" />
                         Takvim Görünümü
                     </Button>
-                    <Button variant="primary">
+                    <Button variant="primary" onClick={() => setIsOhModalOpen(true)}>
                         <Plus size={18} className="mr-2" />
                         Ofis Saati Ekle
                     </Button>
@@ -71,7 +103,7 @@ export default function AppointmentScheduler() {
                                     </Button>
                                 </div>
                             ))}
-                            <Button variant="outline" className="w-full border-dashed">
+                            <Button variant="outline" className="w-full border-dashed" onClick={() => setIsOhModalOpen(true)}>
                                 + Yeni Aralık Ekle
                             </Button>
                         </div>
@@ -171,10 +203,10 @@ export default function AppointmentScheduler() {
 
                                                 {apt.status === 'Bekliyor' && (
                                                     <div className="flex gap-2 mt-2">
-                                                        <Button size="sm" variant="success" className="h-8">
+                                                        <Button size="sm" variant="success" className="h-8" disabled={updateStatus.isPending} onClick={() => handleStatusChange(apt.id, 'Onaylandı')}>
                                                             <CheckCircle size={16} className="mr-1" /> Onayla
                                                         </Button>
-                                                        <Button size="sm" variant="danger" className="h-8">
+                                                        <Button size="sm" variant="danger" className="h-8" disabled={updateStatus.isPending} onClick={() => handleStatusChange(apt.id, 'Reddedildi')}>
                                                             <XCircle size={16} className="mr-1" /> Reddet
                                                         </Button>
                                                     </div>
@@ -194,8 +226,22 @@ export default function AppointmentScheduler() {
                     </Card>
                 </div>
             </div>
+
+            <Modal isOpen={isOhModalOpen} onClose={() => setIsOhModalOpen(false)} title="Ofis Saati Ekle">
+                <form onSubmit={handleOhSubmit} className="space-y-4">
+                    <Input label="Gün" placeholder="Örn. Pazartesi" value={ohForm.day} onChange={handleOhField('day')} required />
+                    <Input label="Saat Aralığı" placeholder="Örn. 10:00 - 12:00" value={ohForm.time} onChange={handleOhField('time')} required />
+                    <Input label="Konum" placeholder="Örn. B-204" value={ohForm.location} onChange={handleOhField('location')} />
+                    <div className="flex justify-end gap-2 pt-2">
+                        <Button type="button" variant="outline" onClick={() => setIsOhModalOpen(false)}>İptal</Button>
+                        <Button type="submit" variant="primary" disabled={createOfficeHour.isPending}>
+                            {createOfficeHour.isPending ? 'Ekleniyor...' : 'Ekle'}
+                        </Button>
+                    </div>
+                </form>
+            </Modal>
         </div>
     );
 }
 import { CalendarIcon, CheckCircle, Clock, MapPin, MoreHorizontal, Plus, Search, Users, Video, XCircle } from 'lucide-react';
-import { Badge, Button, Card, PageHeader } from '../../components/ui';
+import { Badge, Button, Card, Input, Modal, PageHeader } from '../../components/ui';

@@ -73,6 +73,25 @@ const schemas = {
         model: z.string().min(2, "Marka/model gereklidir").max(60),
         owner: z.string().max(100).optional(),
         color: z.string().max(30).optional()
+    }),
+
+    appointmentCreate: z.object({
+        student: z.string().min(1, "Öğrenci adı gereklidir").max(100),
+        studentId: z.string().max(40).optional(),
+        topic: z.string().min(1, "Konu gereklidir").max(200),
+        date: z.string().min(1, "Tarih gereklidir"),
+        time: z.string().min(1, "Saat gereklidir"),
+        type: z.enum(['Online', 'Yüz Yüze']).optional()
+    }),
+
+    appointmentStatus: z.object({
+        status: z.enum(['Bekliyor', 'Onaylandı', 'Reddedildi', 'Tamamlandı', 'İptal'])
+    }),
+
+    officeHour: z.object({
+        day: z.string().min(1, "Gün gereklidir").max(20),
+        time: z.string().min(1, "Saat gereklidir").max(40),
+        location: z.string().max(80).optional()
     })
 };
 

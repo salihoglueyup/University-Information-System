@@ -45,6 +45,7 @@ const eventsRoute = require('./routes/events');
 const diningRoute = require('./routes/dining');
 const healthReportsRoute = require('./routes/healthReports');
 const vehicleRoute = require('./routes/vehicle');
+const appointmentsRoute = require('./routes/appointments');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -231,6 +232,7 @@ app.use("/api/events", verifyToken, eventsRoute);
 app.use("/api/dining-menu", verifyToken, diningRoute);
 app.use("/api/health-reports", verifyToken, healthReportsRoute);
 app.use("/api/vehicle", verifyToken, vehicleRoute);
+app.use("/api/appointments", verifyToken, appointmentsRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

@@ -1,11 +1,37 @@
+import { useState } from 'react';
 import { Award, HelpCircle, TrendingUp } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
+import { Badge, Button, Card, Modal, Input, Select } from '../../components/ui';
+import { useScholarships, useApplyScholarship } from '../../hooks/queries/useScholarships';
 
-// Components
-
-// Mock Data
-import { scholarships } from '../../data/mockData';
+const EMPTY_FORM = { name: '', type: 'Özel', amount: '' };
 
 export default function Scholarships() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [form, setForm] = useState(EMPTY_FORM);
+
+    const { data: scholarships = [], isLoading } = useScholarships();
+    const applyScholarship = useApplyScholarship();
+
+    const handleField = (key) => (e) => setForm(prev => ({ ...prev, [key]: e.target.value }));
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!form.name.trim()) {
+            toast.warning('Lütfen burs adını girin.');
+            return;
+        }
+        applyScholarship.mutate(form, {
+            onSuccess: () => {
+                toast.success('Burs başvurunuz alındı.');
+                setForm(EMPTY_FORM);
+                setIsModalOpen(false);
+            },
+            onError: (err) => toast.error(err?.response?.data?.message || 'Başvuru gönderilemedi.')
+        });
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -23,6 +49,7 @@ export default function Scholarships() {
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {isLoading && <p className="text-slate-400 text-sm">Yükleniyor...</p>}
                 {scholarships.map((scholarship) => (
                     <Card key={scholarship.id} className="p-6 relative overflow-hidden border-l-4 border-l-amber-500">
                         <div className="absolute top-0 right-0 p-4 opacity-10">
@@ -63,11 +90,34 @@ export default function Scholarships() {
                     <p className="text-xs text-slate-500 mb-4 px-4">
                         KYK, Vakıf ve Özel burs başvurularını buradan takip edebilirsiniz.
                     </p>
-                    <Button variant="secondary" size="sm">Başvuru Yap</Button>
+                    <Button variant="secondary" size="sm" onClick={() => setIsModalOpen(true)}>Başvuru Yap</Button>
                 </Card>
             </div>
+
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Yeni Burs Başvurusu">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <Input label="Burs Adı" placeholder="Örn. KYK Öğrenim Bursu" value={form.name} onChange={handleField('name')} required />
+                    <Select
+                        label="Tür"
+                        value={form.type}
+                        onChange={handleField('type')}
+                        options={[
+                            { value: 'KYK', label: 'KYK' },
+                            { value: 'Vakıf', label: 'Vakıf' },
+                            { value: 'Özel', label: 'Özel' },
+                            { value: 'Başarı', label: 'Başarı' },
+                            { value: 'İndirim', label: 'İndirim' },
+                        ]}
+                    />
+                    <Input label="Tutar / Oran (opsiyonel)" placeholder="Örn. %50 veya 2000 ₺" value={form.amount} onChange={handleField('amount')} />
+                    <div className="flex justify-end gap-2 pt-2">
+                        <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>İptal</Button>
+                        <Button type="submit" variant="primary" disabled={applyScholarship.isPending}>
+                            {applyScholarship.isPending ? 'Gönderiliyor...' : 'Başvuruyu Gönder'}
+                        </Button>
+                    </div>
+                </form>
+            </Modal>
         </motion.div>
     );
 }
-import { motion } from 'framer-motion';
-import { Badge, Button, Card } from '../../components/ui';

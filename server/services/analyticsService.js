@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const Transaction = require('../models/Transaction');
 const Log = require('../models/Log');
+const Scholarship = require('../models/Scholarship');
 
 exports.getGeneralAnalytics = async () => {
     // 1. KPI Metrikleri
@@ -12,14 +13,19 @@ exports.getGeneralAnalytics = async () => {
     ]);
     const totalRevenue = revenueResult[0]?.totalRevenue || 0;
 
-    const scholarshipRate = 24.5;
+    // Real scholarship rate: active scholarships as a % of active students.
+    const activeScholarships = await Scholarship.countDocuments({ status: 'Aktif' });
+    const scholarshipRate = activeStudentsCount > 0
+        ? Math.round((activeScholarships / activeStudentsCount) * 1000) / 10
+        : 0;
 
     // Günlük Kampüs Girişi
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const dailyLoginCount = await Log.countDocuments({ action: 'Giriş Başarılı', timestamp: { $gte: today } });
 
-    // 2. Fakülte Bazlı Finansal Dağılım (Mock/Karma Data)
+    // 2. DEMO: faculty-level revenue/scholarship split has no real source yet
+    // (transactions aren't linked to a faculty). Illustrative figures.
     const financeData = [
         { name: 'Mühendislik', revenue: 4500000, scholarship: 1200000 },
         { name: 'Tıp', revenue: 6800000, scholarship: 900000 },
@@ -28,7 +34,7 @@ exports.getGeneralAnalytics = async () => {
         { name: 'MYO', revenue: 1500000, scholarship: 400000 },
     ];
 
-    // 3. Kampüs Alan Kullanımı
+    // 3. DEMO: campus space usage needs location/turnstile sensors; illustrative.
     const campusUsageData = [
         { name: 'Kütüphane', value: 45 },
         { name: 'Spor Merkezi', value: 25 },

@@ -10,18 +10,29 @@ exports.getPaymentOverview = async (userIdStr) => {
     const transactions = await Transaction.find({ userId: user.username }).sort({ date: -1 });
     const tuition = await Tuition.findOne({ userId: user.username });
 
+    // Real spending breakdown: the user's expense transactions grouped by category.
+    const palette = ['bg-orange-500', 'bg-blue-500', 'bg-green-500', 'bg-red-500', 'bg-purple-500', 'bg-slate-400'];
+    const knownColors = { 'Yemek': 'bg-orange-500', 'Ulaşım': 'bg-blue-500', 'Market': 'bg-green-500', 'Ceza': 'bg-red-500', 'Transfer': 'bg-purple-500' };
+    const spendByCategory = {};
+    for (const t of transactions) {
+        if (t.type !== 'expense') continue;
+        const cat = t.category || 'Diğer';
+        spendByCategory[cat] = (spendByCategory[cat] || 0) + Math.abs(t.amount);
+    }
+    const spendingData = Object.entries(spendByCategory).map(([category, amount], i) => ({
+        category,
+        amount,
+        color: knownColors[category] || palette[i % palette.length]
+    }));
+
     return {
         transactions,
         tuition,
-        spendingData: [
-            { category: "Yemek", amount: 450, color: "bg-orange-500" },
-            { category: "Ulaşım", amount: 200, color: "bg-blue-500" },
-            { category: "Market", amount: 150, color: "bg-green-500" },
-            { category: "Diğer", amount: 100, color: "bg-slate-400" }
-        ],
+        spendingData,
+        // DEMO: campus bank cards have no real integration source yet, so this is
+        // illustrative only. Replace with a Card model / bank integration when available.
         cards: [
-            { id: 1, bank: "Vakıfbank", type: "Kampüs Kart", number: "4000 **** **** 1234", balance: "250.00 ₺", expiry: "12/28", holder: "TEST USER", theme: "bg-gradient-to-r from-yellow-400 to-yellow-600" },
-            { id: 2, bank: "Ziraat Bankası", type: "Genç Kart", number: "5000 **** **** 5678", balance: "1.250.00 ₺", expiry: "09/27", holder: "TEST USER", theme: "bg-gradient-to-r from-red-600 to-red-800" }
+            { id: 1, bank: "Vakıfbank", type: "Kampüs Kart", number: "4000 **** **** 1234", balance: "250.00 ₺", expiry: "12/28", holder: user.fullName || user.username, theme: "bg-gradient-to-r from-yellow-400 to-yellow-600" }
         ]
     };
 };

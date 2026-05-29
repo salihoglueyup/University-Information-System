@@ -66,6 +66,13 @@ const schemas = {
         name: z.string().min(1, "Burs adı gereklidir").max(120),
         type: z.string().max(40).optional(),
         amount: z.string().max(40).optional()
+    }),
+
+    vehicleApply: z.object({
+        plate: z.string().min(5, "Geçerli bir plaka giriniz").max(15),
+        model: z.string().min(2, "Marka/model gereklidir").max(60),
+        owner: z.string().max(100).optional(),
+        color: z.string().max(30).optional()
     })
 };
 

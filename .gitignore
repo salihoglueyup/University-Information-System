@@ -31,6 +31,7 @@ client/.env
 Thumbs.db
 .vscode/
 .idea/
+.claude/
 *.swp
 
 # Docker local volumes and runtime

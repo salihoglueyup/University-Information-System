@@ -20,6 +20,12 @@ const errorHandler = (err, req, res, _next) => {
         err = new AppError(message, 400);
     }
 
+    // Cast error (Mongoose) — e.g. a malformed ObjectId from client input.
+    // Without this it surfaces as a non-operational 500 instead of a 400.
+    if (err.name === 'CastError') {
+        err = new AppError(`Invalid ${err.path}: ${err.value}`, 400);
+    }
+
     // Zod Validation Error
     if (err.error === 'Zod Validation Error' || err.name === 'ZodError') {
         const message = err.messages ? err.messages.join('. ') : err.message;

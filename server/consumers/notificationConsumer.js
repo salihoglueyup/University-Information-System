@@ -66,7 +66,10 @@ async function startNotificationConsumer() {
                     ch.ack(msg);
                 } catch (err) {
                     logger.error(`[Consumer] Error processing message: ${err.message}`);
-                    // Don't ack so it can be retried or put back
+                    // Drop the poison message (requeue=false) instead of leaving it
+                    // unacked — an unacked malformed message is redelivered on every
+                    // reconnect and loops forever.
+                    try { ch.nack(msg, false, false); } catch { /* channel may be closed */ }
                 }
             }
         });

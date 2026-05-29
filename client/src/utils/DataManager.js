@@ -1,5 +1,8 @@
 import axiosInstance from '../api/axiosInstance';
-const recordsPath = '/src/data/records';
+// Served as static assets so they resolve in BOTH dev and production.
+// '/src/...' only works under the Vite dev server and 404s in a production build,
+// so these JSON records must live under client/public/records (BASE_URL aware).
+const recordsPath = `${import.meta.env.BASE_URL}records`;
 
 const getFromApi = async (url) => {
     const res = await axiosInstance.get(url);

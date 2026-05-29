@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageSquare, Cpu, CheckCircle2, ChevronDown, Send } from 'lucide-react';
 import { DataManager } from '../../../utils/DataManager';
+import { getUser } from '../../../utils/authStorage';
 
 export default function CampusAIWidget() {
     const [isOpen, setIsOpen] = useState(false);
@@ -43,10 +44,10 @@ export default function CampusAIWidget() {
             }
             else if (lowerInput.includes('danışman') || lowerInput.includes('hoca')) {
                 // Fetch user logic
-                const storedUser = localStorage.getItem('user');
-                if (storedUser) {
-                    const parsedUser = JSON.parse(storedUser);
-                    aiReply = `Bölüm danışmanınız ile görüşmek için bölüm sayfanızdan veya Öğrenci İşleri panelinden randevu alabilirsiniz. (Şu anki giriş yapan: ${parsedUser.name})`;
+                const parsedUser = getUser();
+                if (parsedUser) {
+                    const displayName = parsedUser.fullName || parsedUser.username || 'Öğrenci';
+                    aiReply = `Bölüm danışmanınız ile görüşmek için bölüm sayfanızdan veya Öğrenci İşleri panelinden randevu alabilirsiniz. (Şu anki giriş yapan: ${displayName})`;
                 } else {
                     aiReply = "Bölüm sayfanızda kendi akademik danışmanınıza ait bilgileri görebilirsiniz.";
                 }

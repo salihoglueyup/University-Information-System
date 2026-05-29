@@ -49,10 +49,13 @@ module.exports = {
         io.on("connection", (socket) => {
             logger.info(`📡 New Socket Connection: ${socket.id}`);
 
-            // Client can register with either a username string (legacy) or identity object.
-            socket.on("register_user", (identity) => {
-                const userId = toKey(identity && typeof identity === 'object' ? (identity.userId || identity.id || identity._id) : '');
-                const username = toKey(identity && typeof identity === 'object' ? identity.username : identity);
+            // Identity is taken from the verified JWT (socket.user), NOT from client
+            // input, so a socket can only register under its own user keys. Trusting
+            // a client-supplied identity allowed registering under another user's key
+            // and hijacking notifications/messages directed at that user.
+            socket.on("register_user", () => {
+                const userId = toKey(socket.user && (socket.user.id || socket.user._id));
+                const username = toKey(socket.user && socket.user.username);
 
                 const keys = new Set([userId, username].filter(Boolean));
 
@@ -71,14 +74,30 @@ module.exports = {
                 io.emit("online_users_count", socketUserKeys.size);
             });
 
-            // Rooms implementation for generic messaging (like emails)
+            // Rooms implementation for generic messaging (like emails).
+            // A socket may only join a room scoped to its own verified identity,
+            // otherwise any authenticated user could join another user's room and
+            // eavesdrop on their messages.
             socket.on("join_room", (room) => {
+                const allowed = new Set([
+                    toKey(socket.user && socket.user.id),
+                    toKey(socket.user && socket.user._id),
+                    toKey(socket.user && socket.user.username)
+                ].filter(Boolean));
+
+                if (!allowed.has(toKey(room))) {
+                    logger.warn(`🚫 Socket ${socket.id} denied join to room: ${room}`);
+                    return;
+                }
                 socket.join(room);
                 logger.info(`👥 Socket ${socket.id} joined room: ${room}`);
             });
 
             socket.on("send_message", (data) => {
-                socket.to(data.room).emit("receive_message", data);
+                // Only relay to a room this socket has actually joined.
+                if (data && data.room && socket.rooms.has(data.room)) {
+                    socket.to(data.room).emit("receive_message", data);
+                }
             });
 
             socket.on("disconnect", () => {

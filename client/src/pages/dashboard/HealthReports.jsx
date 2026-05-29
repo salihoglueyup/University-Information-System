@@ -1,11 +1,37 @@
+import { useState } from 'react';
 import { AlertCircle, Calendar, FileCheck, Stethoscope, UploadCloud } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { toast } from 'react-toastify';
+import { Badge, Button, Card, Modal, Input } from '../../components/ui';
+import { useHealthReports, useCreateHealthReport } from '../../hooks/queries/useHealthReports';
 
-// Components
-
-// Mock Data
-import { healthReports } from '../../data/mockData';
+const EMPTY_FORM = { hospital: '', diagnosis: '', date: '', days: 1 };
 
 export default function HealthReports() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [form, setForm] = useState(EMPTY_FORM);
+
+    const { data: reports = [], isLoading } = useHealthReports();
+    const createReport = useCreateHealthReport();
+
+    const handleField = (key) => (e) => setForm(prev => ({ ...prev, [key]: e.target.value }));
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!form.hospital.trim() || !form.diagnosis.trim() || !form.date) {
+            toast.warning('Lütfen hastane, tanı ve tarih alanlarını doldurun.');
+            return;
+        }
+        createReport.mutate({ ...form, days: Number(form.days) || 1 }, {
+            onSuccess: () => {
+                toast.success('Raporunuz bildirildi.');
+                setForm(EMPTY_FORM);
+                setIsModalOpen(false);
+            },
+            onError: (err) => toast.error(err?.response?.data?.message || 'Rapor bildirilemedi.')
+        });
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -19,7 +45,7 @@ export default function HealthReports() {
                     </h1>
                     <p className="text-slate-500 text-sm">Mazeret sınavı ve devamsızlık için rapor bildirimi</p>
                 </div>
-                <Button variant="primary" icon={UploadCloud}>Rapor Yükle</Button>
+                <Button variant="primary" icon={UploadCloud} onClick={() => setIsModalOpen(true)}>Rapor Yükle</Button>
             </div>
 
             <div className="grid lg:grid-cols-3 gap-6">
@@ -40,7 +66,11 @@ export default function HealthReports() {
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-slate-100">
-                                {healthReports.map((report) => (
+                                {isLoading ? (
+                                    <tr><td colSpan={5} className="px-4 py-8 text-center text-slate-400">Yükleniyor...</td></tr>
+                                ) : reports.length === 0 ? (
+                                    <tr><td colSpan={5} className="px-4 py-8 text-center text-slate-400">Henüz rapor bildirmediniz.</td></tr>
+                                ) : reports.map((report) => (
                                     <tr key={report.id} className="hover:bg-slate-50 transition-colors">
                                         <td className="px-4 py-3 font-medium text-slate-700 flex items-center gap-2">
                                             <Calendar size={14} className="text-slate-400" />
@@ -75,8 +105,23 @@ export default function HealthReports() {
                     </div>
                 </Card>
             </div>
+
+            <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} title="Sağlık Raporu Bildir">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <Input label="Hastane / Kurum" placeholder="Örn. Acıbadem Hastanesi" value={form.hospital} onChange={handleField('hospital')} required />
+                    <Input label="Tanı" placeholder="Örn. Üst solunum yolu enfeksiyonu" value={form.diagnosis} onChange={handleField('diagnosis')} required />
+                    <div className="grid grid-cols-2 gap-4">
+                        <Input label="Rapor Tarihi" type="date" value={form.date} onChange={handleField('date')} required />
+                        <Input label="Süre (gün)" type="number" min="1" max="60" value={form.days} onChange={handleField('days')} required />
+                    </div>
+                    <div className="flex justify-end gap-2 pt-2">
+                        <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>İptal</Button>
+                        <Button type="submit" variant="primary" disabled={createReport.isPending}>
+                            {createReport.isPending ? 'Gönderiliyor...' : 'Raporu Bildir'}
+                        </Button>
+                    </div>
+                </form>
+            </Modal>
         </motion.div>
     );
 }
-import { motion } from 'framer-motion';
-import { Badge, Button, Card } from '../../components/ui';

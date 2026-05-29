@@ -32,6 +32,13 @@ const schemas = {
         courseId: z.string().min(1),
         answers: z.record(z.string(), z.any()), // allows dynamic key-value pairs
         comment: z.string().max(1000).optional()
+    }),
+
+    healthReport: z.object({
+        hospital: z.string().min(2, "Hastane/kurum adı en az 2 karakter olmalıdır").max(120),
+        diagnosis: z.string().min(2, "Tanı en az 2 karakter olmalıdır").max(200),
+        date: z.string().min(1, "Rapor tarihi zorunludur"),
+        days: z.coerce.number().int("Gün sayısı tam sayı olmalıdır").min(1, "Gün sayısı en az 1 olmalıdır").max(60, "Gün sayısı en fazla 60 olabilir")
     })
 };
 

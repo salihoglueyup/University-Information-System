@@ -47,7 +47,8 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 UserSchema.index({ role: 1 });
-UserSchema.index({ email: 1 });
+// email already has a unique+sparse index from its field definition above;
+// declaring it again here caused a duplicate-index warning.
 
 // Auto-Sync with Meilisearch
 UserSchema.post('save', async function(doc) {

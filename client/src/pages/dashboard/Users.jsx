@@ -34,7 +34,7 @@ export default function Users() {
         fetchUsers();
     }, []);
 
-    const handleEdit = (user) => {
+    const handleEdit = (_user) => {
         // TODO: implement edit user
     };
 

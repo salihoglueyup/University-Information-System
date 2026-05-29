@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const authController = require('../controllers/authController');
 const { validate } = require('../middleware/validate');
-const { verifyToken } = require('../middleware/auth');
+const { verifyToken, verifyTokenAllowPending } = require('../middleware/auth');
 const passport = require('../utils/passportConfig');
 
 /**
@@ -137,6 +137,7 @@ router.post('/2fa/generate', verifyToken, authController.generate2FA);
  *     summary: Verify 2FA OTP Code
  *     tags: [Auth]
  */
-router.post('/2fa/verify', verifyToken, authController.verify2FA);
+// Accepts the temporary 2FA token (is2FAPending) so login-time verification works.
+router.post('/2fa/verify', verifyTokenAllowPending, authController.verify2FA);
 
 module.exports = router;

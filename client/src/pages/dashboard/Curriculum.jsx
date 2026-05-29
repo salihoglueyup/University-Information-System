@@ -4,7 +4,7 @@ import { courseCatalog } from '../../data/mockData';
 export default function Curriculum() {
     const [courses, setCourses] = useState(courseCatalog); // Mock state
 
-    const handleEdit = (course) => {
+    const handleEdit = (_course) => {
         // TODO: implement edit course
     };
 

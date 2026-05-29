@@ -1,12 +1,18 @@
 const jwt = require('jsonwebtoken');
 const AppError = require('../utils/AppError');
 
-const verifyToken = (req, res, next) => {
+// allowPending: when true, accepts the temporary 2FA token (is2FAPending).
+// Only the /2fa/verify route should allow it — every other protected route
+// must reject pending tokens so 2FA cannot be bypassed by using the temp token.
+const buildVerifyToken = (allowPending) => (req, res, next) => {
     const authHeader = req.headers.authorization;
     if (authHeader) {
         const token = authHeader.split(" ")[1];
         jwt.verify(token, process.env.JWT_SEC, (err, user) => {
             if (err) return next(new AppError("Token is not valid or has expired!", 401));
+            if (user && user.is2FAPending && !allowPending) {
+                return next(new AppError("Two-factor authentication is required to complete sign-in.", 401));
+            }
             req.user = user;
             next();
         });
@@ -14,6 +20,9 @@ const verifyToken = (req, res, next) => {
         return next(new AppError("You are not authenticated!", 401));
     }
 };
+
+const verifyToken = buildVerifyToken(false);
+const verifyTokenAllowPending = buildVerifyToken(true);
 
 const restrictTo = (...roles) => {
     return (req, res, next) => {
@@ -58,4 +67,4 @@ const verifyRole = (roles) => {
     };
 };
 
-module.exports = { verifyToken, verifyRole, restrictTo, verifyOwnerOrStaff };
+module.exports = { verifyToken, verifyTokenAllowPending, verifyRole, restrictTo, verifyOwnerOrStaff };

@@ -43,6 +43,8 @@ export default function DashboardLayout() {
     useEffect(() => {
         const latestUnread = notifications.find(n => !n.read);
         if (latestUnread && latestUnread.id !== lastNotifiedId) {
+            // Guarded by the id check above so it runs once per new notification.
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setLastNotifiedId(latestUnread.id);
             toast.info(latestUnread.message, {
                 icon: latestUnread.type === 'success' ? '📝' : '📢',

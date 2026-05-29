@@ -107,7 +107,7 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('combined', { stream: { write: message => logger.info(message.trim()) } }));
 }
 
-app.use(express.json());
+app.use(express.json({ limit: '1mb' }));
 
 let memoryRateLimitFallbackLogged = false;
 

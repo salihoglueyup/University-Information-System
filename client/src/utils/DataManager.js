@@ -134,7 +134,7 @@ export class DataManager {
         }
     }
 
-    static async getInstructorCourses(instructorId) {
+    static async getInstructorCourses(_instructorId) {
         const demoCourses = ["YZM101", "YZM302", "BIL101"];
 
         try {

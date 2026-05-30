@@ -15,7 +15,6 @@ export const erasmusChoices = [];
 export const events = [];
 export const examApplications = [];
 export const examResults = [];
-export const examSchedule = [];
 export const financialReports = {};
 export const healthReports = [];
 export const internshipData = {};

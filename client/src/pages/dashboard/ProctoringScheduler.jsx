@@ -1,16 +1,16 @@
 import { useState } from 'react';
-
-import { examSchedule } from '../../data/mockData';
+import { useExamSessions } from '../../hooks/queries/useExamSessions';
 
 export default function ProctoringScheduler() {
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchTerm, setSearchTerm] = useState('');
+    const { data: examSchedule = [] } = useExamSessions();
 
     const filteredExams = examSchedule.filter(exam => {
         const matchesStatus = filterStatus === 'All' || exam.status === filterStatus;
-        const matchesSearch = exam.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            exam.courseCode.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            exam.proctors.some(p => p.toLowerCase().includes(searchTerm.toLowerCase()));
+        const matchesSearch = (exam.courseName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (exam.courseCode || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (exam.proctors || []).some(p => p.toLowerCase().includes(searchTerm.toLowerCase()));
         return matchesStatus && matchesSearch;
     });
 
@@ -103,6 +103,9 @@ export default function ProctoringScheduler() {
                         </div>
 
                         <div className="space-y-4">
+                            {filteredExams.length === 0 && (
+                                <div className="text-center py-12 text-gray-400 text-sm">Planlanmış sınav bulunamadı.</div>
+                            )}
                             {filteredExams.map(exam => (
                                 <div key={exam.id} className="p-5 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all bg-white group">
                                     <div className="flex flex-col md:flex-row justify-between gap-4">

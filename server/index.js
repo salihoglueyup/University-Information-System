@@ -81,6 +81,7 @@ const thesisStudentsRoute = require('./routes/thesisStudents');
 const thesisMilestonesRoute = require('./routes/thesisMilestones');
 const thesisTasksRoute = require('./routes/thesisTasks');
 const thesisAssistanceRoute = require('./routes/thesisAssistance');
+const examSessionsRoute = require('./routes/examSessions');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -303,6 +304,7 @@ app.use("/api/thesis-students", verifyToken, thesisStudentsRoute);
 app.use("/api/thesis-milestones", verifyToken, thesisMilestonesRoute);
 app.use("/api/thesis-tasks", verifyToken, thesisTasksRoute);
 app.use("/api/thesis-assistance", verifyToken, thesisAssistanceRoute);
+app.use("/api/exam-sessions", verifyToken, examSessionsRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

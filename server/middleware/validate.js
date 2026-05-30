@@ -154,6 +154,17 @@ const schemas = {
         registrationOpen: z.boolean().optional(),
         allowGradeEntry: z.boolean().optional(),
         maintenanceMode: z.boolean().optional()
+    }),
+
+    adminCreateUser: z.object({
+        username: z.string().min(3, "Kullanıcı adı en az 3 karakter olmalıdır").max(30),
+        password: z.string().min(6, "Şifre en az 6 karakter olmalıdır").max(128),
+        fullName: z.string().min(2, "Ad soyad en az 2 karakter olmalıdır").max(100),
+        email: z.string().email("Geçerli bir e-posta adresi giriniz").optional(),
+        role: z.enum(['student', 'academic', 'admin']),
+        academicTitle: z.string().max(40).optional(),
+        faculty: z.string().max(120).optional(),
+        department: z.string().max(120).optional()
     })
 };
 

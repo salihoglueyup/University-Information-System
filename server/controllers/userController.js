@@ -15,6 +15,11 @@ exports.getAllUsers = catchAsync(async (req, res) => {
     res.status(200).json(users);
 });
 
+exports.createUser = catchAsync(async (req, res) => {
+    const created = await userService.createUser(req.body);
+    res.status(201).json(created);
+});
+
 exports.updateUser = catchAsync(async (req, res) => {
     const updatedUser = await userService.updateUser(req.params.id, req.body);
     res.status(200).json(updatedUser);

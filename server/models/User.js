@@ -21,6 +21,20 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: false
     },
+    // For academics: 'RES_ASST' marks a research assistant (araştırma görevlisi);
+    // any other value (e.g. 'OGR_GOR') is treated as an instructor (öğretim görevlisi).
+    academicTitle: {
+        type: String,
+        default: ''
+    },
+    faculty: {
+        type: String,
+        default: ''
+    },
+    department: {
+        type: String,
+        default: ''
+    },
     email: {
         type: String,
         unique: true,

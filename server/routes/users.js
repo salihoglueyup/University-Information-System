@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const userController = require('../controllers/userController');
 const { verifyToken, verifyRole } = require('../middleware/auth');
+const { validate } = require('../middleware/validate');
 
 /**
  * @swagger
@@ -40,6 +41,9 @@ router.get('/profile', verifyToken, userController.getUserProfile);
  */
 // GET ALL USERS (ADMIN ONLY)
 router.get('/', verifyRole(['admin']), userController.getAllUsers);
+
+// CREATE USER WITH ANY ROLE (ADMIN ONLY)
+router.post('/', verifyRole(['admin']), validate('adminCreateUser'), userController.createUser);
 
 // UPDATE USER ROLE/INFO (ADMIN ONLY)
 router.put('/:id', verifyRole(['admin']), userController.updateUser);

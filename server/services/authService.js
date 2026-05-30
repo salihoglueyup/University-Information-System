@@ -8,7 +8,7 @@ const SALT_ROUNDS = 10;
 
 class AuthService {
     async registerUser(userData) {
-        const { username, password, fullName } = userData;
+        const { username, password, fullName, email, faculty, department } = userData;
 
         // Check if user already exists
         const existingUser = await User.findOne({ username });
@@ -18,10 +18,16 @@ class AuthService {
 
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
 
+        // Public self-registration always creates a plain student. Privileged roles
+        // (academic/admin) can only be assigned by an admin via the users API.
         const newUser = new User({
             username,
             password: hashedPassword,
-            fullName
+            fullName,
+            email,
+            faculty,
+            department,
+            role: 'student'
         });
 
         const savedUser = await newUser.save();

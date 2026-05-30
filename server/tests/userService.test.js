@@ -24,6 +24,25 @@ describe('UserService', () => {
         });
     });
 
+    describe('createUser', () => {
+        it('creates a user with the given role', async () => {
+            User.findOne.mockResolvedValue(null);
+            User.create.mockResolvedValue({ _doc: { _id: '1', username: 'ra1', role: 'academic', academicTitle: 'RES_ASST', password: 'hashed' } });
+
+            const result = await userService.createUser({ username: 'ra1', password: 'secret123', fullName: 'Ad Soyad', role: 'academic', academicTitle: 'RES_ASST' });
+            expect(result.role).toBe('academic');
+            expect(result.academicTitle).toBe('RES_ASST');
+            expect(result.password).toBeUndefined();
+        });
+
+        it('throws 409 when the username already exists', async () => {
+            User.findOne.mockResolvedValue({ _id: 'x', username: 'ra1' });
+            await expect(userService.createUser({ username: 'ra1', password: 'secret123', fullName: 'Ad', role: 'student' }))
+                .rejects.toMatchObject({ statusCode: 409 });
+            expect(User.create).not.toHaveBeenCalled();
+        });
+    });
+
     describe('getAllUsers', () => {
         it('should return users without passwords', async () => {
             const mockFind = { select: jest.fn().mockResolvedValue([{ username: 'a' }, { username: 'b' }]) };

@@ -236,3 +236,7 @@ export const roleNavigation = {
         }
     ]
 };
+
+// Research assistants (araştırma görevlisi) share the instructor (öğretim
+// görevlisi) navigation until a dedicated menu is designed.
+roleNavigation.researchAssistant = roleNavigation.instructor;

@@ -32,7 +32,6 @@ export const leaveRequests = [];
 export const libraryFines = [];
 export const lostFoundItems = [];
 export const publications = [];
-export const questionBank = [];
 export const schedule = [];
 export const scholarships = [];
 export const shuttleHours = [];

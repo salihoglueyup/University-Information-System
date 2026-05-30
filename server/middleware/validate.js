@@ -127,6 +127,14 @@ const schemas = {
         doctor: z.string().max(100).optional(),
         date: z.string().min(1, "Tarih gereklidir").max(40),
         time: z.string().min(1, "Saat gereklidir").max(40)
+    }),
+
+    question: z.object({
+        text: z.string().min(1, "Soru metni gereklidir").max(2000),
+        course: z.string().max(40).optional(),
+        topic: z.string().max(120).optional(),
+        difficulty: z.enum(['Kolay', 'Orta', 'Zor']).optional(),
+        type: z.string().max(60).optional()
     })
 };
 

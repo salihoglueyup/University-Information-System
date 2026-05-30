@@ -31,6 +31,5 @@ export const scholarships = [];
 export const supportTickets = [];
 export const systemSettings = {};
 export const thesisAssistance = [];
-export const thesisKanbanData = {};
 export const uzemExams = [];
 export const vehicleSticker = {};

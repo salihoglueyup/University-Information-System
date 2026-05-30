@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
 import { toast } from 'react-toastify';
+import { useThesisBoard } from '../../hooks/queries/useThesisBoard';
 import {
     closestCorners,
     KeyboardSensor,
@@ -17,8 +18,6 @@ import {
     useSortable
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-
-import { thesisKanbanData } from '../../data/mockData';
 
 // --- Sortable Item Component ---
 function SortableItem({ id, item, onClick }) {
@@ -126,9 +125,16 @@ function DroppableContainer({ id, title, count, items, onClickItem }) {
 
 export default function ThesisKanban() {
     const navigate = useNavigate();
-    const [columns] = useState(thesisKanbanData.columns || []);
-    const [items, setItems] = useState(thesisKanbanData.items || []);
+    const { data: board } = useThesisBoard();
+    const columns = board?.columns || [];
+    const [items, setItems] = useState([]);
     const [activeId, setActiveId] = useState(null);
+
+    // Seed the DnD-local item state from the server board (server -> local sync).
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (board?.items) setItems(board.items);
+    }, [board]);
 
     const sensors = useSensors(
         useSensor(PointerSensor),

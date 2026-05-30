@@ -79,6 +79,7 @@ const virtualTourRoute = require('./routes/virtualTour');
 const deptTasksRoute = require('./routes/deptTasks');
 const thesisStudentsRoute = require('./routes/thesisStudents');
 const thesisMilestonesRoute = require('./routes/thesisMilestones');
+const thesisTasksRoute = require('./routes/thesisTasks');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -299,6 +300,7 @@ app.use("/api/virtual-tour", verifyToken, virtualTourRoute);
 app.use("/api/dept-tasks", verifyToken, deptTasksRoute);
 app.use("/api/thesis-students", verifyToken, thesisStudentsRoute);
 app.use("/api/thesis-milestones", verifyToken, thesisMilestonesRoute);
+app.use("/api/thesis-tasks", verifyToken, thesisTasksRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

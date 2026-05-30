@@ -139,6 +139,14 @@ const schemas = {
 
     deptTaskStatus: z.object({
         status: z.enum(['todo', 'in-progress', 'done'])
+    }),
+
+    thesisTaskMove: z.object({
+        column: z.enum(['todo', 'in_progress', 'completed'])
+    }),
+
+    thesisTaskReorder: z.object({
+        newIndex: z.coerce.number().int().min(0).max(1000)
     })
 };
 

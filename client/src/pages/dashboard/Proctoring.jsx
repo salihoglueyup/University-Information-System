@@ -1,6 +1,17 @@
-import { proctoringDuties } from '../../data/mockData';
+import { toast } from 'react-toastify';
+import { useProctoringDuties, useConfirmDuty } from '../../hooks/queries/useProctoring';
 
 export default function Proctoring() {
+    const { data: proctoringDuties = [] } = useProctoringDuties();
+    const confirmDuty = useConfirmDuty();
+
+    const handleConfirm = (id) => {
+        confirmDuty.mutate(id, {
+            onSuccess: () => toast.success('Görev onaylandı.'),
+            onError: () => toast.error('Görev onaylanamadı.')
+        });
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -42,6 +53,12 @@ export default function Proctoring() {
 
             {/* Content Grid */}
             <div className="grid grid-cols-1 gap-4">
+                {proctoringDuties.length === 0 && (
+                    <div className="bg-white p-12 rounded-2xl border border-dashed border-gray-200 text-center text-gray-400">
+                        <ShieldCheck size={32} className="mx-auto mb-3 text-gray-300" />
+                        <p className="text-sm">Atanmış gözetmenlik göreviniz bulunmamaktadır.</p>
+                    </div>
+                )}
                 {proctoringDuties.map((duty) => (
                     <motion.div
                         key={duty.id}
@@ -86,7 +103,7 @@ export default function Proctoring() {
                             <div className="flex items-center gap-3">
                                 {duty.status === 'pending' ? (
                                     <>
-                                        <button className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all hover:scale-105 active:scale-95">
+                                        <button onClick={() => handleConfirm(duty.id)} disabled={confirmDuty.isPending} className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white text-sm font-bold rounded-xl shadow-lg shadow-indigo-200 transition-all hover:scale-105 active:scale-95">
                                             Görevi Onayla
                                         </button>
                                         <button className="px-4 py-2 bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-bold rounded-xl transition-all">

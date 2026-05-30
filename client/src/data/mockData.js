@@ -38,7 +38,6 @@ export const lostFoundItems = [];
 export const officeHours = [];
 export const partTimeWork = {};
 export const prerequisites = [];
-export const proctoringDuties = [];
 export const publications = [];
 export const questionBank = [];
 export const radioSchedule = [];

@@ -1,8 +1,11 @@
-import { proctoringDuties } from '../../../data/mockData';
 import { motion } from 'framer-motion';
 import { ShieldCheck, Calendar, Clock, CheckCircle, MapPin, User } from 'lucide-react';
+import { useProctoringDuties, useConfirmDuty } from '../../../hooks/queries/useProctoring';
 
 export default function ProctoringWidget() {
+    const { data: proctoringDuties = [] } = useProctoringDuties();
+    const confirmDuty = useConfirmDuty();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -74,7 +77,7 @@ export default function ProctoringWidget() {
                             </div>
 
                             {duty.status === 'pending' && (
-                                <button className="text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 px-3 py-1.5 rounded-lg transition-colors shadow-sm shadow-indigo-200">
+                                <button onClick={() => confirmDuty.mutate(duty.id)} disabled={confirmDuty.isPending} className="text-xs font-bold text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 px-3 py-1.5 rounded-lg transition-colors shadow-sm shadow-indigo-200">
                                     Onayla
                                 </button>
                             )}

@@ -33,6 +33,5 @@ export const systemSettings = {};
 export const thesisAssistance = [];
 export const thesisKanbanData = {};
 export const thesisMilestones = [];
-export const thesisStudents = [];
 export const uzemExams = [];
 export const vehicleSticker = {};

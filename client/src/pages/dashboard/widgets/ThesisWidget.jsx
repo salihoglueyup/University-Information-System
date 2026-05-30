@@ -1,8 +1,10 @@
-import { thesisStudents } from '../../../data/mockData';
 import { motion } from 'framer-motion';
 import { GraduationCap, Clock } from 'lucide-react';
+import { useThesisStudents } from '../../../hooks/queries/useThesisStudents';
 
 export default function ThesisWidget() {
+    const { data: thesisStudents = [] } = useThesisStudents();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}

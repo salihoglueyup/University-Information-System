@@ -2,15 +2,16 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, ChevronRight, Plus, Search } from 'lucide-react';
-import { thesisStudents } from '../../data/mockData';
+import { useThesisStudents } from '../../hooks/queries/useThesisStudents';
 
 export default function Thesis() {
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
+    const { data: thesisStudents = [] } = useThesisStudents();
 
     const filteredTheses = thesisStudents.filter(t =>
-        t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.projectTitle.toLowerCase().includes(searchTerm.toLowerCase())
+        (t.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (t.projectTitle || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -101,7 +102,7 @@ export default function Thesis() {
                                             <div className="w-full bg-gray-200 rounded-full h-2 w-24">
                                                 <div
                                                     className="bg-blue-600 h-2 rounded-full"
-                                                    style={{ width: `${thesis.progress}% ` }}
+                                                    style={{ width: `${thesis.progress}%` }}
                                                 ></div>
                                             </div>
                                             <span className="text-xs font-bold text-gray-600">%{thesis.progress}</span>
@@ -122,13 +123,18 @@ export default function Thesis() {
                                         <Button
                                             size="sm"
                                             variant="ghost"
-                                            onClick={() => navigate(`/ dashboard / milestone - tracker / ${thesis.id} `)}
+                                            onClick={() => navigate(`/dashboard/milestone-tracker/${thesis.id}`)}
                                         >
                                             Detay <ChevronRight size={16} />
                                         </Button>
                                     </td>
                                 </tr>
                             ))}
+                            {filteredTheses.length === 0 && (
+                                <tr>
+                                    <td colSpan={6} className="px-6 py-10 text-center text-gray-400">Yönettiğiniz tez bulunmamaktadır.</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>

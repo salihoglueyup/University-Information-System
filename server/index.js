@@ -58,6 +58,7 @@ const proctoringRoute = require('./routes/proctoring');
 const prerequisitesRoute = require('./routes/prerequisites');
 const partTimeWorkRoute = require('./routes/partTimeWork');
 const radioScheduleRoute = require('./routes/radioSchedule');
+const accessLogsRoute = require('./routes/accessLogs');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -257,6 +258,7 @@ app.use("/api/proctoring", verifyToken, proctoringRoute);
 app.use("/api/prerequisites", verifyToken, prerequisitesRoute);
 app.use("/api/part-time-work", verifyToken, partTimeWorkRoute);
 app.use("/api/radio-schedule", verifyToken, radioScheduleRoute);
+app.use("/api/access-logs", verifyToken, accessLogsRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

@@ -1,10 +1,8 @@
-
-// Components
-
-// Mock Data
-import { accessLogs } from '../../data/mockData';
+import { useAccessLogs } from '../../hooks/queries/useAccessLogs';
 
 export default function AccessLogs() {
+    const { data: accessLogs = [] } = useAccessLogs();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -30,6 +28,11 @@ export default function AccessLogs() {
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-100">
+                        {accessLogs.length === 0 && (
+                            <tr>
+                                <td colSpan={3} className="px-6 py-10 text-center text-slate-400">Geçiş kaydı bulunmamaktadır.</td>
+                            </tr>
+                        )}
                         {accessLogs.map((log) => (
                             <tr key={log.id} className="hover:bg-slate-50 transition-colors">
                                 <td className="px-6 py-4 flex items-center gap-2">

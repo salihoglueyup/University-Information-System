@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Tooltip as RechartsTooltip } from 'recharts';
-
-// Mock Data
-import { socialTranscript, socialTranscriptCategories, socialTranscriptExtraPoints } from '../../data/mockData';
+import { useSocialTranscript } from '../../hooks/queries/useSocialTranscript';
 
 export default function SocialTranscript() {
+    const { data } = useSocialTranscript();
+    const socialTranscript = { requiredPoints: data?.requiredPoints || 0, badges: data?.badges || [] };
+    const socialTranscriptCategories = data?.categories || [];
+    const socialTranscriptExtraPoints = data?.extraPoints || [];
+
     const [expandedCategory, setExpandedCategory] = useState(null);
     const [uploadModalOpen, setUploadModalOpen] = useState(false);
     const [selectedTask, setSelectedTask] = useState(null);
@@ -31,7 +34,9 @@ export default function SocialTranscript() {
     const extraPointsTotal = socialTranscriptExtraPoints.reduce((acc, item) => acc + item.points, 0);
     const totalEarnedPoints = earnedPointsInitial + extraPointsTotal;
 
-    const isSuccessful = totalEarnedPoints >= socialTranscript.requiredPoints;
+    const required = socialTranscript.requiredPoints || 0;
+    const isSuccessful = required > 0 && totalEarnedPoints >= required;
+    const progressPct = required > 0 ? Math.min(100, (totalEarnedPoints / required) * 100) : 0;
 
     // Prepare Radar Chart Data
     const radarData = socialTranscriptCategories.map(cat => ({
@@ -87,12 +92,12 @@ export default function SocialTranscript() {
                         <div className="flex-1 w-full max-w-lg z-10">
                             <div className="flex justify-between text-xs font-bold uppercase tracking-wider text-indigo-300 mb-2">
                                 <span>İlerleme</span>
-                                <span>{Math.min(100, Math.round((totalEarnedPoints / socialTranscript.requiredPoints) * 100))}%</span>
+                                <span>{Math.round(progressPct)}%</span>
                             </div>
                             <div className="w-full bg-indigo-950/50 rounded-full h-4 overflow-hidden border border-white/10 print:border-slate-300">
                                 <div
                                     className={`h-full ${isSuccessful ? 'bg-emerald-400' : 'bg-amber-400'} print:bg-slate-800`}
-                                    style={{ width: `${Math.min(100, (totalEarnedPoints / socialTranscript.requiredPoints) * 100)}%` }}
+                                    style={{ width: `${progressPct}%` }}
                                 ></div>
                             </div>
                             <p className="text-xs text-center md:text-right mt-2 text-indigo-300 print:text-indigo-100">

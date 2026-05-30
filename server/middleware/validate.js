@@ -114,6 +114,12 @@ const schemas = {
         title: z.string().min(1, "Başlık gereklidir").max(300),
         journal: z.string().max(200).optional(),
         status: z.enum(['Yayınlandı', 'İncelemede', 'Hazırlanıyor']).optional()
+    }),
+
+    partTimeShift: z.object({
+        date: z.string().min(1, "Tarih gereklidir").max(40),
+        hours: z.string().max(40).optional(),
+        total: z.coerce.number().min(0, "Saat 0'dan küçük olamaz").max(24, "Bir günde en fazla 24 saat girilebilir")
     })
 };
 

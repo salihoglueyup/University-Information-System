@@ -55,6 +55,7 @@ const academicProgressRoute = require('./routes/academicProgress');
 const libraryFinesRoute = require('./routes/libraryFines');
 const onlineCoursesRoute = require('./routes/onlineCourses');
 const proctoringRoute = require('./routes/proctoring');
+const prerequisitesRoute = require('./routes/prerequisites');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -251,6 +252,7 @@ app.use("/api/academic-progress", verifyToken, academicProgressRoute);
 app.use("/api/library-fines", verifyToken, libraryFinesRoute);
 app.use("/api/online-courses", verifyToken, onlineCoursesRoute);
 app.use("/api/proctoring", verifyToken, proctoringRoute);
+app.use("/api/prerequisites", verifyToken, prerequisitesRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

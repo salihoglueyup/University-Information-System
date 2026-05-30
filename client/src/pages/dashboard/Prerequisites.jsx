@@ -1,10 +1,8 @@
-
-// Components
-
-// Mock Data
-import { prerequisites } from '../../data/mockData';
+import { usePrerequisites } from '../../hooks/queries/usePrerequisites';
 
 export default function Prerequisites() {
+    const { data: prerequisites = [] } = usePrerequisites();
+
     const columns = [
         { header: 'Ders Kodu', accessor: 'code', className: "font-mono font-bold text-slate-700 w-32" },
         { header: 'Ders Adı', accessor: 'name', className: "font-medium" },

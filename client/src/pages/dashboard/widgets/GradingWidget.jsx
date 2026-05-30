@@ -1,8 +1,10 @@
-import { gradingQueue } from '../../../data/mockData';
 import { motion } from 'framer-motion';
 import { PenTool, FileText, ChevronRight } from 'lucide-react';
+import { useGradingQueue } from '../../../hooks/queries/useGradingQueue';
 
 export default function GradingWidget() {
+    const { data: gradingQueue = [] } = useGradingQueue();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}

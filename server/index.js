@@ -66,6 +66,7 @@ const healthAppointmentsRoute = require('./routes/healthAppointments');
 const questionsRoute = require('./routes/questions');
 const courseCatalogRoute = require('./routes/courseCatalog');
 const instructorCoursesRoute = require('./routes/instructorCourses');
+const gradingQueueRoute = require('./routes/gradingQueue');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -273,6 +274,7 @@ app.use("/api/health-appointments", verifyToken, healthAppointmentsRoute);
 app.use("/api/questions", verifyToken, questionsRoute);
 app.use("/api/course-catalog", verifyToken, courseCatalogRoute);
 app.use("/api/instructor-courses", verifyToken, instructorCoursesRoute);
+app.use("/api/grading-queue", verifyToken, gradingQueueRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

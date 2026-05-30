@@ -18,7 +18,6 @@ export const examApplications = [];
 export const examResults = [];
 export const examSchedule = [];
 export const financialReports = {};
-export const gradingQueue = [];
 export const graduationStatus = {};
 export const healthReports = [];
 export const internshipData = {};

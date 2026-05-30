@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart2, CheckCircle, ChevronRight, ClipboardList, Clock } from 'lucide-react';
-import { gradingQueue } from '../../data/mockData';
 import { useInstructorCourses } from '../../hooks/queries/useInstructorCourses';
+import { useGradingQueue } from '../../hooks/queries/useGradingQueue';
 
 export default function Grading() {
     const navigate = useNavigate();
     const [filter, setFilter] = useState('all'); // all, pending, completed
     const { data: instructorCoursesData = [] } = useInstructorCourses();
+    const { data: gradingQueue = [] } = useGradingQueue();
 
     // Merge course info into grading queue for display
     const gradingTasks = gradingQueue.map(task => {
@@ -88,6 +89,9 @@ export default function Grading() {
                 }
             >
                 <div className="space-y-4">
+                    {filteredTasks.length === 0 && (
+                        <p className="text-sm text-gray-400 text-center py-10">Değerlendirme kuyruğunuz boş.</p>
+                    )}
                     {filteredTasks.map((task, index) => (
                         <motion.div
                             key={task.id}
@@ -97,8 +101,7 @@ export default function Grading() {
                             className="group flex flex-col md:flex-row items-center justify-between p-4 rounded-xl border border-gray-100 hover:border-blue-200 hover:shadow-md transition-all bg-white"
                         >
                             <div className="flex items-center gap-4 w-full md:w-auto">
-                                <div className={`w - 12 h - 12 rounded - xl flex items - center justify - center font - bold text - lg ${task.pendingCount > 0 ? 'bg-orange-50 text-orange-600' : 'bg-green-50 text-green-600'
-                                    } `}>
+                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg ${task.pendingCount > 0 ? 'bg-orange-50 text-orange-600' : 'bg-green-50 text-green-600'}`}>
                                     {task.courseCode.split(' ')[0]}
                                 </div>
                                 <div>
@@ -118,11 +121,11 @@ export default function Grading() {
                             <div className="flex items-center gap-6 w-full md:w-auto mt-4 md:mt-0 justify-between md:justify-end">
                                 <div className="text-right">
                                     <div className="text-sm text-gray-500">Durum</div>
-                                    <div className={`font - bold ${task.pendingCount > 0 ? 'text-orange-600' : 'text-green-600'} `}>
+                                    <div className={`font-bold ${task.pendingCount > 0 ? 'text-orange-600' : 'text-green-600'}`}>
                                         {task.pendingCount > 0 ? `${task.pendingCount} Bekliyor` : 'Tamamlandı'}
                                     </div>
                                 </div>
-                                <Button onClick={() => navigate(`/ dashboard / grading / ${task.id} `)}>
+                                <Button onClick={() => navigate(`/dashboard/grading/${task.id}`)}>
                                     Not Gir
                                     <ChevronRight size={16} className="ml-2" />
                                 </Button>

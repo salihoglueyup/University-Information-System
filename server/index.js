@@ -70,6 +70,7 @@ const gradingQueueRoute = require('./routes/gradingQueue');
 const graduationStatusRoute = require('./routes/graduationStatus');
 const syllabusRoute = require('./routes/syllabus');
 const studentClubsRoute = require('./routes/studentClubs');
+const sportsFacilitiesRoute = require('./routes/sportsFacilities');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -281,6 +282,7 @@ app.use("/api/grading-queue", verifyToken, gradingQueueRoute);
 app.use("/api/graduation-status", verifyToken, graduationStatusRoute);
 app.use("/api/syllabus", verifyToken, syllabusRoute);
 app.use("/api/student-clubs", verifyToken, studentClubsRoute);
+app.use("/api/sports-facilities", verifyToken, sportsFacilitiesRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

@@ -1,11 +1,9 @@
 import { Clock, Trophy } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { sportsFacilities } from '../../data/mockData';
+import { useSportsFacilities } from '../../hooks/queries/useSportsFacilities';
 
 export default function Sports() {
+    const { data: sportsFacilities = [] } = useSportsFacilities();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -21,6 +19,13 @@ export default function Sports() {
                 </div>
                 <Button variant="primary" icon={Clock}>Randevu Al</Button>
             </div>
+
+            {sportsFacilities.length === 0 && (
+                <Card className="p-12 text-center text-slate-400 border-dashed">
+                    <Trophy size={32} className="mx-auto mb-3 text-slate-300" />
+                    <p className="text-sm">Tesis bilgisi bulunmamaktadır.</p>
+                </Card>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-6">
                 {sportsFacilities.map((facility) => (

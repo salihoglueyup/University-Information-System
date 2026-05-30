@@ -120,6 +120,13 @@ const schemas = {
         date: z.string().min(1, "Tarih gereklidir").max(40),
         hours: z.string().max(40).optional(),
         total: z.coerce.number().min(0, "Saat 0'dan küçük olamaz").max(24, "Bir günde en fazla 24 saat girilebilir")
+    }),
+
+    healthAppointment: z.object({
+        department: z.string().min(1, "Poliklinik gereklidir").max(80),
+        doctor: z.string().max(100).optional(),
+        date: z.string().min(1, "Tarih gereklidir").max(40),
+        time: z.string().min(1, "Saat gereklidir").max(40)
     })
 };
 

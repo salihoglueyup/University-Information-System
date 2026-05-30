@@ -1,11 +1,27 @@
+import { useState } from 'react';
 import { CalendarCheck, HeartPulse, Phone, Stethoscope } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { healthAppointments } from '../../data/mockData';
+import { toast } from 'react-toastify';
+import { useHealthAppointments, useCreateHealthAppointment } from '../../hooks/queries/useHealthAppointments';
 
 export default function HealthCenter() {
+    const { data: healthAppointments = [] } = useHealthAppointments();
+    const createAppt = useCreateHealthAppointment();
+
+    const [open, setOpen] = useState(false);
+    const [form, setForm] = useState({ department: '', doctor: '', date: '', time: '' });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        createAppt.mutate(form, {
+            onSuccess: () => {
+                toast.success('Randevunuz oluşturuldu.');
+                setOpen(false);
+                setForm({ department: '', doctor: '', date: '', time: '' });
+            },
+            onError: (err) => toast.error(err?.response?.data?.message || 'Randevu oluşturulamadı.')
+        });
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -29,10 +45,13 @@ export default function HealthCenter() {
                         <h3 className="font-bold text-lg text-slate-800 flex items-center gap-2">
                             <CalendarCheck size={20} className="text-blue-600" /> Randevularım
                         </h3>
-                        <Button variant="outline" size="sm">Yeni Randevu</Button>
+                        <Button variant="outline" size="sm" onClick={() => setOpen(true)}>Yeni Randevu</Button>
                     </div>
 
                     <div className="space-y-3">
+                        {healthAppointments.length === 0 && (
+                            <p className="text-sm text-slate-400 text-center py-6 border border-dashed border-slate-200 rounded-xl">Randevunuz bulunmamaktadır.</p>
+                        )}
                         {healthAppointments.map((app) => (
                             <div key={app.id} className="flex items-center justify-between p-4 border border-slate-100 rounded-xl bg-slate-50">
                                 <div className="flex items-center gap-4">
@@ -79,8 +98,44 @@ export default function HealthCenter() {
                     </Card>
                 </div>
             </div>
+
+            <Modal isOpen={open} onClose={() => setOpen(false)} title="Yeni Sağlık Randevusu" size="sm">
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <Input
+                        label="Poliklinik"
+                        placeholder="Diş Hekimliği"
+                        value={form.department}
+                        onChange={(e) => setForm({ ...form, department: e.target.value })}
+                        required
+                    />
+                    <Input
+                        label="Hekim (opsiyonel)"
+                        placeholder="Dr. Ada Yılmaz"
+                        value={form.doctor}
+                        onChange={(e) => setForm({ ...form, doctor: e.target.value })}
+                    />
+                    <Input
+                        label="Tarih"
+                        type="date"
+                        value={form.date}
+                        onChange={(e) => setForm({ ...form, date: e.target.value })}
+                        required
+                    />
+                    <Input
+                        label="Saat"
+                        type="time"
+                        value={form.time}
+                        onChange={(e) => setForm({ ...form, time: e.target.value })}
+                        required
+                    />
+                    <div className="flex justify-end gap-2 pt-2">
+                        <Button type="button" variant="outline" onClick={() => setOpen(false)}>İptal</Button>
+                        <Button type="submit" variant="primary" disabled={createAppt.isPending}>Randevu Al</Button>
+                    </div>
+                </form>
+            </Modal>
         </motion.div>
     );
 }
 import { motion } from 'framer-motion';
-import { Button, Card } from '../../components/ui';
+import { Button, Card, Input, Modal } from '../../components/ui';

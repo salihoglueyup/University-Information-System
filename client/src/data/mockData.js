@@ -22,7 +22,6 @@ export const examSchedule = [];
 export const financialReports = {};
 export const gradingQueue = [];
 export const graduationStatus = {};
-export const healthAppointments = [];
 export const healthReports = [];
 export const instructorCoursesData = [];
 export const internshipData = {};

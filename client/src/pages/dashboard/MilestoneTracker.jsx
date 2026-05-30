@@ -1,14 +1,15 @@
 import { useParams, useNavigate } from 'react-router-dom';
-
-import { thesisMilestones } from '../../data/mockData';
+import { useThesisMilestones } from '../../hooks/queries/useThesisMilestones';
 
 export default function MilestoneTracker() {
     const { id } = useParams(); // Thesis/Student ID
     const navigate = useNavigate();
 
-    // In a real app, fetch based on id. 
-    // using '1' as default for demo since mock data has key '1'
-    const data = thesisMilestones[id] || thesisMilestones['1'];
+    const { data } = useThesisMilestones(id);
+    const plan = data || { student: '', project: '', startDate: '', endDate: '', milestones: [] };
+    const milestones = plan.milestones || [];
+    const completedCount = milestones.filter(m => m.status === 'Tamamlandı').length;
+    const overallProgress = milestones.length > 0 ? Math.round((completedCount / milestones.length) * 100) : 0;
 
     const getStatusIcon = (status) => {
         switch (status) {
@@ -45,19 +46,19 @@ export default function MilestoneTracker() {
                                 Lisans Tezi
                             </span>
                             <span>•</span>
-                            <span>{data.student}</span>
+                            <span>{plan.student}</span>
                         </div>
-                        <h1 className="text-3xl font-bold mb-2 leading-tight">{data.project}</h1>
+                        <h1 className="text-3xl font-bold mb-2 leading-tight">{plan.project}</h1>
                         <div className="flex items-center gap-4 text-sm opacity-80">
-                            <span className="flex items-center gap-1"><Calendar size={14} /> Başlangıç: {data.startDate}</span>
-                            <span className="flex items-center gap-1"><Calendar size={14} /> Bitiş: {data.endDate}</span>
+                            <span className="flex items-center gap-1"><Calendar size={14} /> Başlangıç: {plan.startDate}</span>
+                            <span className="flex items-center gap-1"><Calendar size={14} /> Bitiş: {plan.endDate}</span>
                         </div>
                     </div>
 
                     <div className="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/10 min-w-[150px] text-center">
                         <div className="text-xs text-indigo-200 uppercase tracking-wider mb-1">Genel İlerleme</div>
                         <div className="text-3xl font-bold">
-                            %{Math.round((data.milestones.filter(m => m.status === 'Tamamlandı').length / data.milestones.length) * 100)}
+                            %{overallProgress}
                         </div>
                     </div>
                 </div>
@@ -67,7 +68,10 @@ export default function MilestoneTracker() {
                 <div className="lg:col-span-2 space-y-6">
                     <Card title="Proje Aşamaları (Milestones)">
                         <div className="relative pl-4 space-y-8 before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-0.5 before:bg-gray-100">
-                            {data.milestones.map((milestone) => (
+                            {milestones.length === 0 && (
+                                <p className="text-sm text-gray-400 py-6 pl-4">Bu tez için aşama girilmemiş.</p>
+                            )}
+                            {milestones.map((milestone) => (
                                 <div key={milestone.id} className="relative pl-8">
                                     <div className="absolute left-0 top-1 bg-white p-1 rounded-full border border-gray-100 shadow-sm z-10">
                                         {getStatusIcon(milestone.status)}

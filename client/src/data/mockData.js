@@ -32,6 +32,5 @@ export const supportTickets = [];
 export const systemSettings = {};
 export const thesisAssistance = [];
 export const thesisKanbanData = {};
-export const thesisMilestones = [];
 export const uzemExams = [];
 export const vehicleSticker = {};

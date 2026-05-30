@@ -1,19 +1,21 @@
 import { useState } from 'react';
-
-// Components
-
-// Mock Data
-import { examApplications } from '../../data/mockData';
+import { toast } from 'react-toastify';
+import { useExamApplications, useApplyExam } from '../../hooks/queries/useExamApplications';
 
 export default function ExemptionExam() {
     const [selectedExam, setSelectedExam] = useState('');
     const [isApplied, setIsApplied] = useState(false);
+    const { data: examApplications = [] } = useExamApplications();
+    const applyExam = useApplyExam();
 
     const availableExams = examApplications.filter(e => e.type === 'Muafiyet Sınavı');
 
     const handleApply = (e) => {
         e.preventDefault();
-        setIsApplied(true);
+        applyExam.mutate(selectedExam, {
+            onSuccess: () => setIsApplied(true),
+            onError: () => toast.error('Başvuru yapılamadı.')
+        });
     };
 
     return (
@@ -58,7 +60,7 @@ export default function ExemptionExam() {
                             </Alert>
 
                             <div className="flex justify-end">
-                                <Button variant="primary" type="submit" disabled={!selectedExam}>
+                                <Button variant="primary" type="submit" disabled={!selectedExam || applyExam.isPending}>
                                     Başvuruyu Tamamla
                                 </Button>
                             </div>

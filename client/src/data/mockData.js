@@ -13,7 +13,6 @@ export const electronicExams = [];
 export const erasmusApplications = [];
 export const erasmusChoices = [];
 export const events = [];
-export const examApplications = [];
 export const examResults = [];
 export const financialReports = {};
 export const healthReports = [];

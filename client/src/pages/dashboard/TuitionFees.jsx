@@ -1,11 +1,20 @@
 import { AlertCircle, CreditCard, Download, Landmark } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { tuitionFees } from '../../data/mockData';
+import { toast } from 'react-toastify';
+import { useTuitionFees, usePayTuition } from '../../hooks/queries/useTuitionFees';
 
 export default function TuitionFees() {
+    const { data: tuitionFees = [] } = useTuitionFees();
+    const payTuition = usePayTuition();
+
+    const firstUnpaid = tuitionFees.find(f => f.status === 'Ödenmedi');
+
+    const handlePay = (id) => {
+        payTuition.mutate(id, {
+            onSuccess: () => toast.success('Ödeme alındı.'),
+            onError: () => toast.error('Ödeme yapılamadı.')
+        });
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -19,7 +28,7 @@ export default function TuitionFees() {
                     </h1>
                     <p className="text-slate-500 text-sm">Dönemlik harç ödemeleri ve borç sorgulama</p>
                 </div>
-                <Button variant="primary" icon={CreditCard}>Online Ödeme Yap</Button>
+                <Button variant="primary" icon={CreditCard} disabled={!firstUnpaid || payTuition.isPending} onClick={() => firstUnpaid && handlePay(firstUnpaid.id)}>Online Ödeme Yap</Button>
             </div>
 
             {tuitionFees.some(f => f.status === 'Ödenmedi') && (
@@ -53,7 +62,9 @@ export default function TuitionFees() {
                                     )}
                                 </td>
                                 <td className="px-6 py-4 text-right">
-                                    {fee.receipt ? (
+                                    {fee.status === 'Ödenmedi' ? (
+                                        <Button variant="primary" size="sm" icon={CreditCard} disabled={payTuition.isPending} onClick={() => handlePay(fee.id)}>Öde</Button>
+                                    ) : fee.receipt ? (
                                         <Button variant="ghost" size="sm" icon={Download} className="text-slate-500">İndir</Button>
                                     ) : (
                                         <span className="text-slate-300">-</span>
@@ -61,6 +72,11 @@ export default function TuitionFees() {
                                 </td>
                             </tr>
                         ))}
+                        {tuitionFees.length === 0 && (
+                            <tr>
+                                <td colSpan={5} className="px-6 py-10 text-center text-slate-400">Harç kaydı bulunmamaktadır.</td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </Card>

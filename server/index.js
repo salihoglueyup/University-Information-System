@@ -74,6 +74,7 @@ const sportsFacilitiesRoute = require('./routes/sportsFacilities');
 const socialTranscriptRoute = require('./routes/socialTranscript');
 const shuttleRoute = require('./routes/shuttle');
 const transcriptRoute = require('./routes/transcript');
+const tuitionFeesRoute = require('./routes/tuitionFees');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -289,6 +290,7 @@ app.use("/api/sports-facilities", verifyToken, sportsFacilitiesRoute);
 app.use("/api/social-transcript", verifyToken, socialTranscriptRoute);
 app.use("/api/shuttle", verifyToken, shuttleRoute);
 app.use("/api/transcript", verifyToken, transcriptRoute);
+app.use("/api/tuition-fees", verifyToken, tuitionFeesRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

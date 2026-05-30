@@ -1,10 +1,8 @@
-
-// Components
-
-// Mock Data
-import { radioSchedule } from '../../data/mockData';
+import { useRadioSchedule } from '../../hooks/queries/useRadioSchedule';
 
 export default function RadioTV() {
+    const { data: radioSchedule = [] } = useRadioSchedule();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -64,6 +62,9 @@ export default function RadioTV() {
                         </h3>
                     </div>
                     <div className="divide-y divide-slate-100">
+                        {radioSchedule.length === 0 && (
+                            <div className="p-6 text-center text-sm text-slate-400">Yayın akışı bilgisi bulunmamaktadır.</div>
+                        )}
                         {radioSchedule.map((item, idx) => (
                             <div key={idx} className="p-4 flex gap-4 hover:bg-slate-50 transition-colors">
                                 <span className="font-mono font-bold text-rose-500">{item.time}</span>

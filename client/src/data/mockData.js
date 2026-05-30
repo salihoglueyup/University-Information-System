@@ -37,7 +37,6 @@ export const libraryFines = [];
 export const lostFoundItems = [];
 export const publications = [];
 export const questionBank = [];
-export const radioSchedule = [];
 export const schedule = [];
 export const scholarships = [];
 export const semCourses = [];

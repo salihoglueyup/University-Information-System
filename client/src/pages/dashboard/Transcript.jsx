@@ -5,13 +5,14 @@ import { jsPDF } from 'jspdf';
 import QRCode from 'qrcode';
 // Components
 
-// Mock Data
-import { transcriptData, currentUser } from '../../data/mockData';
+import { currentUser } from '../../data/mockData';
+import { useTranscript } from '../../hooks/queries/useTranscript';
 import axiosInstance from '../../api/axiosInstance';
 export default function Transcript() {
     const printRef = useRef(null);
     const [isExporting, setIsExporting] = useState(false);
     const [qrCodeDataUri, setQrCodeDataUri] = useState(null);
+    const { data: transcriptData = [] } = useTranscript();
 
     React.useEffect(() => {
         const createVerification = async () => {

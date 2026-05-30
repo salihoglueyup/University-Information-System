@@ -35,7 +35,6 @@ export const thesisAssistance = [];
 export const thesisKanbanData = {};
 export const thesisMilestones = [];
 export const thesisStudents = [];
-export const transcriptData = [];
 export const tuitionFees = [];
 export const uzemExams = [];
 export const vehicleSticker = {};

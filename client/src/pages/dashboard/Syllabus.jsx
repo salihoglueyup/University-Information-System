@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { syllabusData } from '../../data/mockData';
 import { useCourseCatalog } from '../../hooks/queries/useCourseCatalog';
+import { useSyllabus } from '../../hooks/queries/useSyllabus';
 
 export default function Syllabus() {
     const { data: courseCatalog = [] } = useCourseCatalog();
-    const [weeks] = useState(syllabusData);
     const [selectedCourse, setSelectedCourse] = useState(null);
+    const activeCourse = selectedCourse || courseCatalog[0]?.id || null;
+    const { data: weeks = [] } = useSyllabus(activeCourse);
 
     return (
         <motion.div
@@ -45,7 +46,7 @@ export default function Syllabus() {
                     <button
                         key={course.id}
                         onClick={() => setSelectedCourse(course.id)}
-                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${selectedCourse === course.id
+                        className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap ${activeCourse === course.id
                             ? 'bg-amber-100 text-amber-700 ring-2 ring-amber-500/20'
                             : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
                             }`}
@@ -57,6 +58,12 @@ export default function Syllabus() {
 
             {/* Weeks List */}
             <div className="space-y-4">
+                {weeks.length === 0 && (
+                    <div className="bg-white p-10 rounded-3xl border border-dashed border-gray-200 text-center text-gray-400">
+                        <BookOpen size={28} className="mx-auto mb-2 text-gray-300" />
+                        <p className="text-sm">{courseCatalog.length === 0 ? 'Ders kataloğu boş.' : 'Bu ders için izlence girilmemiş.'}</p>
+                    </div>
+                )}
                 <AnimatePresence>
                     {weeks.map((week) => (
                         <motion.div

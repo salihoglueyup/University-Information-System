@@ -36,7 +36,6 @@ export const socialTranscriptExtraPoints = [];
 export const sportsFacilities = [];
 export const studentClubs = [];
 export const supportTickets = [];
-export const syllabusData = [];
 export const systemSettings = {};
 export const thesisAssistance = [];
 export const thesisKanbanData = {};

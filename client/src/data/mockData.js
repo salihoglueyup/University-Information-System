@@ -35,7 +35,6 @@ export const labSections = [];
 export const leaveRequests = [];
 export const libraryFines = [];
 export const lostFoundItems = [];
-export const officeHours = [];
 export const publications = [];
 export const questionBank = [];
 export const radioSchedule = [];

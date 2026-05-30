@@ -49,3 +49,14 @@ export const useCreateOfficeHour = () => {
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['office-hours'] }),
     });
 };
+
+export const useDeleteOfficeHour = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (id) => {
+            await axiosInstance.delete(`/appointments/office-hours/${id}`);
+            return id;
+        },
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['office-hours'] }),
+    });
+};

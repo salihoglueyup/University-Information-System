@@ -10,5 +10,6 @@ router.patch('/:id/status', validate('appointmentStatus'), appointmentController
 // Office hours (advisor availability)
 router.get('/office-hours', appointmentController.listOfficeHours);
 router.post('/office-hours', validate('officeHour'), appointmentController.createOfficeHour);
+router.delete('/office-hours/:id', appointmentController.deleteOfficeHour);
 
 module.exports = router;

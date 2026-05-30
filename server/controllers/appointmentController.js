@@ -32,6 +32,13 @@ class AppointmentController {
             res.status(201).json(await officeHourService.create(req.user && req.user.username, req.body));
         } catch (err) { next(err); }
     }
+
+    async deleteOfficeHour(req, res, next) {
+        try {
+            await officeHourService.remove(req.user && req.user.username, req.params.id);
+            res.status(204).end();
+        } catch (err) { next(err); }
+    }
 }
 
 module.exports = new AppointmentController();

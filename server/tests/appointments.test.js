@@ -70,4 +70,18 @@ describe('Appointments API', () => {
         expect(res.statusCode).toBe(400);
         expect(officeHourService.create).not.toHaveBeenCalled();
     });
+
+    it('DELETE /office-hours/:id removes a slot (204)', async () => {
+        officeHourService.remove.mockResolvedValue({ _id: '1' });
+        const res = await request(app).delete('/api/appointments/office-hours/1');
+        expect(res.statusCode).toBe(204);
+        expect(officeHourService.remove).toHaveBeenCalledWith(undefined, '1');
+    });
+
+    it('DELETE /office-hours/:id returns 404 when missing', async () => {
+        const AppError = require('../utils/AppError');
+        officeHourService.remove.mockRejectedValue(new AppError('Ofis saati bulunamadı', 404));
+        const res = await request(app).delete('/api/appointments/office-hours/zzz');
+        expect(res.statusCode).toBe(404);
+    });
 });

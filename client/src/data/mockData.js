@@ -8,7 +8,6 @@ export const allUsers = [];
 export const appointments = [];
 export const bankData = {};
 export const contracts = [];
-export const courseCatalog = [];
 export const currentUser = {};
 export const deptTasks = [];
 export const diningMenu = [];

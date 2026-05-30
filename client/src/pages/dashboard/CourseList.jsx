@@ -9,9 +9,9 @@ export default function CourseList({ courses, onEdit, onDelete }) {
 
     const filteredCourses = useMemo(() => {
         return courses.filter(course => {
-            const matchesSearch = course.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                course.id.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesSemester = semesterFilter === 'ALL' || course.semester.toString() === semesterFilter;
+            const matchesSearch = (course.courseName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                (course.code || '').toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesSemester = semesterFilter === 'ALL' || String(course.semester) === semesterFilter;
             return matchesSearch && matchesSemester;
         });
     }, [courses, searchTerm, semesterFilter]);
@@ -82,7 +82,7 @@ export default function CourseList({ courses, onEdit, onDelete }) {
                                 >
                                     <td className="px-6 py-4">
                                         <span className="font-mono font-bold text-indigo-600 bg-indigo-50 px-2 py-1 rounded-lg text-xs">
-                                            {course.id}
+                                            {course.code}
                                         </span>
                                     </td>
                                     <td className="px-6 py-4">

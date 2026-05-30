@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { courseCatalog } from '../../data/mockData';
+import { useCourseCatalog } from '../../hooks/queries/useCourseCatalog';
 
 export default function Curriculum() {
-    const [courses, setCourses] = useState(courseCatalog); // Mock state
+    const { data: courseCatalog = [] } = useCourseCatalog();
+    const [deletedIds, setDeletedIds] = useState([]);
+
+    const courses = courseCatalog.filter(c => !deletedIds.includes(c.id));
 
     const handleEdit = (_course) => {
         // TODO: implement edit course
@@ -10,8 +13,7 @@ export default function Curriculum() {
 
     const handleDelete = (id) => {
         if (window.confirm("Bu dersi silmek istediğinize emin misiniz?")) {
-            // TODO: implement delete course
-            setCourses(courses.filter(c => c.id !== id));
+            setDeletedIds(prev => [...prev, id]);
         }
     };
 

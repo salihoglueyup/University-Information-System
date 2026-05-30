@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { syllabusData, courseCatalog } from '../../data/mockData';
+import { syllabusData } from '../../data/mockData';
+import { useCourseCatalog } from '../../hooks/queries/useCourseCatalog';
 
 export default function Syllabus() {
+    const { data: courseCatalog = [] } = useCourseCatalog();
     const [weeks] = useState(syllabusData);
-    const [selectedCourse, setSelectedCourse] = useState(courseCatalog[0]?.id);
+    const [selectedCourse, setSelectedCourse] = useState(null);
 
     return (
         <motion.div

@@ -1,25 +1,24 @@
 import { useState } from 'react';
-import { courseCatalog, allUsers } from '../../data/mockData';
+import { allUsers } from '../../data/mockData';
+import { useCourseCatalog } from '../../hooks/queries/useCourseCatalog';
 
 export default function CourseAssignments() {
-    const [assignments, setAssignments] = useState(courseCatalog.map(c => ({
-        ...c,
-        instructor: null // Initial state, no instructor assigned
-    })));
+    const { data: courseCatalog = [] } = useCourseCatalog();
+    const [assignedMap, setAssignedMap] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
 
     const instructors = allUsers.filter(u => u.role === 'academic');
 
+    const assignments = courseCatalog.map(c => ({ ...c, instructor: assignedMap[c.id] || null }));
+
     const handleAssign = (courseId, instructorId) => {
         const instructor = instructors.find(i => i.id === parseInt(instructorId));
-        setAssignments(assignments.map(a =>
-            a.id === courseId ? { ...a, instructor: instructor ? instructor.name : null } : a
-        ));
+        setAssignedMap(prev => ({ ...prev, [courseId]: instructor ? instructor.name : null }));
     };
 
     const filteredAssignments = assignments.filter(a =>
-        a.courseName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        a.id.toLowerCase().includes(searchTerm.toLowerCase())
+        (a.courseName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (a.code || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -80,7 +79,7 @@ export default function CourseAssignments() {
                                         className="group hover:bg-teal-50/30 transition-colors"
                                     >
                                         <td className="px-6 py-4 font-mono font-bold text-teal-600">
-                                            {assignment.id}
+                                            {assignment.code}
                                         </td>
                                         <td className="px-6 py-4 font-bold text-gray-800">
                                             {assignment.courseName}

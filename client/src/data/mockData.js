@@ -10,7 +10,6 @@ export const bankData = {};
 export const contracts = [];
 export const courseCatalog = [];
 export const currentUser = {};
-export const departmentCourses = [];
 export const deptTasks = [];
 export const diningMenu = [];
 export const electronicExams = [];

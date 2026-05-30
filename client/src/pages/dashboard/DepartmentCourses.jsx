@@ -1,10 +1,8 @@
-
-// Components
-
-// Mock Data
-import { departmentCourses } from '../../data/mockData';
+import { useDepartmentCourses } from '../../hooks/queries/useDepartmentCourses';
 
 export default function DepartmentCourses() {
+    const { data: departmentCourses = [] } = useDepartmentCourses();
+
     const columns = [
         { label: 'Ders Kodu', key: 'code', sortable: true, className: "font-mono font-medium text-blue-600 w-32" },
         { label: 'Ders Adı', key: 'name', sortable: true, className: "font-medium text-slate-900" },

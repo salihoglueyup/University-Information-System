@@ -30,6 +30,5 @@ export const schedule = [];
 export const scholarships = [];
 export const supportTickets = [];
 export const systemSettings = {};
-export const thesisAssistance = [];
 export const uzemExams = [];
 export const vehicleSticker = {};

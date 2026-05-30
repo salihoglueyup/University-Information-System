@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { CheckCircle, ChevronRight, Clock, FileText, GraduationCap, MessageSquare, Search, User, Users } from 'lucide-react';
-import { thesisAssistance } from '../../data/mockData';
+import { useThesisAssistance } from '../../hooks/queries/useThesisAssistance';
 
 export default function ThesisSupport() {
     const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
+    const { data: thesisAssistance = [] } = useThesisAssistance();
 
     const filteredStudents = thesisAssistance.filter(student => {
-        const matchesSearch = student.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            student.projectTitle.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesStatus = statusFilter === 'all' || student.status.toLowerCase().replace(' ', '') === statusFilter;
+        const matchesSearch = (student.studentName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (student.projectTitle || '').toLowerCase().includes(searchTerm.toLowerCase());
+        const matchesStatus = statusFilter === 'all' || (student.status || '').toLowerCase().replace(' ', '') === statusFilter;
         return matchesSearch && matchesStatus;
     });
 
@@ -107,6 +108,12 @@ export default function ThesisSupport() {
 
             {/* Student List */}
             <div className="grid gap-4">
+                {filteredStudents.length === 0 && (
+                    <Card className="p-12 text-center text-gray-400 border-dashed">
+                        <GraduationCap size={32} className="mx-auto mb-3 text-gray-300" />
+                        <p className="text-sm">Danışmanlığını yürüttüğünüz öğrenci bulunmamaktadır.</p>
+                    </Card>
+                )}
                 {filteredStudents.map((student, index) => (
                     <motion.div
                         key={student.id}

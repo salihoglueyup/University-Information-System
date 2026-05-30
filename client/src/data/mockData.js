@@ -21,7 +21,6 @@ export const jobPostings = [];
 export const leaveRequests = [];
 export const libraryFines = [];
 export const lostFoundItems = [];
-export const publications = [];
 export const schedule = [];
 export const scholarships = [];
 export const supportTickets = [];

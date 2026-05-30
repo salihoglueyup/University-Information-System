@@ -1,15 +1,15 @@
 import { useState } from 'react';
-import { publications } from '../../data/mockData';
+import { usePublications } from '../../hooks/queries/usePublications';
 
 export default function Publications() {
-    const [pubList] = useState(publications);
+    const { data: pubList = [] } = usePublications();
     const [searchTerm, setSearchTerm] = useState('');
 
-    const totalPoints = pubList.reduce((acc, curr) => acc + curr.points, 0);
+    const totalPoints = pubList.reduce((acc, curr) => acc + (curr.points || 0), 0);
 
     const filteredPubs = pubList.filter(p =>
-        p.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.type.toLowerCase().includes(searchTerm.toLowerCase())
+        (p.title || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (p.type || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -124,6 +124,11 @@ export default function Publications() {
                                     </motion.tr>
                                 ))}
                             </AnimatePresence>
+                            {filteredPubs.length === 0 && (
+                                <tr>
+                                    <td colSpan={5} className="px-6 py-10 text-center text-gray-400">Yayın kaydı bulunmamaktadır.</td>
+                                </tr>
+                            )}
                         </tbody>
                     </table>
                 </div>

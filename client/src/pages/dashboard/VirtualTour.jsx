@@ -1,11 +1,9 @@
 import { ExternalLink, PlayCircle, View } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { virtualTourImages } from '../../data/mockData';
+import { useVirtualTour } from '../../hooks/queries/useVirtualTour';
 
 export default function VirtualTour() {
+    const { data: virtualTourImages = [] } = useVirtualTour();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -20,6 +18,13 @@ export default function VirtualTour() {
                     <p className="text-slate-500 text-sm">Kampüsü oturduğunuz yerden keşfedin</p>
                 </div>
             </div>
+
+            {virtualTourImages.length === 0 && (
+                <Card className="p-12 text-center text-slate-400 border-dashed">
+                    <View size={32} className="mx-auto mb-3 text-slate-300" />
+                    <p className="text-sm">Sanal tur içeriği bulunmamaktadır.</p>
+                </Card>
+            )}
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {virtualTourImages.map((spot) => (

@@ -37,4 +37,3 @@ export const thesisMilestones = [];
 export const thesisStudents = [];
 export const uzemExams = [];
 export const vehicleSticker = {};
-export const virtualTourImages = [];

@@ -18,7 +18,6 @@ export const healthReports = [];
 export const internshipData = {};
 export const internshipOffers = [];
 export const jobPostings = [];
-export const labSections = [];
 export const leaveRequests = [];
 export const libraryFines = [];
 export const lostFoundItems = [];

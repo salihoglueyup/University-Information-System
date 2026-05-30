@@ -1,8 +1,10 @@
-import { labSections } from '../../../data/mockData';
 import { motion } from 'framer-motion';
 import { Monitor, Users, Clock, ClipboardList, ChevronRight } from 'lucide-react';
+import { useLabs } from '../../../hooks/queries/useLabs';
 
 export default function LabDutiesWidget() {
+    const { data: labSections = [] } = useLabs();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -23,6 +25,9 @@ export default function LabDutiesWidget() {
             </div>
 
             <div className="space-y-4">
+                {labSections.length === 0 && (
+                    <p className="text-sm text-gray-400 text-center py-6">Sorumlu olduğunuz laboratuvar bulunmamaktadır.</p>
+                )}
                 {labSections.map((lab) => (
                     <div
                         key={lab.id}

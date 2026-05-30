@@ -1,7 +1,9 @@
-import { academicReports } from '../../data/mockData';
 import { ResponsiveContainer, BarChart as RechartsBarChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, LineChart, Line } from 'recharts';
+import { useAcademicReports } from '../../hooks/queries/useAcademicReports';
 
 export default function AcademicReports() {
+    const { data: academicReports = { facultyStats: [], enrollmentTrends: [] } } = useAcademicReports();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}

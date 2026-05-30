@@ -3,7 +3,6 @@
 // replace with real data or wire pages to the API. Types inferred from usage.
 
 export const academicMilestones = {};
-export const academicReports = {};
 export const appointments = [];
 export const bankData = {};
 export const contracts = [];

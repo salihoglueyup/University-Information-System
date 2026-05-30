@@ -1,18 +1,33 @@
-import { useState } from 'react';
-import { systemSettings } from '../../data/mockData';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
+import { useSystemSettings, useUpdateSystemSettings } from '../../hooks/queries/useSystemSettings';
 
 export default function SystemSettings() {
-    const [settings, setSettings] = useState(systemSettings);
-    const [isSaving, setIsSaving] = useState(false);
+    const { data } = useSystemSettings();
+    const updateSettings = useUpdateSystemSettings();
+    const [settings, setSettings] = useState({});
+
+    // Seed the editable form state from the server settings.
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        if (data) setSettings(data);
+    }, [data]);
+
+    const isSaving = updateSettings.isPending;
 
     const handleSave = () => {
-        setIsSaving(true);
-        setTimeout(() => {
-            setIsSaving(false);
-            // In a real app, this would be an API call
-            toast.success('Ayarlar başarıyla kaydedildi!');
-        }, 1000);
+        updateSettings.mutate(
+            {
+                activeSemester: settings.activeSemester,
+                registrationOpen: settings.registrationOpen,
+                allowGradeEntry: settings.allowGradeEntry,
+                maintenanceMode: settings.maintenanceMode
+            },
+            {
+                onSuccess: () => toast.success('Ayarlar başarıyla kaydedildi!'),
+                onError: () => toast.error('Ayarlar kaydedilemedi.')
+            }
+        );
     };
 
     const handleChange = (key, value) => {

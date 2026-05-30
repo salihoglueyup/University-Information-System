@@ -147,6 +147,13 @@ const schemas = {
 
     thesisTaskReorder: z.object({
         newIndex: z.coerce.number().int().min(0).max(1000)
+    }),
+
+    systemSettings: z.object({
+        activeSemester: z.string().max(40).optional(),
+        registrationOpen: z.boolean().optional(),
+        allowGradeEntry: z.boolean().optional(),
+        maintenanceMode: z.boolean().optional()
     })
 };
 

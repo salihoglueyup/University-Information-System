@@ -22,5 +22,4 @@ export const lostFoundItems = [];
 export const schedule = [];
 export const scholarships = [];
 export const supportTickets = [];
-export const systemSettings = {};
 export const vehicleSticker = {};

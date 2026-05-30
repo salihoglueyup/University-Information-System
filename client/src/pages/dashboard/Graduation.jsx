@@ -1,11 +1,10 @@
-
-// Components
-
-// Mock Data
-import { graduationStatus } from '../../data/mockData';
+import { useGraduationStatus } from '../../hooks/queries/useGraduationStatus';
 
 export default function Graduation() {
-    const creditProgress = (graduationStatus.totalCredits / graduationStatus.requiredCredits) * 100;
+    const { data: graduationStatus = {} } = useGraduationStatus();
+
+    const required = graduationStatus.requiredCredits || 0;
+    const creditProgress = required > 0 ? (graduationStatus.totalCredits / required) * 100 : 0;
 
     return (
         <motion.div

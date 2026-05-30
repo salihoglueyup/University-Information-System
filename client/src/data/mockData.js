@@ -34,7 +34,6 @@ export const socialTranscript = {};
 export const socialTranscriptCategories = [];
 export const socialTranscriptExtraPoints = [];
 export const sportsFacilities = [];
-export const studentClubs = [];
 export const supportTickets = [];
 export const systemSettings = {};
 export const thesisAssistance = [];

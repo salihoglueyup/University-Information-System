@@ -1,11 +1,18 @@
 import { UserPlus, Users } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { studentClubs } from '../../data/mockData';
+import { toast } from 'react-toastify';
+import { useStudentClubs, useJoinClub } from '../../hooks/queries/useStudentClubs';
 
 export default function StudentClubs() {
+    const { data: studentClubs = [] } = useStudentClubs();
+    const joinClub = useJoinClub();
+
+    const handleJoin = (id) => {
+        joinClub.mutate(id, {
+            onSuccess: () => toast.success('Kulübe üyeliğiniz alındı.'),
+            onError: () => toast.error('Üyelik işlemi başarısız.')
+        });
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -21,6 +28,13 @@ export default function StudentClubs() {
                 </div>
                 <Button variant="outline" icon={UserPlus}>Yeni Kulüp Başvurusu</Button>
             </div>
+
+            {studentClubs.length === 0 && (
+                <Card className="p-12 text-center text-slate-400 border-dashed">
+                    <Users size={32} className="mx-auto mb-3 text-slate-300" />
+                    <p className="text-sm">Şu anda aktif bir öğrenci kulübü bulunmamaktadır.</p>
+                </Card>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {studentClubs.map((club) => (
@@ -46,7 +60,7 @@ export default function StudentClubs() {
                                 </div>
                             </div>
 
-                            <Button variant="primary" className="w-full mt-2">Üye Ol</Button>
+                            <Button variant="primary" className="w-full mt-2" disabled={joinClub.isPending} onClick={() => handleJoin(club.id)}>Üye Ol</Button>
                         </div>
                     </Card>
                 ))}

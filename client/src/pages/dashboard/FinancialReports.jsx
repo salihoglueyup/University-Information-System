@@ -1,7 +1,9 @@
-import { financialReports } from '../../data/mockData';
 import { ResponsiveContainer, PieChart as RePieChart, Pie, Cell, Tooltip, Legend, AreaChart, CartesianGrid, XAxis, YAxis, Area } from 'recharts';
+import { useFinancialReports } from '../../hooks/queries/useFinancialReports';
 
 export default function FinancialReports() {
+    const { data: financialReports = { paymentStats: [], monthlyRevenue: [] } } = useFinancialReports();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -87,6 +87,7 @@ const electronicExamsRoute = require('./routes/electronicExams');
 const uzemExamsRoute = require('./routes/uzemExams');
 const publicationsRoute = require('./routes/publications');
 const academicReportsRoute = require('./routes/academicReports');
+const financialReportsRoute = require('./routes/financialReports');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -315,6 +316,7 @@ app.use("/api/electronic-exams", verifyToken, electronicExamsRoute);
 app.use("/api/uzem-exams", verifyToken, uzemExamsRoute);
 app.use("/api/publications", verifyToken, publicationsRoute);
 app.use("/api/academic-reports", verifyToken, academicReportsRoute);
+app.use("/api/financial-reports", verifyToken, financialReportsRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

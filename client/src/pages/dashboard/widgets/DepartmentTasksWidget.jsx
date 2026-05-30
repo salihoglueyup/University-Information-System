@@ -1,6 +1,6 @@
-import { deptTasks } from '../../../data/mockData';
 import { motion } from 'framer-motion';
 import { ClipboardList, MoreHorizontal, CheckSquare, Clock } from 'lucide-react';
+import { useDeptTasks } from '../../../hooks/queries/useDeptTasks';
 
 const priorityColors = {
     high: 'bg-red-50 text-red-600 border-red-100',
@@ -15,6 +15,8 @@ const priorityLabels = {
 };
 
 export default function DepartmentTasksWidget() {
+    const { data: deptTasks = [] } = useDeptTasks();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}

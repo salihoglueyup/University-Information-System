@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { deptTasks } from '../../data/mockData';
+import { useDeptTasks, useUpdateTaskStatus } from '../../hooks/queries/useDeptTasks';
 
 export default function DepartmentTasks() {
     const [filter, setFilter] = useState('all'); // all, todo, in-progress, done
+    const { data: deptTasks = [] } = useDeptTasks();
+    const updateStatus = useUpdateTaskStatus();
 
     const filteredTasks = deptTasks.filter(task => {
         if (filter === 'all') return true;
@@ -83,7 +85,7 @@ export default function DepartmentTasks() {
                                 <div className="mt-1">
                                     <Checkbox
                                         checked={task.status === 'done'}
-                                        onCheckedChange={() => { }}
+                                        onCheckedChange={() => updateStatus.mutate({ id: task.id, status: task.status === 'done' ? 'todo' : 'done' })}
                                         className="border-gray-300 data-[state=checked]:bg-purple-600 data-[state=checked]:border-purple-600"
                                     />
                                 </div>

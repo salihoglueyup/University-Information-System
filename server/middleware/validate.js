@@ -135,6 +135,10 @@ const schemas = {
         topic: z.string().max(120).optional(),
         difficulty: z.enum(['Kolay', 'Orta', 'Zor']).optional(),
         type: z.string().max(60).optional()
+    }),
+
+    deptTaskStatus: z.object({
+        status: z.enum(['todo', 'in-progress', 'done'])
     })
 };
 

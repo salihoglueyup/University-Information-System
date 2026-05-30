@@ -5,16 +5,19 @@ import { jsPDF } from 'jspdf';
 import QRCode from 'qrcode';
 // Components
 
-import { currentUser } from '../../data/mockData';
 import { useTranscript } from '../../hooks/queries/useTranscript';
+import { useProfile } from '../../hooks/queries/useProfile';
 import axiosInstance from '../../api/axiosInstance';
 export default function Transcript() {
     const printRef = useRef(null);
     const [isExporting, setIsExporting] = useState(false);
     const [qrCodeDataUri, setQrCodeDataUri] = useState(null);
     const { data: transcriptData = [] } = useTranscript();
+    const { data: currentUser = {} } = useProfile();
 
     React.useEffect(() => {
+        if (!currentUser.id && !currentUser.username) return;
+
         const createVerification = async () => {
             try {
                 // axiosInstance already injects the auth header
@@ -36,7 +39,7 @@ export default function Transcript() {
         };
 
         createVerification();
-    }, []);
+    }, [currentUser.id, currentUser.username, currentUser.name, currentUser.fullName, currentUser.tc]);
 
     const columns = [
         { header: 'Ders Kodu', accessor: 'code', className: 'font-mono w-28' },

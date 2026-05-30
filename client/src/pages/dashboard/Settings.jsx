@@ -10,10 +10,10 @@ import { ThemeCustomizer } from '../../components/ui/theme/ThemeCustomizer';
 import axiosInstance from '../../api/axiosInstance';
 import { toast } from 'react-toastify';
 
-// Mock Data
-import { currentUser } from '../../data/mockData';
+import { useProfile } from '../../hooks/queries/useProfile';
 
 export default function Settings() {
+    const { data: currentUser = {} } = useProfile();
     const [notifications, setNotifications] = useState({
         email: true,
         sms: false,
@@ -81,12 +81,12 @@ export default function Settings() {
                                 <Button variant="outline" size="sm">Fotoğraf Değiştir</Button>
                             </div>
                             <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-                                <Input label="Ad Soyad" defaultValue={currentUser.name} disabled />
-                                <Input label="Öğrenci Numarası" defaultValue={currentUser.studentId} disabled />
-                                <Input label="E-Posta" defaultValue={currentUser.email} disabled />
+                                <Input label="Ad Soyad" value={currentUser.name || ''} disabled />
+                                <Input label="Öğrenci Numarası" value={currentUser.studentId || ''} disabled />
+                                <Input label="E-Posta" value={currentUser.email || ''} disabled />
                                 <Input label="Telefon" defaultValue="+90 555 123 45 67" />
-                                <Input label="Fakülte" defaultValue={currentUser.faculty} disabled />
-                                <Input label="Bölüm" defaultValue={currentUser.department} disabled />
+                                <Input label="Fakülte" value={currentUser.faculty || ''} disabled />
+                                <Input label="Bölüm" value={currentUser.department || ''} disabled />
                             </div>
                         </div>
                         <div className="p-4 bg-slate-50 border-t border-slate-100 text-right">

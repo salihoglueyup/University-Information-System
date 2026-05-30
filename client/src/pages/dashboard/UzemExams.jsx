@@ -1,11 +1,9 @@
 import { AlertTriangle, Clock, PlayCircle, Wifi } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { uzemExams } from '../../data/mockData';
+import { useUzemExams } from '../../hooks/queries/useUzemExams';
 
 export default function UzemExams() {
+    const { data: uzemExams = [] } = useUzemExams();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -28,6 +26,13 @@ export default function UzemExams() {
                     <li>Sınav sırasında başka bir tarayıcı sekmesi açmak kopya muamelesi görmenize sebep olabilir.</li>
                 </ul>
             </Alert>
+
+            {uzemExams.length === 0 && (
+                <Card className="p-12 text-center text-slate-400 border-dashed">
+                    <Wifi size={32} className="mx-auto mb-3 text-slate-300" />
+                    <p className="text-sm">Planlanmış online sınavınız bulunmamaktadır.</p>
+                </Card>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {uzemExams.map((exam) => (

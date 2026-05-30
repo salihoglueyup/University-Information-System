@@ -36,7 +36,6 @@ export const leaveRequests = [];
 export const libraryFines = [];
 export const lostFoundItems = [];
 export const officeHours = [];
-export const onlineCourses = [];
 export const partTimeWork = {};
 export const prerequisites = [];
 export const proctoringDuties = [];

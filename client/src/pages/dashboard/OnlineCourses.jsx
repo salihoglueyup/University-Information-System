@@ -1,11 +1,9 @@
 import { Calendar, Clock, ExternalLink, PlayCircle, Wifi } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { onlineCourses } from '../../data/mockData';
+import { useOnlineCourses } from '../../hooks/queries/useOnlineCourses';
 
 export default function OnlineCourses() {
+    const { data: onlineCourses = [] } = useOnlineCourses();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -23,6 +21,13 @@ export default function OnlineCourses() {
                     UZEM Sistemine Git
                 </Button>
             </div>
+
+            {onlineCourses.length === 0 && (
+                <Card className="p-12 text-center text-slate-400 border-dashed">
+                    <Wifi size={32} className="mx-auto mb-3 text-slate-300" />
+                    <p className="text-sm">Henüz online dersiniz bulunmamaktadır.</p>
+                </Card>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {onlineCourses.map((course) => (

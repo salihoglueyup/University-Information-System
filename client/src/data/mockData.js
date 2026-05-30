@@ -24,7 +24,6 @@ export const gradingQueue = [];
 export const graduationStatus = {};
 export const healthAppointments = [];
 export const healthReports = [];
-export const infoCenterResources = [];
 export const instructorCoursesData = [];
 export const internshipData = {};
 export const internshipOffers = [];

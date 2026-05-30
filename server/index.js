@@ -61,6 +61,7 @@ const radioScheduleRoute = require('./routes/radioSchedule');
 const accessLogsRoute = require('./routes/accessLogs');
 const departmentCoursesRoute = require('./routes/departmentCourses');
 const semCoursesRoute = require('./routes/semCourses');
+const infoResourcesRoute = require('./routes/infoResources');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -263,6 +264,7 @@ app.use("/api/radio-schedule", verifyToken, radioScheduleRoute);
 app.use("/api/access-logs", verifyToken, accessLogsRoute);
 app.use("/api/department-courses", verifyToken, departmentCoursesRoute);
 app.use("/api/sem-courses", verifyToken, semCoursesRoute);
+app.use("/api/info-resources", verifyToken, infoResourcesRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

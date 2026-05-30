@@ -1,9 +1,9 @@
 import { BookOpen, Database, ExternalLink, Globe, Library, Lock, Search } from 'lucide-react';
-
-// Mock Data
-import { infoCenterResources } from '../../data/mockData';
+import { useInfoResources } from '../../hooks/queries/useInfoResources';
 
 export default function InfoCenter() {
+    const { data: infoCenterResources = [] } = useInfoResources();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -38,13 +38,16 @@ export default function InfoCenter() {
                         <Database className="text-emerald-600" /> Popüler Veritabanları
                     </h3>
                     <div className="space-y-3">
+                        {infoCenterResources.length === 0 && (
+                            <p className="text-sm text-slate-400 text-center py-4">Kaynak bulunmamaktadır.</p>
+                        )}
                         {infoCenterResources.map((res) => (
                             <div key={res.id} className="flex items-center justify-between p-3 border border-slate-100 rounded-xl hover:shadow-sm transition-shadow">
                                 <div>
                                     <h4 className="font-bold text-slate-700">{res.name}</h4>
                                     <span className="text-xs text-slate-500">{res.type}</span>
                                 </div>
-                                <Button variant="ghost" size="sm" icon={ExternalLink} />
+                                <Button variant="ghost" size="sm" icon={ExternalLink} disabled={!res.url} onClick={() => res.url && window.open(res.url, '_blank')} />
                             </div>
                         ))}
                     </div>

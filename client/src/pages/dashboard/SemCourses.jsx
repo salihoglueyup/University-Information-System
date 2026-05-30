@@ -1,9 +1,18 @@
 import { ArrowRight, CheckCircle2, Clock, GraduationCap, User } from 'lucide-react';
-
-// Mock Data
-import { semCourses } from '../../data/mockData';
+import { toast } from 'react-toastify';
+import { useSemCourses, useEnrollSemCourse } from '../../hooks/queries/useSemCourses';
 
 export default function SemCourses() {
+    const { data: semCourses = [] } = useSemCourses();
+    const enroll = useEnrollSemCourse();
+
+    const handleEnroll = (id) => {
+        enroll.mutate(id, {
+            onSuccess: () => toast.success('Eğitim programına kaydınız alındı.'),
+            onError: () => toast.error('Kayıt işlemi başarısız.')
+        });
+    };
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -18,6 +27,13 @@ export default function SemCourses() {
                     <p className="text-slate-500 text-sm">Kariyerinize değer katacak sertifikalı eğitim programları</p>
                 </div>
             </div>
+
+            {semCourses.length === 0 && (
+                <Card className="p-12 text-center text-slate-400 border-dashed">
+                    <GraduationCap size={32} className="mx-auto mb-3 text-slate-300" />
+                    <p className="text-sm">Şu anda açık bir eğitim programı bulunmamaktadır.</p>
+                </Card>
+            )}
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {semCourses.map((course) => (
@@ -45,7 +61,7 @@ export default function SemCourses() {
                                 <span className="text-xs text-slate-600 font-medium">E-Devlet Onaylı Sertifika</span>
                             </div>
 
-                            <Button variant="primary" className="w-full" icon={ArrowRight}>Kayıt Ol</Button>
+                            <Button variant="primary" className="w-full" icon={ArrowRight} disabled={enroll.isPending} onClick={() => handleEnroll(course.id)}>Kayıt Ol</Button>
                         </div>
                     </Card>
                 ))}

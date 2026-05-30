@@ -37,7 +37,6 @@ export const publications = [];
 export const questionBank = [];
 export const schedule = [];
 export const scholarships = [];
-export const semCourses = [];
 export const shuttleHours = [];
 export const socialTranscript = {};
 export const socialTranscriptCategories = [];

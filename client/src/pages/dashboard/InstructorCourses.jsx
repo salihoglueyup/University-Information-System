@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { AlertCircle, BookOpen, CheckCircle, ChevronRight, Clock, FileText, Filter, MapPin, MoreVertical, PenTool, Search, Users } from 'lucide-react';
-import { instructorCoursesData } from '../../data/mockData';
 import { useNavigate } from 'react-router-dom';
+import { useInstructorCourses } from '../../hooks/queries/useInstructorCourses';
 
 export default function InstructorCourses() {
     const navigate = useNavigate();
     const [searchTerm, setSearchTerm] = useState('');
+    const { data: instructorCoursesData = [] } = useInstructorCourses();
 
     const filteredCourses = instructorCoursesData.filter(course =>
-        course.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        course.code.toLowerCase().includes(searchTerm.toLowerCase())
+        (course.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (course.code || '').toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     return (
@@ -47,6 +48,13 @@ export default function InstructorCourses() {
                     </Button>
                 </div>
             </div>
+
+            {filteredCourses.length === 0 && (
+                <Card className="p-12 text-center text-gray-400 border-dashed">
+                    <BookOpen size={32} className="mx-auto mb-3 text-gray-300" />
+                    <p className="text-sm">Bu dönem yürüttüğünüz bir ders bulunmamaktadır.</p>
+                </Card>
+            )}
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {filteredCourses.map((course, index) => (
@@ -125,16 +133,14 @@ export default function InstructorCourses() {
                             <div className="flex items-center gap-4 mb-6 p-3 bg-gray-50 rounded-xl border border-gray-100">
                                 <div className="flex-1 text-center border-r border-gray-200">
                                     <p className="text-xs text-gray-500 mb-1">Ders İzlencesi</p>
-                                    <div className={`text - xs font - bold flex items - center justify - center gap - 1 ${course.syllabusStatus === 'Tamamlandı' ? 'text-green-600' : 'text-amber-600'
-                                        } `}>
+                                    <div className={`text-xs font-bold flex items-center justify-center gap-1 ${course.syllabusStatus === 'Tamamlandı' ? 'text-green-600' : 'text-amber-600'}`}>
                                         {course.syllabusStatus === 'Tamamlandı' ? <CheckCircle size={12} /> : <AlertCircle size={12} />}
                                         {course.syllabusStatus}
                                     </div>
                                 </div>
                                 <div className="flex-1 text-center">
                                     <p className="text-xs text-gray-500 mb-1">Bekleyen Not</p>
-                                    <div className={`text - xs font - bold flex items - center justify - center gap - 1 ${course.pendingGrading > 0 ? 'text-amber-600' : 'text-gray-400'
-                                        } `}>
+                                    <div className={`text-xs font-bold flex items-center justify-center gap-1 ${course.pendingGrading > 0 ? 'text-amber-600' : 'text-gray-400'}`}>
                                         {course.pendingGrading} Öğrenci
                                     </div>
                                 </div>
@@ -144,7 +150,7 @@ export default function InstructorCourses() {
                             <div className="flex items-center gap-3">
                                 <Button
                                     className="flex-1"
-                                    onClick={() => navigate(`/ dashboard / course / ${course.id} `)}
+                                    onClick={() => navigate(`/dashboard/course/${course.id}`)}
                                 >
                                     Ders Detayı
                                     <ChevronRight size={16} className="ml-1 opacity-70" />

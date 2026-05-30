@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BarChart2, CheckCircle, ChevronRight, ClipboardList, Clock } from 'lucide-react';
-import { instructorCoursesData, gradingQueue } from '../../data/mockData';
+import { gradingQueue } from '../../data/mockData';
+import { useInstructorCourses } from '../../hooks/queries/useInstructorCourses';
 
 export default function Grading() {
     const navigate = useNavigate();
     const [filter, setFilter] = useState('all'); // all, pending, completed
+    const { data: instructorCoursesData = [] } = useInstructorCourses();
 
     // Merge course info into grading queue for display
     const gradingTasks = gradingQueue.map(task => {

@@ -9,7 +9,6 @@ export const bankData = {};
 export const contracts = [];
 export const currentUser = {};
 export const diningMenu = [];
-export const electronicExams = [];
 export const erasmusApplications = [];
 export const erasmusChoices = [];
 export const events = [];

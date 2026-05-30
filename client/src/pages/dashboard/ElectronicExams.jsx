@@ -1,11 +1,9 @@
 import { CalendarCheck, MapPin, Monitor } from 'lucide-react';
-
-// Components
-
-// Mock Data
-import { electronicExams } from '../../data/mockData';
+import { useElectronicExams } from '../../hooks/queries/useElectronicExams';
 
 export default function ElectronicExams() {
+    const { data: electronicExams = [] } = useElectronicExams();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -21,6 +19,13 @@ export default function ElectronicExams() {
                 </div>
                 <Button variant="outline" icon={CalendarCheck}>Yeni Randevu Al</Button>
             </div>
+
+            {electronicExams.length === 0 && (
+                <Card className="p-12 text-center text-slate-400 border-dashed">
+                    <Monitor size={32} className="mx-auto mb-3 text-slate-300" />
+                    <p className="text-sm">Elektronik sınav randevunuz bulunmamaktadır.</p>
+                </Card>
+            )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {electronicExams.map((exam) => (

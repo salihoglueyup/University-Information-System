@@ -83,6 +83,7 @@ const thesisTasksRoute = require('./routes/thesisTasks');
 const thesisAssistanceRoute = require('./routes/thesisAssistance');
 const examSessionsRoute = require('./routes/examSessions');
 const examApplicationsRoute = require('./routes/examApplications');
+const electronicExamsRoute = require('./routes/electronicExams');
 const { verifyToken, verifyRole } = require('./middleware/auth');
 const secureUploads = require('./middleware/secureUploads');
 const errorHandler = require('./middleware/errorHandler');
@@ -307,6 +308,7 @@ app.use("/api/thesis-tasks", verifyToken, thesisTasksRoute);
 app.use("/api/thesis-assistance", verifyToken, thesisAssistanceRoute);
 app.use("/api/exam-sessions", verifyToken, examSessionsRoute);
 app.use("/api/exam-applications", verifyToken, examApplicationsRoute);
+app.use("/api/electronic-exams", verifyToken, electronicExamsRoute);
 
 // Serve uploads with access control
 app.use('/uploads', secureUploads, express.static(path.join(__dirname, 'uploads')));

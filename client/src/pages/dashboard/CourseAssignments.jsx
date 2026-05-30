@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { allUsers } from '../../data/mockData';
 import { useCourseCatalog } from '../../hooks/queries/useCourseCatalog';
+import { useAllUsers } from '../../hooks/queries/useAllUsers';
 
 export default function CourseAssignments() {
     const { data: courseCatalog = [] } = useCourseCatalog();
+    const { data: allUsers = [] } = useAllUsers();
     const [assignedMap, setAssignedMap] = useState({});
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -12,7 +13,7 @@ export default function CourseAssignments() {
     const assignments = courseCatalog.map(c => ({ ...c, instructor: assignedMap[c.id] || null }));
 
     const handleAssign = (courseId, instructorId) => {
-        const instructor = instructors.find(i => i.id === parseInt(instructorId));
+        const instructor = instructors.find(i => String(i.id) === String(instructorId));
         setAssignedMap(prev => ({ ...prev, [courseId]: instructor ? instructor.name : null }));
     };
 

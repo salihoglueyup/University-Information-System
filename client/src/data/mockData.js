@@ -4,7 +4,6 @@
 
 export const academicMilestones = {};
 export const academicReports = {};
-export const allUsers = [];
 export const appointments = [];
 export const bankData = {};
 export const contracts = [];

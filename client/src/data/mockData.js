@@ -29,7 +29,6 @@ export const lostFoundItems = [];
 export const publications = [];
 export const schedule = [];
 export const scholarships = [];
-export const shuttleHours = [];
 export const supportTickets = [];
 export const systemSettings = {};
 export const thesisAssistance = [];

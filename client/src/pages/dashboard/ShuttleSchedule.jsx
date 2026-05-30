@@ -1,10 +1,8 @@
-
-// Components
-
-// Mock Data
-import { shuttleHours } from '../../data/mockData';
+import { useShuttle } from '../../hooks/queries/useShuttle';
 
 export default function ShuttleSchedule() {
+    const { data: shuttleHours = [] } = useShuttle();
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -19,6 +17,13 @@ export default function ShuttleSchedule() {
                     <p className="text-slate-500 text-sm">Kampüs ile ana ulaşım noktaları arasındaki ücretsiz ring servis saatleri</p>
                 </div>
             </div>
+
+            {shuttleHours.length === 0 && (
+                <Card className="p-12 text-center text-slate-400 border-dashed">
+                    <Bus size={32} className="mx-auto mb-3 text-slate-300" />
+                    <p className="text-sm">Ring sefer bilgisi bulunmamaktadır.</p>
+                </Card>
+            )}
 
             <div className="grid md:grid-cols-2 gap-6">
                 {shuttleHours.map((route, idx) => (
